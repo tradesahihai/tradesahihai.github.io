@@ -2,7 +2,9 @@
 const SUPABASE_URL = window.env?.SUPABASE_URL || "https://tieaswmnzytdeuatkmmq.supabase.co";
 const SUPABASE_ANON_KEY = window.env?.SUPABASE_ANON_KEY || "sb_publishable_46Q5oJKF2fdpiov_RHCN3g_OBcCMDb4";
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+//const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchCloudPosts();
