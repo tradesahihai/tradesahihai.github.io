@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Dashboard</title>
+    <title>Trade Sahi Hai | Live Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Supabase CDN Architecture -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
-    <!-- Header Navigation Layout -->
     <header>
         <div class="logo">📈 Trade Sahi Hai</div>
         <nav class="tab-navigation">
@@ -18,66 +19,51 @@
         </nav>
     </header>
 
-    <!-- Main Dynamic Interface -->
     <div class="container">
-        
-        <!-- Live Analysis Display Stream -->
         <main class="content-stream">
-            
-            <!-- Technical Analysis Tab Section -->
             <section id="technical-tab" class="tab-panel active">
                 <div id="technical-posts-container">
-                    <!-- Core generated content populates here dynamically -->
-                    <article class="post-card">
-                        <h2>Sample Technical Structure</h2>
-                        <p class="meta-info">Posted on August 15, 2026</p>
-                        <p>Click the Admin Portal button to configure your custom dashboard password and begin replacing these placeholder posts.</p>
-                    </article>
+                    <p class="loading-text">Fetching latest cloud data...</p>
                 </div>
             </section>
 
-            <!-- Fundamental Analysis Tab Section -->
             <section id="fundamental-tab" class="tab-panel">
                 <div id="fundamental-posts-container">
-                    <article class="post-card">
-                        <h2>Sample Fundamental Breakdown</h2>
-                        <p class="meta-info">Posted on August 15, 2026</p>
-                        <p>Fundamental research records, balance sheet reviews, and macroeconomic updates display cleanly inside this responsive layout container.</p>
-                    </article>
+                    <p class="loading-text">Fetching latest cloud data...</p>
                 </div>
             </section>
         </main>
 
-        <!-- Secure Administrative Workspace Container -->
         <aside id="admin-panel" class="admin-sidebar hidden">
             <div class="admin-wrapper">
                 <h3>Admin Authentication</h3>
                 <div id="auth-box">
-                    <input type="password" id="admin-pass" placeholder="Enter Secure Password">
-                    <button class="action-btn positive" onclick="authenticateAdmin()">Unlock Editor</button>
+                    <input type="email" id="admin-email" placeholder="Admin Email">
+                    <input type="password" id="admin-pass" placeholder="Secure Password">
+                    <button class="action-btn positive" onclick="loginAdmin()">Secure Login</button>
                 </div>
 
-                <!-- Hidden Content Editing Interface Suite -->
                 <div id="editor-controls" class="hidden">
+                    <div class="admin-profile-badge">⚡ Authenticated Session Active</div>
                     <hr class="divider">
                     <h3>Publish New Analysis</h3>
-                    <label for="post-category">Stream Classification</label>
+                    <label>Stream Classification</label>
                     <select id="post-category">
                         <option value="technical">Technical Analysis</option>
                         <option value="fundamental">Fundamental Analysis</option>
                     </select>
 
-                    <label for="post-title">Analysis Heading</label>
+                    <label>Analysis Heading</label>
                     <input type="text" id="post-title" placeholder="e.g., NIFTY Breakout Confirmation">
 
-                    <label for="post-image">Chart Graphic (Image URL)</label>
-                    <input type="text" id="post-image" placeholder="Paste image address link or repository file path">
+                    <label>Chart Graphic (Image URL)</label>
+                    <input type="text" id="post-image" placeholder="Paste link to chart image">
 
-                    <label for="post-body">Strategic Observations & Insights</label>
-                    <textarea id="post-body" rows="6" placeholder="Document specific trendlines, indicators, stop-losses or fundamental valuation data..."></textarea>
+                    <label>Strategic Observations & Insights</label>
+                    <textarea id="post-body" rows="6" placeholder="Document specific trendlines..."></textarea>
 
-                    <button class="action-btn complete" onclick="publishPost()">Publish Live to Display</button>
-                    <button class="action-btn negative" onclick="clearSavedData()">Reset Database</button>
+                    <button class="action-btn complete" onclick="publishToCloud()">Publish Live Globally</button>
+                    <button class="action-btn negative" onclick="logoutAdmin()">Sign Out</button>
                 </div>
             </div>
         </aside>
