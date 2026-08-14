@@ -1,125 +1,64 @@
-/* Color Palette Variables */
-:root {
-    --bg-dark: #0f111a;
-    --card-bg: #151824;
-    --text-main: #f0f2f5;
-    --text-muted: #8a90a6;
-    --accent-blue: #2962ff;
-    --bull-green: #00c853;
-    --bear-red: #ff3d00;
+/* Style upgrades for chart rendering */
+.analysis-post {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #24293e;
+    margin-bottom: 2rem;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-}
-
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    line-height: 1.6;
-}
-
-header {
+.post-meta {
+    margin-bottom: 0.8rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
-    background-color: var(--card-bg);
-    border-bottom: 1px solid #24293e;
 }
 
-.logo {
-    font-size: 1.4rem;
-    font-weight: bold;
+.analysis-post h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
     color: var(--text-main);
 }
 
-nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    margin-left: 1.5rem;
-    font-size: 0.95rem;
-    transition: color 0.2s;
-}
-
-nav a.active, nav a:hover {
-    color: var(--accent-blue);
-    font-weight: 600;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-}
-
-.post-card {
-    background-color: var(--card-bg);
-    padding: 1.8rem;
+.chart-container {
+    background-color: #0f111a;
+    padding: 0.5rem;
     border-radius: 8px;
+    border: 1px solid #24293e;
     margin-bottom: 1.5rem;
-    border: 1px solid #24293e;
+    overflow: hidden;
 }
 
-.badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 4px;
-    font-weight: bold;
-    text-transform: uppercase;
+.analysis-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+    transition: transform 0.2s ease-in-out;
 }
 
-.badge.technical { background-color: rgba(41, 98, 255, 0.15); color: #448aff; }
-.badge.fundamental { background-color: rgba(255, 152, 0, 0.15); color: #ffb74d; }
-
-.date {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-left: 0.5rem;
+/* Slight zoom layout effect when hovering over the analysis graphic */
+.analysis-chart:hover {
+    transform: scale(1.01);
+    cursor: zoom-in;
 }
 
-.post-card h2 {
-    margin: 0.8rem 0;
-    font-size: 1.5rem;
-}
-
-.post-card p {
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-}
-
-.read-more {
+.analysis-body h3 {
+    font-size: 1.15rem;
     color: var(--accent-blue);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
+    margin: 1.5rem 0 0.5rem 0;
 }
 
-.widget {
-    background-color: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #24293e;
+.analysis-body ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
 }
 
-.watchlist li {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #24293e;
-    font-size: 0.9rem;
+.analysis-body li {
+    margin-bottom: 0.4rem;
 }
 
-.green { color: var(--bull-green); font-weight: bold; }
-.red { color: var(--bear-red); font-weight: bold; }
-
-@media (max-width: 768px) {
-    .container { grid-template-columns: 1fr; }
+.analysis-body p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
 }
