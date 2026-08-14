@@ -3,66 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Daily Market Analysis</title>
+    <title>Trade Sahi Hai | Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Top Navigation Header -->
+    <!-- Header Navigation Layout -->
     <header>
         <div class="logo">📈 Trade Sahi Hai</div>
-        <nav>
-            <a href="#" class="active">Daily Analysis</a>
-            <a href="#">Technical Logs</a>
-            <a href="#">Fundamentals</a>
+        <nav class="tab-navigation">
+            <button class="nav-btn active" onclick="switchTab('technical')">Technical Analysis</button>
+            <button class="nav-btn" onclick="switchTab('fundamental')">Fundamentals</button>
+            <button class="nav-btn admin-gateway" onclick="toggleAdminPanel()">🔒 Admin Portal</button>
         </nav>
     </header>
 
-    <!-- Main Content Arena -->
+    <!-- Main Dynamic Interface -->
     <div class="container">
         
-        <!-- Main Blog Post Container -->
-        <main class="posts-feed">
-            <article class="analysis-post">
-                <div class="post-meta">
-                    <span class="badge technical">Technical Analysis</span>
-                    <span class="date">August 15, 2026</span>
+        <!-- Live Analysis Display Stream -->
+        <main class="content-stream">
+            
+            <!-- Technical Analysis Tab Section -->
+            <section id="technical-tab" class="tab-panel active">
+                <div id="technical-posts-container">
+                    <!-- Core generated content populates here dynamically -->
+                    <article class="post-card">
+                        <h2>Sample Technical Structure</h2>
+                        <p class="meta-info">Posted on August 15, 2026</p>
+                        <p>Click the Admin Portal button to configure your custom dashboard password and begin replacing these placeholder posts.</p>
+                    </article>
                 </div>
-                
-                <h2>NIFTY 50: Confirming Bullish Flag Breakout</h2>
-                
-                <!-- Your Uploaded Screenshot Container -->
-                <div class="chart-container">
-                    <img src="nifty-analysis.png" alt="Nifty 50 Chart Analysis" class="analysis-chart">
-                </div>
+            </section>
 
-                <!-- Strategic Commentary Section -->
-                <div class="analysis-body">
-                    <h3>Key Observations:</h3>
-                    <ul>
-                        <li><strong>Support Zone:</strong> Price successfully rebounded off the 50-day EMA line on above-average volume.</li>
-                        <li><strong>Breakout Confirmation:</strong> Daily candle closed firmly outside the upper descending trendline resistance.</li>
-                        <li><strong>RSI Momentum:</strong> The Relative Strength Index shifted back up past 62, indicating a renewal of buying pressure.</li>
-                    </ul>
-                    
-                    <h3>Trade Bias & Strategy:</h3>
-                    <p>Looking for long entries on minor intraday pullbacks toward the breakout retest zone. Initial targets sit near previous swing highs with a strict invalidation stop loss set below the pattern swing low.</p>
+            <!-- Fundamental Analysis Tab Section -->
+            <section id="fundamental-tab" class="tab-panel">
+                <div id="fundamental-posts-container">
+                    <article class="post-card">
+                        <h2>Sample Fundamental Breakdown</h2>
+                        <p class="meta-info">Posted on August 15, 2026</p>
+                        <p>Fundamental research records, balance sheet reviews, and macroeconomic updates display cleanly inside this responsive layout container.</p>
+                    </article>
                 </div>
-            </article>
+            </section>
         </main>
 
-        <!-- Sidebar Panel for Quick Stats -->
-        <aside class="sidebar">
-            <div class="widget">
-                <h3>🔍 Market Watchlist</h3>
-                <ul class="watchlist">
-                    <li><span>NIFTY 50</span> <span class="green">+1.25%</span></li>
-                    <li><span>BANK NIFTY</span> <span class="red">-0.38%</span></li>
-                    <li><span>RELIANCE</span> <span class="green">+2.10%</span></li>
-                </ul>
+        <!-- Secure Administrative Workspace Container -->
+        <aside id="admin-panel" class="admin-sidebar hidden">
+            <div class="admin-wrapper">
+                <h3>Admin Authentication</h3>
+                <div id="auth-box">
+                    <input type="password" id="admin-pass" placeholder="Enter Secure Password">
+                    <button class="action-btn positive" onclick="authenticateAdmin()">Unlock Editor</button>
+                </div>
+
+                <!-- Hidden Content Editing Interface Suite -->
+                <div id="editor-controls" class="hidden">
+                    <hr class="divider">
+                    <h3>Publish New Analysis</h3>
+                    <label for="post-category">Stream Classification</label>
+                    <select id="post-category">
+                        <option value="technical">Technical Analysis</option>
+                        <option value="fundamental">Fundamental Analysis</option>
+                    </select>
+
+                    <label for="post-title">Analysis Heading</label>
+                    <input type="text" id="post-title" placeholder="e.g., NIFTY Breakout Confirmation">
+
+                    <label for="post-image">Chart Graphic (Image URL)</label>
+                    <input type="text" id="post-image" placeholder="Paste image address link or repository file path">
+
+                    <label for="post-body">Strategic Observations & Insights</label>
+                    <textarea id="post-body" rows="6" placeholder="Document specific trendlines, indicators, stop-losses or fundamental valuation data..."></textarea>
+
+                    <button class="action-btn complete" onclick="publishPost()">Publish Live to Display</button>
+                    <button class="action-btn negative" onclick="clearSavedData()">Reset Database</button>
+                </div>
             </div>
         </aside>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
