@@ -1,6 +1,6 @@
 // Initialization Configuration - Injected via Vercel Runtime Env
-const SUPABASE_URL = window.env?.SUPABASE_URL || "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = window.env?.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = window.env?.SUPABASE_URL || "https://tieaswmnzytdeuatkmmq.supabase.co";
+const SUPABASE_ANON_KEY = window.env?.SUPABASE_ANON_KEY || "sb_publishable_46Q5oJKF2fdpiov_RHCN3g_OBcCMDb4";
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
