@@ -1,0 +1,125 @@
+/* Color Palette Variables */
+:root {
+    --bg-dark: #0f111a;
+    --card-bg: #151824;
+    --text-main: #f0f2f5;
+    --text-muted: #8a90a6;
+    --accent-blue: #2962ff;
+    --bull-green: #00c853;
+    --bear-red: #ff3d00;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid #24293e;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-main);
+}
+
+nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+nav a.active, nav a:hover {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.post-card {
+    background-color: var(--card-bg);
+    padding: 1.8rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #24293e;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge.technical { background-color: rgba(41, 98, 255, 0.15); color: #448aff; }
+.badge.fundamental { background-color: rgba(255, 152, 0, 0.15); color: #ffb74d; }
+
+.date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+}
+
+.post-card h2 {
+    margin: 0.8rem 0;
+    font-size: 1.5rem;
+}
+
+.post-card p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.read-more {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.widget {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #24293e;
+}
+
+.watchlist li {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #24293e;
+    font-size: 0.9rem;
+}
+
+.green { color: var(--bull-green); font-weight: bold; }
+.red { color: var(--bear-red); font-weight: bold; }
+
+@media (max-width: 768px) {
+    .container { grid-template-columns: 1fr; }
+}
