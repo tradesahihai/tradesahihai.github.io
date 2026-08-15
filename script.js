@@ -1,21 +1,18 @@
-// ✅ SINGLE BASE CONFIGURATION: No double-declarations or typos
-const BACKEND_URL = "https://tradesahihai-backend.onrender.com"; 
+// ✅ SINGLE ABSOLUTE DEFINITION: Points directly to your custom live Render Web Service
+const REFINED_BACKEND_URL = "https://tradesahihai-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchCloudData();
     fetchDailyFlatFiles();
 });
 
-/**
- * 📈 FLAT-FILE LOGS ENGINE: Fetches directly out of your flexible wildcard backend folders
- */
 async function fetchDailyFlatFiles() {
     try {
         const year = "2026";
         const month = "August";
         const dateStr = "Aug15";
 
-        const res = await fetch(`${BACKEND_URL}/api/analysis/${year}/${month}/${dateStr}`);
+        const res = await fetch(`${REFINED_BACKEND_URL}/api/analysis/${year}/${month}/${dateStr}`);
         if (!res.ok) {
             console.warn("Flat file logs matching today's parameters are empty or pending.");
             return;
@@ -29,9 +26,6 @@ async function fetchDailyFlatFiles() {
     }
 }
 
-/**
- * 🎨 DOM INJECTION WORKER: Maps parameters right inside your current layout containers
- */
 function injectFlatFilesIntoVaults(data) {
     const dailyVault = document.getElementById('stream-daily');
     const learningVault = document.getElementById('stream-learning');
@@ -40,7 +34,6 @@ function injectFlatFilesIntoVaults(data) {
 
     if (!dailyVault || !learningVault || !strategyVault || !reelsVault) return;
 
-    // 1. Daily Summary Inferences & Chart Image Layer
     if (data.summary) {
         let imgHtml = data.imageUrl ? `<div class="chart-frame-wrapper"><img src="${data.imageUrl}" class="chart-frame-img" style="max-width:100%; border-radius:8px; margin: 1rem 0;"></div>` : '';
         dailyVault.innerHTML = `
@@ -56,7 +49,6 @@ function injectFlatFilesIntoVaults(data) {
         ` + dailyVault.innerHTML; 
     }
 
-    // 2. Educational Learning Metrics Layer
     if (data.learning) {
         learningVault.innerHTML = `
             <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
@@ -69,7 +61,6 @@ function injectFlatFilesIntoVaults(data) {
         ` + learningVault.innerHTML;
     }
 
-    // 3. Conditional Strategy Layer (Prepends ONLY if file text context exists)
     if (data.strategy) {
         strategyVault.innerHTML = `
             <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
@@ -82,7 +73,6 @@ function injectFlatFilesIntoVaults(data) {
         ` + strategyVault.innerHTML;
     }
 
-    // 4. Conditional Video Reels Layer (Injects native HTML5 mp4 media players natively)
     if (data.videoUrl) {
         reelsVault.innerHTML = `
             <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
@@ -98,12 +88,9 @@ function injectFlatFilesIntoVaults(data) {
     }
 }
 
-/**
- * 🌐 CLOUD STORAGE ACCESSOR: Fetches data rows from Supabase
- */
 async function fetchCloudData() {
     try {
-        const res = await fetch(`${BACKEND_URL}/api/posts`);
+        const res = await fetch(`${REFINED_BACKEND_URL}/api/posts`);
         const posts = await res.json();
         
         const dailyVault = document.getElementById('stream-daily');
