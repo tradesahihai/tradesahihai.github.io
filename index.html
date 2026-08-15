@@ -6,21 +6,19 @@
     <title>Trade Sahi Hai | Premium Hub</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- ⚡️ INSTANT PERSISTENCE INTERCEPTOR ENGINE -->
+    <!-- ⚡️ CLEAN TRACKING SESSIONS PERSISTENCE INTERCEPTOR ENGINE -->
     <script>
         (function() {
-            // ✅ Read explicitly from this tab session boundary layer
+            // Isolates active panel data boundaries specifically to this individual browser window tab
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
             var styleNode = document.createElement('style');
             styleNode.id = "instant-persistence-css";
             styleNode.innerHTML = `
+                /* Lock hide visibility defaults across ALL panels to prevent layout stacking overrides */
+                .viewport-panel { display: none !important; }
+                
+                /* Reveal exclusively this browser tab's isolated active workspace */
                 #${activeTab}-panel { display: block !important; }
-                .navigation-hub button[onclick*="'${activeTab}'"] { 
-                    background-color: var(--button-active-bg, #21262d) !important; 
-                    color: #ffffff !important; 
-                    border-color: #2962ff !important;
-                    font-weight: 600 !important;
-                }
             `;
             document.head.appendChild(styleNode);
         })();
@@ -28,7 +26,7 @@
 </head>
 <body>
 
-    <!-- Main Navigation Top Bar (Studio Desk Trigger Removed Cleanly) -->
+    <!-- Main Navigation Top Bar -->
     <header>
         <div class="logo-group">
             <span class="trend-icon" aria-hidden="true">📈</span>
@@ -69,16 +67,17 @@
                 </div>
             </div>
         </section>
+
         <!-- Main Layout Live Document Vault Feed Column Space -->
-                <!-- Main Layout Live Document Vault Feed Column Space -->
         <main class="primary-feed">
             
+            <!-- Isolated Sections: Separated into clean independent panels -->
             <div id="daily-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Daily Market Analysis Inferences</h2>
                     <span class="badge blue">Live Charts</span>
                 </div>
-                <div class="cards-grid" id="stream-daily"></div>
+                <div id="stream-daily-container"></div>
             </div>
 
             <div id="learning-panel" class="viewport-panel">
@@ -86,7 +85,7 @@
                     <h2>Today's Market Concepts & Learning Logs</h2>
                     <span class="badge gold">Educational</span>
                 </div>
-                <div class="cards-grid" id="stream-learning"></div>
+                <div id="stream-learning-container"></div>
             </div>
 
             <div id="strategy-panel" class="viewport-panel">
@@ -94,7 +93,7 @@
                     <h2>Systematic Strategy Execution Rules</h2>
                     <span class="badge green">Playbook</span>
                 </div>
-                <div class="cards-grid" id="stream-strategy"></div>
+                <div id="stream-strategy-container"></div>
             </div>
 
             <div id="reels-panel" class="viewport-panel">
@@ -102,19 +101,19 @@
                     <h2>Market Bytes & Short Reels</h2>
                     <span class="badge purple">Video Stream</span>
                 </div>
-                <div class="reels-vertical-grid" id="stream-reels"></div>
+                <div id="stream-reels-container"></div>
             </div>
 
         </main>
+
         <!-- Sidebar Management Panel Right Stack Column Space -->
         <aside class="right-widget-stack">
-            
             <div class="profile-widget-card">
                 <h4>👨‍💻 Trade Sahi Hai Admin</h4>
                 <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
             </div>
 
-            <!-- Position Risk Calculator -->
+            <!-- Position Risk Calculator Widget -->
             <div class="calculator-widget-card">
                 <h4>🧮 Position Risk Calculator</h4>
                 <p style="font-size: 0.75rem; margin-bottom: 0.75rem; color: #8b949e;">Enter trade bounds to calculate risk metrics.</p>
@@ -149,10 +148,10 @@
         </aside>
     </div> <!-- Close workspace-wrapper -->
 
-    <!-- Script Controllers Core Engine -->
-    <script src="app.js?v=7.0.0"></script>
+    <!-- ✅ SINGLE SYSTEM ENTRY POINT -->
+    <script src="app.js?v=9.0.0"></script>
     <script>
-        // Calculates trading risk-to-reward ratios based on fixed template formats
+        // Calculates trading risk-to-reward ratios
         function calculateTradeMetrics() {
             const entry = parseFloat(document.getElementById('calc-entry').value);
             const target = parseFloat(document.getElementById('calc-target').value);
@@ -168,28 +167,49 @@
                 outBox.innerHTML = "Invalid bounds."; 
                 return; 
             }
-            
             outBox.innerHTML = `Ratio: <b style="color:#2962ff;">${(reward / risk).toFixed(2)} : 1</b>`;
         }
 
         // Tabbed Panel Viewport Switching Controller
         function navigateHub(targetTab, event) {
-            document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
+            sessionStorage.setItem('activeTradingTab', targetTab);
+            
+            // Cleanly remove the instant persistence inline block to avoid style locks
+            const overrideStyle = document.getElementById("instant-persistence-css");
+            if (overrideStyle) overrideStyle.remove();
+
+            initializeTabStateView(targetTab, event ? event.target : null);
+        }
+
+        function initializeTabStateView(targetTab, targetButton = null) {
+            document.querySelectorAll('.viewport-panel').forEach(p => {
+                p.style.setProperty('display', 'none', 'important');
+                p.classList.remove('active');
+            });
             document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-            
-            if (event && event.target) {
-                event.target.classList.add('active');
+
+            const panel = document.getElementById(`${targetTab}-panel`);
+            if (panel) {
+                panel.style.setProperty('display', 'block', 'important');
+                panel.classList.add('active');
             }
-            
-            const targetPanel = document.getElementById(`${targetTab}-panel`);
-            if (targetPanel) {
-                targetPanel.classList.add('active');
+
+            if (targetButton) {
+                targetButton.classList.add('active');
+            } else {
+                const navButtons = document.querySelectorAll('.nav-link');
+                navButtons.forEach(btn => {
+                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${targetTab}'`)) {
+                        btn.classList.add('active');
+                    }
+                });
             }
         }
 
-        // Fire initialization metrics setup on launch load
         window.addEventListener('DOMContentLoaded', () => {
             calculateTradeMetrics();
+            const cachedActiveTab = sessionStorage.getItem('activeTradingTab') || 'daily';
+            initializeTabStateView(cachedActiveTab);
         });
     </script>
 </body>
