@@ -1,5 +1,5 @@
-// Local Development Cache Memory Arrays with Fixed and Secured Image Paths
-let mockTechnicalDatabase = [
+// Local Cache Databases Seeded with Modern High-Density Mock Content
+let dailyAnalysisDatabase = [
     {
         id: 101,
         title: "NIFTY 50: Rebounding from 50-day EMA Anchor",
@@ -9,25 +9,35 @@ let mockTechnicalDatabase = [
     }
 ];
 
-let mockFundamentalDatabase = [
+let todaysLearningDatabase = [
     {
         id: 201,
-        title: "Reliance Industries: Margin Expansion Review",
-        date: "Aug 12, 2026",
+        title: "Liquidity Sweeps vs. Genuine Trend Breakouts",
+        date: "Aug 15, 2026",
         media: "https://unsplash.com",
-        body: "Detailed review of quarterly performance metrics reveals a 120bps margin expansion across core operating arrays. Cash conversion parameters remain highly positive, justifying historical valuation expansion runways."
+        body: "A key lesson today is identifying volume confirmation. A genuine breakout happens when the asset moves past a key structural line with volume expanding at least 1.5x above its 20-period average. If volume remains low, institutions are likely sweeping liquidity to trap retail breakout buyers before reversing the trend."
+    }
+];
+
+let tradingStrategyDatabase = [
+    {
+        id: 301,
+        title: "The Opening Range Breakout (ORB) System",
+        date: "Aug 14, 2026",
+        media: "https://unsplash.com",
+        body: "Rule 1: Mark the high and low bounds of the market's initial 15-minute chart candle. \nRule 2: Enter long immediately when a subsequent 5-minute candle closes completely outside the upper boundary. \nRule 3: Set an absolute stop loss parameter below the VWAP midline tracker, and target a clean 2:1 risk-to-reward boundary."
     }
 ];
 
 let mockReelsDatabase = [
     {
-        id: 301,
+        id: 401,
         title: "How to Spot Fake Breakouts 💸",
         desc: "3 volume filters to avoid trap structures.",
         thumbnail: "https://unsplash.com"
     },
     {
-        id: 302,
+        id: 402,
         title: "My Top 3 Candlestick Setups 🕯️",
         desc: "High probability reversals explained in 60s.",
         thumbnail: "https://unsplash.com"
@@ -70,8 +80,8 @@ function adjustFormFields() {
         mediaGroup.querySelector('label').innerText = "Reel Vertical Thumbnail Image Link (URL)";
         bodyLabel.innerText = "Short Captions & Strategy Snippet";
     } else {
-        mediaGroup.querySelector('label').innerText = "Chart Graphic (Direct Link Address / URL)";
-        bodyLabel.innerText = "Strategic Observations & Breakdown Summary";
+        mediaGroup.querySelector('label').innerText = "Media Graphic Link (URL)";
+        bodyLabel.innerText = "Strategic Observations & Detailed Explanations";
     }
 }
 
@@ -83,16 +93,18 @@ function compileStudioAsset() {
     const body = document.getElementById('content-body').value;
 
     if (!title || !body) {
-        alert("Please complete the required titles and asset parameter fields.");
+        alert("Please complete the required titles and text parameters before publishing.");
         return;
     }
 
     const currentFormattedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-    if (type === 'technical') {
-        mockTechnicalDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
-    } else if (type === 'fundamental') {
-        mockFundamentalDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
+    if (type === 'daily') {
+        dailyAnalysisDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
+    } else if (type === 'learning') {
+        todaysLearningDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
+    } else if (type === 'strategy') {
+        tradingStrategyDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
     } else if (type === 'reel') {
         mockReelsDatabase.unshift({ id: Date.now(), title, desc: body, thumbnail: media });
     }
@@ -103,7 +115,7 @@ function compileStudioAsset() {
     document.getElementById('content-body').value = '';
 
     renderAllContentStreams();
-    alert("Asset processed successfully into your layout cache!");
+    alert("Content asset compiled live successfully into interface viewport caches!");
 }
 
 // Dynamic Interactive Risk-to-Reward Calculator Utility Script Logic
@@ -114,7 +126,7 @@ function calculateTradeMetrics() {
     const outBox = document.getElementById('calc-output-metrics');
 
     if (!entry || !target || !stop) {
-        outBox.innerHTML = "<span style='color:#ff1744;'>Fill all math constraints.</span>";
+        outBox.innerHTML = "Enter trade bounds to calculate risk metrics.";
         return;
     }
 
@@ -132,20 +144,22 @@ function calculateTradeMetrics() {
 
 // Rendering Matrix Layer
 function renderAllContentStreams() {
-    const techVault = document.getElementById('tech-cards-vault');
-    const fundVault = document.getElementById('fund-cards-vault');
+    const dailyVault = document.getElementById('daily-cards-vault');
+    const learningVault = document.getElementById('learning-cards-vault');
+    const strategyVault = document.getElementById('strategy-cards-vault');
     const reelsVault = document.getElementById('reels-cards-vault');
 
-    if (!techVault || !fundVault || !reelsVault) return;
+    if (!dailyVault || !learningVault || !strategyVault || !reelsVault) return;
 
     // Clear Previous Container Templates
-    techVault.innerHTML = '';
-    fundVault.innerHTML = '';
+    dailyVault.innerHTML = '';
+    learningVault.innerHTML = '';
+    strategyVault.innerHTML = '';
     reelsVault.innerHTML = '';
 
-    // Technical Cards Execution Loop
-    mockTechnicalDatabase.forEach(item => {
-        techVault.innerHTML += `
+    // Stream 1: Daily Analysis Cards Loop
+    dailyAnalysisDatabase.forEach(item => {
+        dailyVault.innerHTML += `
             <article class="display-card">
                 <h3>${item.title}</h3>
                 <p class="card-meta">Log compiled on ${item.date}</p>
@@ -155,19 +169,31 @@ function renderAllContentStreams() {
         `;
     });
 
-    // Fundamental Cards Execution Loop
-    mockFundamentalDatabase.forEach(item => {
-        fundVault.innerHTML += `
+    // Stream 2: Today's Learning Cards Loop
+    todaysLearningDatabase.forEach(item => {
+        learningVault.innerHTML += `
             <article class="display-card">
                 <h3>${item.title}</h3>
-                <p class="card-meta">Analysis created on ${item.date}</p>
-                <img src="${item.media}" class="card-graphic" alt="Valuation Summary Graphic" onerror="this.src='https://unsplash.com'">
+                <p class="card-meta">Concept analyzed on ${item.date}</p>
+                <img src="${item.media}" class="card-graphic" alt="Educational Graphic" onerror="this.src='https://unsplash.com'">
                 <p class="card-body-text">${item.body}</p>
             </article>
         `;
     });
 
-    // Reels Simulation Grid Execution Loop
+    // Stream 3: Systematic Strategy Cards Loop
+    tradingStrategyDatabase.forEach(item => {
+        strategyVault.innerHTML += `
+            <article class="display-card">
+                <h3>${item.title}</h3>
+                <p class="card-meta">System playbook created on ${item.date}</p>
+                <img src="${item.media}" class="card-graphic" alt="Strategy Blueprint Layout" onerror="this.src='https://unsplash.com'">
+                <p class="card-body-text">${item.body}</p>
+            </article>
+        `;
+    });
+
+    // Stream 4: Video Reels Grid Execution Loop
     mockReelsDatabase.forEach(reel => {
         reelsVault.innerHTML += `
             <article class="reel-card">
@@ -182,79 +208,4 @@ function renderAllContentStreams() {
             </article>
         `;
     });
-}
-/* Custom Added Sidebar Component Layout Blocks */
-.profile-widget-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.profile-avatar-avatar {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: var(--border-line);
-    border: 2px solid var(--accent-blue);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.75rem;
-}
-
-.profile-widget-card h4 {
-    color: var(--text-header);
-    font-size: 1.05rem;
-    margin-bottom: 0.25rem;
-}
-
-.profile-widget-card p {
-    font-size: 0.8rem;
-    color: var(--text-body);
-}
-
-.calculator-widget-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.calculator-widget-card h4 {
-    color: var(--text-header);
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.calc-inputs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.calc-inputs-grid input {
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    text-align: center;
-}
-
-.calc-output-display-box {
-    background-color: var(--app-bg);
-    border: 1px dashed var(--border-line);
-    border-radius: 6px;
-    padding: 0.75rem;
-    font-size: 0.85rem;
-    text-align: center;
 }
