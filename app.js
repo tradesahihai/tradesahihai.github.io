@@ -1,7 +1,8 @@
-const REFINED_BACKEND_URL = "https://onrender.com"; 
+// ✅ RENAMED UNIQUE CONFIGURATION: Eliminates variable collisions completely
+const DYNAMIC_BACKEND_PORTAL_URL = "https://tradesahihai-backend.onrender.com"; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ✅ Reads exclusively from this isolated browser tab's session cache
+    // ✅ Isolates tracking states explicitly to this specific browser window view tab
     const cachedActiveTab = sessionStorage.getItem('activeTradingTab') || 'daily';
     
     initializeTabStateView(cachedActiveTab);
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * 📈 FLAT-FILE FILE ENGINE: Fetches directly out of your flexible backend folders
+ * 📈 FLAT-FILE SYNC ENGINE: Fetches directly out of your flexible backend folders
  */
 async function fetchDailyFlatFiles() {
     try {
@@ -18,7 +19,7 @@ async function fetchDailyFlatFiles() {
         const month = "August";
         const dateStr = "Aug15";
 
-        const res = await fetch(`${REFINED_BACKEND_URL}/api/analysis/${year}/${month}/${dateStr}`);
+        const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dateStr}`);
         if (!res.ok) {
             console.warn("Flat file logs matching today's parameters are empty or pending.");
             return;
@@ -40,6 +41,7 @@ function injectFlatFilesIntoVaults(data) {
 
     if (!dailyVault || !learningVault || !strategyVault || !reelsVault) return;
 
+    // 1. Daily Summary Inferences & Chart Image Layer
     if (data.summary) {
         let imgHtml = data.imageUrl ? `<div class="chart-frame-wrapper"><img src="${data.imageUrl}" class="chart-frame-img" style="max-width:100%; border-radius:8px; margin: 1rem 0;"></div>` : '';
         dailyVault.innerHTML = `
@@ -55,6 +57,7 @@ function injectFlatFilesIntoVaults(data) {
         ` + dailyVault.innerHTML; 
     }
 
+    // 2. Educational Learning Metrics Layer
     if (data.learning) {
         learningVault.innerHTML = `
             <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
@@ -67,6 +70,7 @@ function injectFlatFilesIntoVaults(data) {
         ` + learningVault.innerHTML;
     }
 
+    // 3. Conditional Strategy Layer (Prepends ONLY if file text context exists)
     if (data.strategy) {
         strategyVault.innerHTML = `
             <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
@@ -79,6 +83,7 @@ function injectFlatFilesIntoVaults(data) {
         ` + strategyVault.innerHTML;
     }
 
+    // 4. Conditional Video Reels Layer (Injects native HTML5 mp4 players)
     if (data.videoUrl) {
         reelsVault.innerHTML = `
             <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
@@ -96,7 +101,7 @@ function injectFlatFilesIntoVaults(data) {
 
 async function fetchCloudData() {
     try {
-        const res = await fetch(`${REFINED_BACKEND_URL}/api/posts`);
+        const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/posts`);
         const posts = await res.json();
         
         const dailyVault = document.getElementById('stream-daily');
@@ -151,11 +156,9 @@ async function fetchCloudData() {
     } catch (err) { console.error("Cloud syncing blocked", err); }
 }
 
-// 🎛️ Navigation Manager using SessionStorage Caching
 function navigateHub(targetTab, event) {
     sessionStorage.setItem('activeTradingTab', targetTab);
     
-    // Wipe the head styling nodes to allow smooth adjustments
     const overrideStyle = document.getElementById("instant-persistence-css");
     if (overrideStyle) overrideStyle.remove();
 
@@ -174,9 +177,10 @@ function initializeTabStateView(targetTab, targetButton = null) {
     } else {
         const navButtons = document.querySelectorAll('.nav-link');
         navButtons.forEach(btn => {
-            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${targetTab}'`)) {
-                btn.classList.add('active');
-            }
-        });
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
+        btn.classList.add('active');
     }
+});
 }
+}
+
