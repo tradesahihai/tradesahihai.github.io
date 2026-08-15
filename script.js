@@ -39,13 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAllContentStreams();
 });
 
-// Dynamic Tab View Controller System
-function navigateHub(targetTab, event) {
+// Dynamic Tab View Controller System - Fixed event parameter declaration
+function navigateHub(targetTab, evt) {
     document.querySelectorAll('.viewport-panel').forEach(panel => panel.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
 
     document.getElementById(`${targetTab}-panel`).classList.add('active');
-    event.currentTarget.classList.add('active');
+    
+    if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add('active');
+    }
 
     // Soft viewport scroll reset
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,7 +103,7 @@ function compileStudioAsset() {
     document.getElementById('content-body').value = '';
 
     renderAllContentStreams();
-    alert("Asset processed successfully into your layout cache! Switching screens.");
+    alert("Asset processed successfully into your layout cache!");
 }
 
 // Rendering Matrix Layer
@@ -108,6 +111,8 @@ function renderAllContentStreams() {
     const techVault = document.getElementById('tech-cards-vault');
     const fundVault = document.getElementById('fund-cards-vault');
     const reelsVault = document.getElementById('reels-cards-vault');
+
+    if (!techVault || !fundVault || !reelsVault) return;
 
     // Clear Previous Container Templates
     techVault.innerHTML = '';
