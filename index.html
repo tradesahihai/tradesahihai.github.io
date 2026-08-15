@@ -23,32 +23,7 @@
         </nav>
     </header>
 
-    <!-- Insert this block directly underneath the <div class="workspace-wrapper"> opening tag -->
-<section class="global-reach-bar" style="grid-column: span 2; width: 100%;">
-    <div class="reach-metric-item">
-        <div class="reach-metric-icon">🌍</div>
-        <div class="reach-metric-data">
-            <h5>Multi-Market Sync</h5>
-            <p>NSE / BSE / Global Indices</p>
-        </div>
-    </div>
-    <div class="reach-metric-item">
-        <div class="reach-metric-icon">⚡</div>
-        <div class="reach-metric-data">
-            <h5>CDN Edge Nodes</h5>
-            <p>Sub-100ms Worldwide Delivery</p>
-        </div>
-    </div>
-    <div class="reach-metric-item">
-        <div class="reach-metric-icon">🗣️</div>
-        <div class="reach-metric-data">
-            <h5>Localized Engine</h5>
-            <p>English / International Formats</p>
-        </div>
-    </div>
-</section>
-
-     <!-- Global App Layout Wrapper Split Container -->
+    <!-- Global App Layout Wrapper Split Container -->
     <div class="workspace-wrapper">
         
         <!-- Live Performance Marquee Row -->
@@ -62,6 +37,31 @@
             </div>
         </section>
 
+        <!-- Global Reach Bar Component -->
+        <section class="global-reach-bar">
+            <div class="reach-metric-item">
+                <div class="reach-metric-icon">🌍</div>
+                <div class="reach-metric-data">
+                    <h5>Multi-Market Sync</h5>
+                    <p>NSE / BSE / Global Indices</p>
+                </div>
+            </div>
+            <div class="reach-metric-item">
+                <div class="reach-metric-icon">⚡</div>
+                <div class="reach-metric-data">
+                    <h5>CDN Edge Nodes</h5>
+                    <p>Sub-100ms Worldwide Delivery</p>
+                </div>
+            </div>
+            <div class="reach-metric-item">
+                <div class="reach-metric-icon">🗣️</div>
+                <div class="reach-metric-data">
+                    <h5>Localized Engine</h5>
+                    <p>English / International Formats</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Main Display Post Columns Feed -->
         <main class="primary-feed">
             
@@ -71,7 +71,9 @@
                     <h2>Daily Market Analysis Inferences</h2>
                     <span class="badge blue">Live Charts</span>
                 </div>
-                <div id="daily-cards-vault" class="cards-grid"><p class="status-msg">Connecting to cloud stream...</p></div>
+                <div id="daily-cards-vault" class="cards-grid">
+                    <p style="color: var(--text-body); font-size: 0.9rem;">Connecting to cloud stream...</p>
+                </div>
             </div>
 
             <!-- Section 2: Today's Learning Workspace Panel -->
@@ -80,7 +82,9 @@
                     <h2>Today's Market Concepts & Learning Logs</h2>
                     <span class="badge gold">Educational</span>
                 </div>
-                <div id="learning-cards-vault" class="cards-grid"><p class="status-msg">Connecting to cloud stream...</p></div>
+                <div id="learning-cards-vault" class="cards-grid">
+                    <p style="color: var(--text-body); font-size: 0.9rem;">Connecting to cloud stream...</p>
+                </div>
             </div>
 
             <!-- Section 3: Trading Strategies Playbook Panel -->
@@ -89,7 +93,9 @@
                     <h2>Systematic Strategy Execution Rules</h2>
                     <span class="badge green">Playbook</span>
                 </div>
-                <div id="strategy-cards-vault" class="cards-grid"><p class="status-msg">Connecting to cloud stream...</p></div>
+                <div id="strategy-cards-vault" class="cards-grid">
+                    <p style="color: var(--text-body); font-size: 0.9rem;">Connecting to cloud stream...</p>
+                </div>
             </div>
 
             <!-- Section 4: Video Reels Grid Workspace Panel -->
@@ -98,7 +104,9 @@
                     <h2>Market Bytes & Short Reels</h2>
                     <span class="badge purple">Video Stream</span>
                 </div>
-                <div id="reels-cards-vault" class="reels-vertical-grid"><p class="status-msg">Connecting to cloud stream...</p></div>
+                <div id="reels-cards-vault" class="reels-vertical-grid">
+                    <p style="color: var(--text-body); font-size: 0.9rem;">Connecting to cloud stream...</p>
+                </div>
             </div>
         </main>
 
@@ -122,8 +130,9 @@
             </div>
         </aside>
 
-        <!-- Dynamic Studio Creator Form Drawer (Secure Server Lock Added) -->
+        <!-- Dynamic Studio Creator Form Drawer -->
         <aside id="studio-desk" class="management-sidebar hidden">
+            <!-- Fixed ID to match executeLogin container hooks -->
             <div id="login-interface">
                 <h4>🔒 System Authentication</h4><br>
                 <input type="email" id="admin-email" placeholder="Admin Email ID">
@@ -131,6 +140,7 @@
                 <button class="studio-action-btn" onclick="executeLogin()">Secure Login</button>
             </div>
             
+            <!-- Fixed ID to match executeLogin container hooks -->
             <div id="editor-interface" class="hidden">
                 <div class="form-element">
                     <label>Select Target Workspace</label>
@@ -159,6 +169,192 @@
 
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        const BACKEND_URL = "https://onrender.com"; 
+        let sessionToken = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchCloudData();
+        });
+
+        async function fetchCloudData() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/posts`);
+                const posts = await res.json();
+                
+                const dailyVault = document.getElementById('daily-cards-vault');
+                const learningVault = document.getElementById('learning-cards-vault');
+                const strategyVault = document.getElementById('strategy-cards-vault');
+                const reelsVault = document.getElementById('reels-cards-vault');
+
+                dailyVault.innerHTML = ''; learningVault.innerHTML = '';
+                strategyVault.innerHTML = ''; reelsVault.innerHTML = '';
+
+                if(!posts || posts.length === 0) {
+                    const fallback = `<div class="display-card-v2"><h4>Workspace Active but Empty</h4><p>Log into Studio Desk to publish your charts.</p></div>`;
+                    dailyVault.innerHTML = fallback; learningVault.innerHTML = fallback;
+                    strategyVault.innerHTML = fallback; reelsVault.innerHTML = fallback;
+                    return;
+                }
+
+                posts.forEach(p => {
+                    let img = p.image_url ? `<div class="chart-frame-wrapper"><img src="${p.image_url}" class="chart-frame-img"></div>` : '';
+
+  // --- YOUR SCRIPT INJECTIONS INTEGRATED BELOW WITH SECURED SYNTAX FIXES ---
+  try {
+    let dateStr = new Date(p.created_at || Date.now()).toLocaleDateString(undefined, {
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric'
+    });
+
+    let cardHtml = `
+      <div class="display-card-v2"> 
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;"> 
+          <h3 style="margin:0;">${p.title}</h3> 
+          <div><span class="localization-tag">🌐 Global Sync</span></div> 
+        </div> 
+        <p style="font-size:0.75rem; color:#636d81; margin-bottom:12px;">Logged securely on ${dateStr}</p> 
+        ${img} 
+        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6;">${p.body}</p> 
+      </div>
+    `;
+
+    if (p.category === 'daily') dailyVault.innerHTML += cardHtml;
+    if (p.category === 'learning') learningVault.innerHTML += cardHtml;
+    if (p.category === 'strategy') strategyVault.innerHTML += cardHtml;
+    
+    if (p.category === 'reel') {
+      reelsVault.innerHTML += `
+        <article class="reel-card"> 
+          <div class="reel-video-simulation-box"> 
+            <img src="${p.image_url}" class="reel-media-placeholder"> 
+            <div style="position: absolute; font-size: 2rem; opacity: 0.85; cursor: pointer;">▶️</div> 
+            <div class="reel-overlay-info"> 
+              <h4>${p.title}</h4> 
+              <p style="font-size:0.75rem; opacity:0.9;">${p.body}</p> 
+            </div> 
+          </div> 
+        </article>
+      `;
+    }
+  } catch (err) {
+    console.error("Cloud syncing blocked", err);
+  }
+                    async function executeLogin() {
+  const email = document.getElementById('admin-email').value;
+  const password = document.getElementById('admin-password').value;
+  
+  try {
+    // Fixed: Wrapped the URL in backticks for template literal interpolation
+    const res = await fetch(`${BACKEND_URL}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok) {
+      sessionToken = data.token;
+      document.getElementById('login-interface').classList.add('hidden');
+      document.getElementById('editor-interface').classList.remove('hidden');
+    } else {
+      alert(data.error);
+    }
+  } catch(e) {
+    alert("Server connectivity exception. Wake up backend.");
+  }
+}
+
+async function submitPostToServer() {
+  const title = document.getElementById('content-title').value;
+  const category = document.getElementById('content-type').value;
+  const image_url = document.getElementById('content-media').value;
+  const body = document.getElementById('content-body').value;
+  
+  if (!title || !body) {
+    return alert("Title and descriptions are required.");
+  }
+  
+  // Missing implementation for sending the post data goes here
+}
+    // Fixed: Wrapped the URL in backticks for template literal interpolation
+    const res = await fetch(`${BACKEND_URL}/api/posts`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': sessionToken 
+      },
+      body: JSON.stringify({ title, category, image_url, body })
+    });
+
+    if (res.ok) {
+      alert("Published live to permanent Supabase database cloud!");
+      document.getElementById('content-title').value = '';
+      document.getElementById('content-media').value = '';
+      document.getElementById('content-body').value = '';
+      togglePublishingDesk();
+      fetchCloudData();
+    } else {
+      const errData = await res.json();
+      alert("Error during publication: " + errData.error);
+    }
+  } catch (e) {
+    alert("Network or server failure during publication.");
+  }
+}
+
+function calculateTradeMetrics() {
+  const entry = parseFloat(document.getElementById('calc-entry').value);
+  const target = parseFloat(document.getElementById('calc-target').value);
+  const stop = parseFloat(document.getElementById('calc-stop').value);
+  const outBox = document.getElementById('calc-output-metrics');
+
+  if (!entry || !target || !stop) return;
+
+  const reward = target - entry;
+  const risk = entry - stop;
+
+  if (risk <= 0 || reward <= 0) {
+    outBox.innerHTML = "Invalid bounds.";
+    return;
+  }
+
+  // Fixed: Wrapped the HTML template string in backticks for dynamic interpolation
+  outBox.innerHTML = `Ratio: <b style="color:#2962ff;">${(reward / risk).toFixed(2)} : 1</b>`;
+}
+
+function navigateHub(targetTab, event) {
+  document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  // Fixed: Wrapped the selector ID in backticks for template literal evaluation
+  document.getElementById(`${targetTab}-panel`).classList.add('active');
+}
+
+function togglePublishingDesk() {
+  document.getElementById('studio-desk').classList.toggle('hidden');
+}
+function adjustFormFields() {
+  const type = document.getElementById('content-type').value;
+  const mediaGroup = document.getElementById('media-link-group');
+  const bodyLabel = document.getElementById('body-label');
+
+  if (!mediaGroup || !bodyLabel) return; // Guard clause to prevent runtime errors
+
+  const mediaLabel = mediaGroup.querySelector('label');
+  if (!mediaLabel) return;
+
+  if (type === 'reel') {
+    mediaLabel.innerText = "Reel Vertical Thumbnail Image Link (URL)";
+    bodyLabel.innerText = "Short Captions & Strategy Snippet";
+  } else {
+    mediaLabel.innerText = "Chart Graphic Image Link URL";
+    bodyLabel.innerText = "Strategic Annotations & Analysis Body Summary";
+  }
+}
+</script>
+
+                    
