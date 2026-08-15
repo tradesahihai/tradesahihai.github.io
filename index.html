@@ -63,20 +63,19 @@
         <!-- Persistent Sidebar Stack Blocks Container -->
         <aside class="right-widget-stack">
             <div class="profile-widget-card">
-                <div class="profile-avatar-avatar">👨‍💻</div>
-                <h4>Trade Sahi Hai Admin</h4>
+                <h4>👨‍💻 Trade Sahi Hai Admin</h4>
                 <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks valuation breakdowns.</p>
             </div>
 
             <div class="calculator-widget-card">
                 <h4>🧮 Position Risk Calculator</h4>
                 <div class="calc-inputs-grid">
-                    <input type="number" id="calc-entry" placeholder="Entry" oninput="calculateTradeMetrics()">
-                    <input type="number" id="calc-target" placeholder="Target" oninput="calculateTradeMetrics()">
-                    <input type="number" id="calc-stop" placeholder="Stop" oninput="calculateTradeMetrics()">
+                    <input type="number" id="calc-entry" placeholder="Entry Price" oninput="calculateTradeMetrics()">
+                    <input type="number" id="calc-target" placeholder="Target Price" oninput="calculateTradeMetrics()">
+                    <input type="number" id="calc-stop" placeholder="Stop Loss Price" oninput="calculateTradeMetrics()">
                 </div>
                 <div class="calc-output-display-box" id="calc-output-metrics">
-                    Enter trade constraints.
+                    Enter trade bounds to calculate risk metrics.
                 </div>
             </div>
         </aside>
