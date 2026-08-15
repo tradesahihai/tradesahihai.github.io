@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Premium Hub</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- ⚡️ INSTANT PERSISTENCE INTERCEPTOR ENGINE -->
+    <script>
+        (function() {
+            var activeTab = localStorage.getItem('activeTradingTab') || 'daily';
+            var styleNode = document.createElement('style');
+            styleNode.id = "instant-persistence-css";
+            styleNode.innerHTML = `
+                #${activeTab}-panel { display: block !important; }
+                .navigation-hub button[onclick*="'${activeTab}'"] { 
+                    background-color: var(--button-active-bg, #21262d) !important; 
+                    color: #ffffff !important; 
+                    border-color: #2962ff !important;
+                    font-weight: 600 !important;
+                }
+            `;
+            document.head.appendChild(styleNode);
+        })();
+    </script>
 </head>
 <body>
 
