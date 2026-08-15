@@ -208,31 +208,30 @@ async function fetchCloudAndFlatData() {
                     combinedTimeline[formattedBucketDateKey].strategy.push(html);
                 });
             }
+            // ✅ REVISED TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
+if (data.videoUrl) {
+    const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
+    reelsArray.forEach((item, idx) => {
+        let videoUrlSrc = item.video || data.videoUrl;
+        if (!videoUrlSrc || videoUrlSrc === "null") return;
+        
+        let videoHtml = `
+            <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
+                <video src="${videoUrlSrc}" crossorigin="anonymous" controls preload="metadata" style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video>
+            </div>
+        `;
+        
+        const contentPayload = isTodayActiveSession ? (item.content || "") : {
+            header: item.title || "Market Walkthrough Reel",
+            hasMore: false,
+            fullContent: item.content || "Daily Video Summary Documentation"
+        };
+        
+        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Market Reel", '🎬 Market Reel', '#a004ff', videoHtml, contentPayload, `local-reel-${dateStr}-${idx}`);
+        combinedTimeline[formattedBucketDateKey].reels.push(html);
+    });
+}
 
-            // ✅ TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
-            if (data.reels || data.videoUrl) {
-                const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
-                reelsArray.forEach((item, idx) => {
-                    let videoUrlSrc = item.video || data.videoUrl;
-                    if (!videoUrlSrc) return;
-                    
-                    // Added crossorigin="anonymous" and custom preload layout blocks to fix media blocking policies
-                    let videoHtml = `
-                        <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
-                            <video src="${videoUrlSrc}" crossorigin="anonymous" controls preload="metadata" style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video>
-                        </div>
-                    `;
-                    
-                    const contentPayload = isTodayActiveSession ? (item.content || "") : {
-                        header: item.title || "Market Walkthrough Reel",
-                        hasMore: false,
-                        fullContent: item.content || "Daily Video Summary Documentation"
-                    };
-                    
-                    let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Market Reel", '🎬 Market Reel', '#a004ff', videoHtml, contentPayload, `local-reel-${dateStr}-${idx}`);
-                    combinedTimeline[formattedBucketDateKey].reels.push(html);
-                });
-            }
         });
     } catch (flatErr) { 
         console.warn("Flat file engine pipeline log bypass:", flatErr.message); 
