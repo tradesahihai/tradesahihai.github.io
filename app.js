@@ -165,14 +165,10 @@ async function fetchCloudAndFlatData() {
             }
             }
         }
-    } 
-    catch (flatErr) { 
-        print("System data log streaming bypassed safely:", flatErr.message); 
     }
     catch (flatErr) { 
     console.warn("Flat file metrics pending for active clock tracking layer:", flatErr);
     }
-}
 
 // 3. Render Sorted Chronological timelines grouped cleanly inside divided Date blocks
 const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
