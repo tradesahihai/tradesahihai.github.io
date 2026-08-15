@@ -36,7 +36,7 @@
             </div>
         </section>
 
-        <!-- Global Reach Bar Component (Fixed & Fully Restored) -->
+        <!-- Global Reach Bar Component -->
         <section class="global-reach-bar" aria-label="System Metrics">
             <div class="reach-metric-item">
                 <div class="metric-icon-wrap"><span class="metric-icon">🌍</span></div>
@@ -157,12 +157,12 @@
                     <span>🔒</span>
                     <h4>System Authentication</h4>
                 </div>
-                <button class="btn-auth-trigger" id="authBtn" onclick="handleAuthMock()">Secure Login</button>
+                <button class="btn-auth-trigger" id="authBtn" onclick="handleAuthToggle()">Secure Login</button>
 
                 <form class="publish-form panel-locked" id="publishForm" onsubmit="handleFormSubmission(event)">
                     <div class="field-group">
                         <label for="workspace-target">Select Target Workspace</label>
-                        <select id="workspace-target">
+                        <select id="workspace-target" disabled>
                             <option value="daily">Daily Analysis Post</option>
                             <option value="learning">Today's Learning Entry</option>
                             <option value="strategy">Trading Strategy Playbook</option>
@@ -172,20 +172,20 @@
 
                     <div class="field-group">
                         <label for="asset-title">Asset/Stock Heading Title</label>
-                        <input type="text" id="asset-title" required placeholder="e.g., RELIANCE Reversal Pattern">
+                        <input type="text" id="asset-title" required disabled placeholder="e.g., RELIANCE Reversal Pattern">
                     </div>
 
                     <div class="field-group">
                         <label for="chart-url">Chart Graphic Image Link URL</label>
-                        <input type="url" id="chart-url" required placeholder="https://example.com">
+                        <input type="url" id="chart-url" required disabled placeholder="https://example.com">
                     </div>
 
                     <div class="field-group">
                         <label for="analysis-summary">Strategic Annotations & Analysis Body Summary</label>
-                        <textarea id="analysis-summary" rows="5" required placeholder="Outline technical patterns, confirmations, macro targets..."></textarea>
+                        <textarea id="analysis-summary" rows="5" required disabled placeholder="Outline technical patterns, confirmations..."></textarea>
                     </div>
 
-                    <button type="submit" class="btn-submit-global">Publish Live Globally</button>
+                    <button type="submit" id="submitBtn" class="btn-submit-global" disabled>Publish Live Globally</button>
                 </form>
             </div>
         </aside>
@@ -221,7 +221,7 @@
             sidebar.classList.toggle('sidebar-visible');
         }
 
-        // Live Risk Arithmetic Calculations Engine
+        // Secure Risk Arithmetic Calculations Engine
         function calculateRisk() {
             const capital = parseFloat(document.getElementById('calc-capital').value) || 0;
             const riskPct = parseFloat(document.getElementById('calc-risk-pct').value) || 0;
@@ -236,40 +236,54 @@
                 quantity = Math.floor(totalRiskAmt / riskPerShare);
             }
 
+            // Validation Rule: Catch upside-down risk logic values
+            if (entry <= stopLoss && entry > 0) {
+                document.getElementById('res-qty').innerText = 'Check Stop Loss (Long Trade)';
+                document.getElementById('res-amt').innerText = '₹' + totalRiskAmt.toLocaleString('en-IN');
+                return;
+            }
+
             document.getElementById('res-amt').innerText = '₹' + totalRiskAmt.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-            document.getElementById('res-qty').innerText = riskPerShare > 0 ? `${quantity} shares` : '0 shares (Invalid SL)';
+            document.getElementById('res-qty').innerText = riskPerShare > 0 ? `${quantity} shares` : '0 shares';
         }
 
-        // Admin Security Workspace Authentication Mock Toggle
+        // Admin Security Workspace Authentication Toggle Engine
         let isAuthenticated = false;
-        function handleAuthMock() {
+        function handleAuthToggle() {
             isAuthenticated = !isAuthenticated;
             const form = document.getElementById('publishForm');
             const authBtn = document.getElementById('authBtn');
+            const formElements = form.querySelectorAll('input, select, textarea, button');
             
             if(isAuthenticated) {
                 form.classList.remove('panel-locked');
                 authBtn.innerText = "Log Out System";
                 authBtn.style.background = "#e74c3c";
+                formElements.forEach(el => el.removeAttribute('disabled'));
             } else {
                 form.classList.add('panel-locked');
                 authBtn.innerText = "Secure Login";
                 authBtn.style.background = "#2ecc71";
+                formElements.forEach(el => el.setAttribute('disabled', 'true'));
             }
+        }
+
+        // Text Sanitize Escaper to Protect Against Injection Exploits
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
         }
 
         // Live Workspace Content DOM Publisher Engine
         function handleFormSubmission(e) {
             e.preventDefault();
-            if(!isAuthenticated) {
-                alert("Security Authorization Error: Please secure login access first.");
-                return;
-            }
+            if(!isAuthenticated) return;
 
             const targetWorkspace = document.getElementById('workspace-target').value;
-            const title = document.getElementById('asset-title').value;
-            const url = document.getElementById('chart-url').value;
-            const summary = document.getElementById('analysis-summary').value;
+            const title = escapeHTML(document.getElementById('asset-title').value);
+            const url = encodeURI(document.getElementById('chart-url').value);
+            const summary = escapeHTML(document.getElementById('analysis-summary').value);
 
             const mapping = {
                 'daily': 'stream-daily',
@@ -280,17 +294,15 @@
 
             const targetContainer = document.getElementById(mapping[targetWorkspace]);
             
-            // Build out new operational component string elements
             const cardMarkup = `
-                <div class="published-data-card animate-slide-in">
+                <div class="published-data-card data-node-added">
                     <h4>${title}</h4>
-                    ${url ? `<img src="${url}" alt="${title} Market Chart Visualization" class="chart-img-render">` : ''}
+                    ${url ? `<img src="${url}" alt="${title} Market Breakdown Chart" class="chart-img-render">` : ''}
                     <p class="summary-text">${summary}</p>
-                    <div class="card-footer-stamp"><small>Published Just Now • Verified Node</small></div>
+                    <div class="card-footer-stamp"><small>Published Just Now • Secured Data Cluster</small></div>
                 </div>
             `;
             
-            // Clear connecting text and prepend new entries
             const statusMsg = targetContainer.querySelector('.status-msg');
             const loader = targetContainer.querySelector('.pulse-loader');
             if (statusMsg) statusMsg.remove();
@@ -299,10 +311,8 @@
             targetContainer.insertAdjacentHTML('afterbegin', cardMarkup);
             e.target.reset();
             
-            // Direct focus and navigate smoothly directly to target feed stream
             navigateHub(targetWorkspace, null);
             
-            // Synchronize active link states 
             document.querySelectorAll('.nav-link').forEach(btn => {
                 if(btn.getAttribute('onclick').includes(`'${targetWorkspace}'`)) {
                     btn.classList.add('active');
@@ -312,7 +322,6 @@
             });
         }
 
-        // Initialize default runtime equations on launch
         window.addEventListener('DOMContentLoaded', () => {
             calculateRisk();
         });
