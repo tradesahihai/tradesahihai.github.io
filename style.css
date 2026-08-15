@@ -11,8 +11,10 @@
     --accent-red: #ff1744;
 }
 
+/* Base Device Layout Normalization Engine */
 html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 * {
@@ -28,14 +30,15 @@ body {
     overflow-x: hidden;
 }
 
-/* Header & Menu Setup */
+/* Header & Tab Navigation Panel Map */
 header {
     background-color: var(--card-bg);
     border-bottom: 1px solid var(--border-line);
-    padding: 1rem 5%;
+    padding: 1rem;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    gap: 1rem;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -44,28 +47,33 @@ header {
 .logo-group {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
 }
 
 .logo-group h1 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: var(--text-header);
 }
 
 .navigation-hub {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.25rem;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .nav-link {
     background: transparent;
     border: none;
     color: var(--text-body);
-    padding: 0.6rem 1.1rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     border-radius: 6px;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 
@@ -77,26 +85,51 @@ header {
 .nav-link.system-trigger {
     border: 1px dashed var(--accent-blue);
     color: var(--accent-blue);
-    margin-left: 0.5rem;
 }
 
-/* Split Columns Workspace Grid Layout */
+/* Global Mobile-First Stacked Layout Framework */
 .workspace-wrapper {
+    width: 100%;
     max-width: 1200px;
-    margin: 1.5rem auto;
-    padding: 0 1.25rem;
-    display: grid;
-    grid-template-columns: 2.2fr 1fr;
-    gap: 1.5rem;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
+/* Horizontal Scrolling Market Performance Ticker Section */
 .ticker-section {
-    grid-column: span 2;
     width: 100%;
 }
 
+.ticker-widget {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+    padding: 0.85rem;
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.green-pct { color: var(--accent-green); }
+.red-pct { color: var(--accent-red); }
+
+/* Primary Columns Workspace Containers */
 .primary-feed {
-    min-width: 0;
+    width: 100%;
 }
 
 .viewport-panel {
@@ -111,85 +144,88 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .stream-header h2 {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     color: var(--text-header);
 }
 
 .badge {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.7rem;
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.badge.blue { background-color: rgba(41, 98, 255, 0.12); color: #448aff; }
-.badge.gold { background-color: rgba(255, 145, 0, 0.12); color: #ffb300; }
-.badge.green { background-color: rgba(0, 230, 118, 0.12); color: #00e676; }
-.badge.purple { background-color: rgba(179, 60, 255, 0.12); color: #dfa3ff; }
+.badge.blue { background-color: rgba(41, 98, 255, 0.15); color: #448aff; }
+.badge.gold { background-color: rgba(255, 145, 0, 0.15); color: #ffb300; }
+.badge.green { background-color: rgba(0, 230, 118, 0.15); color: #00e676; }
+.badge.purple { background-color: rgba(179, 60, 255, 0.15); color: #dfa3ff; }
 
-/* Trading Analysis Post Card Styles */
+/* Analysis Card View Modules Layout Components */
 .cards-grid {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
-.display-card {
+.display-card-v2 {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
     border-radius: 10px;
-    padding: 1.75rem;
+    padding: 1.25rem;
+    width: 100%;
 }
 
-.display-card h3 {
+.display-card-v2 h3 {
     color: var(--text-header);
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
 }
 
 .card-meta {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #636d81;
-    margin-bottom: 1rem;
 }
 
-.card-graphic {
-    width: 100%;
-    max-height: 450px;
-    object-fit: cover;
-    border-radius: 6px;
+.chart-frame-wrapper {
+    background-color: #06080e;
     border: 1px solid var(--border-line);
+    border-radius: 6px;
+    padding: 0.25rem;
     margin: 1rem 0;
+    width: 100%;
+}
+
+.chart-frame-img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
     display: block;
+    border-radius: 4px;
 }
 
 .card-body-text {
-    line-height: 1.6;
-    color: #cbd3e1;
-    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+    font-size: 0.9rem;
     white-space: pre-wrap;
 }
 
-/* Short Reels Vertical Layout Grid */
+/* Vertical Reels Component Grid */
 .reels-vertical-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
 }
 
 .reel-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 .reel-video-simulation-box {
@@ -205,7 +241,7 @@ header {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
 .reel-overlay-info {
@@ -213,72 +249,54 @@ header {
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 1.25rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    padding: 0.75rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
     color: #fff;
 }
 
-.reel-overlay-info h4 {
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
-}
+.reel-overlay-info h4 { font-size: 0.85rem; }
+.reel-overlay-info p { font-size: 0.7rem; color: #a0aec0; }
 
-.reel-overlay-info p {
-    font-size: 0.75rem;
-    color: #cbd5e1;
-}
-
-/* Sidebar Component Layout Blocks */
+/* Sidebar Interface System Configuration Rules */
 .right-widget-stack {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
-.profile-widget-card {
+.profile-widget-card, .calculator-widget-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
     border-radius: 10px;
-    padding: 1.5rem;
-    text-align: left;
+    padding: 1.25rem;
 }
 
-.profile-widget-card h4 {
+.profile-widget-card h4, .calculator-widget-card h4 {
     color: var(--text-header);
+    font-size: 1rem;
     margin-bottom: 0.5rem;
 }
 
 .profile-widget-card p {
     font-size: 0.85rem;
-    line-height: 1.5;
-}
-
-.calculator-widget-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 10px;
-    padding: 1.5rem;
-}
-
-.calculator-widget-card h4 {
-    color: var(--text-header);
-    margin-bottom: 1rem;
+    line-height: 1.4;
 }
 
 .calc-inputs-grid {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
-.calc-inputs-grid input {
+.calc-inputs-grid input, input, select, textarea {
     background-color: var(--app-bg);
     border: 1px solid var(--border-line);
     border-radius: 6px;
-    padding: 0.75rem;
+    padding: 0.65rem;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     width: 100%;
 }
 
@@ -286,39 +304,30 @@ header {
     background-color: var(--app-bg);
     border: 1px dashed var(--border-line);
     border-radius: 6px;
-    padding: 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.65rem;
+    font-size: 0.8rem;
     text-align: center;
 }
 
-/* Studio Production Drawer */
+/* Production Management Sidebar System */
 .management-sidebar {
-    grid-column: span 2;
+    width: 100%;
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
     border-radius: 10px;
-    padding: 1.5rem;
-    margin-top: 1rem;
+    padding: 1.25rem;
 }
 
 .management-sidebar.hidden {
     display: none;
 }
 
-.form-element {
-    margin-bottom: 1rem;
-}
-
-.form-element label {
-    display: block;
-    font-size: 0.8rem;
-    margin-bottom: 0.4rem;
-    color: #7f8b9e;
-}
+.form-element { margin-bottom: 0.75rem; }
+.form-element label { display: block; font-size: 0.75rem; margin-bottom: 0.25rem; color: #7f8b9e; }
 
 .studio-action-btn {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.75rem;
     border: none;
     border-radius: 6px;
     font-weight: 700;
@@ -327,75 +336,27 @@ header {
     cursor: pointer;
 }
 
-/* Ticker Marquee Layouts */
-.ticker-widget {
-    width: 100%;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 10px;
-    padding: 1rem;
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: auto;
-}
-
-.ticker-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.green-pct { color: var(--accent-green); }
-.red-pct { color: var(--accent-red); }
-
-@media (max-width: 850px) {
-    .workspace-wrapper {
-        grid-template-columns: 1fr;
+/* --- Responsive Layout Breakpoint for Desktop Monitors --- */
+@media (min-width: 900px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 5%;
     }
-}
-
-/* --- Append to absolute bottom of existing style.css to fix gadget layouts --- */
-
-@media (max-width: 950px) {
-    /* Forces the split layout columns to turn into a clean single vertical stack */
-    .workspace-wrapper {
-        grid-template-columns: 1fr !important;
-        padding: 0 1rem;
-        gap: 1.25rem;
-    }
-
-    /* Moves the profile and calculator sidebar down below your charts and analysis posts */
-    .right-widget-stack {
-        order: 2;
-        width: 100%;
-    }
-
-    /* Pushes your primary chart feed to the top so it displays first */
-    .primary-feed {
-        order: 1;
-        width: 100%;
-    }
+    .logo-group h1 { font-size: 1.25rem; }
+    .navigation-hub { width: auto; overflow-x: visible; }
+    .nav-link { padding: 0.6rem 1.1rem; font-size: 0.9rem; }
     
-    /* Expands the dashboard cards to take up the full available width of mobile screens */
-    .display-card-v2 {
-        padding: 1.25rem;
+    .workspace-wrapper {
+        display: grid;
+        grid-template-columns: 2.2fr 1fr;
+        gap: 1.5rem;
+        padding: 0 1.25rem;
+        margin: 1.5rem auto;
     }
-}
-
-@media (max-width: 600px) {
-    /* Adds a responsive touchscreen scrollbar to your stock ticker so cards do not clip on mobile */
-    .ticker-widget {
-        display: flex;
-        overflow-x: auto;
-        white-space: nowrap;
-        padding: 0.75rem;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .ticker-item {
-        flex: 0 0 auto;
-        margin-right: 1.5rem;
-    }
+    .ticker-section { grid-column: span 2; }
+    .management-sidebar { grid-column: span 2; }
+    .stream-header h2 { font-size: 1.35rem; }
+    .display-card-v2 { padding: 1.75rem; }
+    .chart-frame-img { max-height: 480px; }
 }
