@@ -1,124 +1,156 @@
-// Initialization Configuration - Injected via Vercel Runtime Env
-const SUPABASE_URL = window.env?.SUPABASE_URL || "https://tieaswmnzytdeuatkmmq.supabase.co";
-const SUPABASE_ANON_KEY = window.env?.SUPABASE_ANON_KEY || "sb_publishable_46Q5oJKF2fdpiov_RHCN3g_OBcCMDb4";
+// Local Development Cache Memory Arrays
+let mockTechnicalDatabase = [
+    {
+        id: 101,
+        title: "NIFTY 50: Rebounding from 50-day EMA Anchor",
+        date: "Aug 15, 2026",
+        media: "https://unsplash.com",
+        body: "The index completed a clean validation sequence at its descending support line confluence. Bullish candles formed on higher volume, verifying pattern integrity. \n\nTarget parameters set for continuation moves towards previous high pivots, with stops safely tracking under current swing points."
+    }
+];
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-//const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let mockFundamentalDatabase = [
+    {
+        id: 201,
+        title: "Reliance Industries: Margin Expansion Review",
+        date: "Aug 12, 2026",
+        media: "https://unsplash.com",
+        body: "Detailed review of quarterly performance metrics reveals a 120bps margin expansion across core operating arrays. Cash conversion parameters remain highly positive, justifying historical valuation expansion runways."
+    }
+);
 
+let mockReelsDatabase = [
+    {
+        id: 301,
+        title: "How to Spot Fake Breakouts 💸",
+        desc: "3 volume filters to avoid trap structures.",
+        thumbnail: "https://unsplash.com"
+    },
+    {
+        id: 302,
+        title: "My Top 3 Candlestick Setups 🕯️",
+        desc: "High probability reversals explained in 60s.",
+        thumbnail: "https://unsplash.com"
+    }
+];
 
+// Active State Initialization System
 document.addEventListener("DOMContentLoaded", () => {
-    fetchCloudPosts();
-    checkActiveSession();
+    renderAllContentStreams();
 });
 
-// Fetch permanent data for all global visitors
-async function fetchCloudPosts() {
-    const techContainer = document.getElementById('technical-posts-container');
-    const fundContainer = document.getElementById('fundamental-posts-container');
+// Dynamic Tab View Controller System
+function navigateHub(targetTab, event) {
+    document.querySelectorAll('.viewport-panel').forEach(panel => panel.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
 
-    let { data: posts, error } = await supabase
-        .from('analysis_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error("Database error:", error);
-        return;
-    }
-
-    techContainer.innerHTML = '';
-    fundContainer.innerHTML = '';
-
-    if (!posts || posts.length === 0) {
-        const fallback = `<article class="post-card"><h2>No Entries Yet</h2><p>Admin hasn't published analyses yet.</p></article>`;
-        techContainer.innerHTML = fallback;
-        fundContainer.innerHTML = fallback;
-        return;
-    }
-
-    posts.forEach(post => {
-        let imgTag = post.image_url ? `<img src="${post.image_url}" class="post-chart" alt="Analysis Graphic">` : '';
-        let dateStr = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        
-        let postHTML = `
-            <article class="post-card">
-                <h2>${post.title}</h2>
-                <p class="meta-info">Published on ${dateStr}</p>
-                ${imgTag}
-                <p style="white-space: pre-line;">${post.body}</p>
-            </article>
-        `;
-
-        if (post.category === 'technical') techContainer.innerHTML += postHTML;
-        if (post.category === 'fundamental') fundContainer.innerHTML += postHTML;
-    });
-}
-
-// Secure Login Logic Engine
-async function loginAdmin() {
-    const email = document.getElementById('admin-email').value;
-    const password = document.getElementById('admin-pass').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        alert("Authentication failed: " + error.message);
-    } else {
-        showEditorSuite();
-    }
-}
-
-async function checkActiveSession() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) showEditorSuite();
-}
-
-function showEditorSuite() {
-    document.getElementById('auth-box').classList.add('hidden');
-    document.getElementById('editor-controls').classList.remove('hidden');
-}
-
-async function logoutAdmin() {
-    await supabase.auth.signOut();
-    window.location.reload();
-}
-
-// Global Cloud Write Publication
-async function publishToCloud() {
-    const category = document.getElementById('post-category').value;
-    const title = document.getElementById('post-title').value;
-    const image_url = document.getElementById('post-image').value;
-    const body = document.getElementById('post-body').value;
-
-    if (!title || !body) {
-        alert("Title and content are required fields!");
-        return;
-    }
-
-    const { data, error } = await supabase
-        .from('analysis_posts')
-        .insert([{ title, category, image_url, body }]);
-
-    if (error) {
-        alert("Publishing error: " + error.message);
-    } else {
-        alert("Published Live Globally!");
-        document.getElementById('post-title').value = '';
-        document.getElementById('post-image').value = '';
-        document.getElementById('post-body').value = '';
-        fetchCloudPosts();
-    }
-}
-
-// Tab Switches Navigation Controls
-function switchTab(targetTabId) {
-    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`${targetTabId}-tab`).classList.add('active');
+    document.getElementById(`${targetTab}-panel`).classList.add('active');
     event.currentTarget.classList.add('active');
+
+    // Soft viewport scroll reset
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function toggleAdminPanel() {
-    document.getElementById('admin-panel').classList.toggle('hidden');
+// Layout Studio Expansion Mechanisms
+function togglePublishingDesk() {
+    const studio = document.getElementById('studio-desk');
+    studio.classList.toggle('hidden');
+}
+
+// Adjust form layouts depending on active media target choice
+function adjustFormFields() {
+    const type = document.getElementById('content-type').value;
+    const mediaGroup = document.getElementById('media-link-group');
+    const bodyLabel = document.getElementById('body-label');
+
+    if (type === 'reel') {
+        mediaGroup.querySelector('label').innerText = "Reel Vertical Thumbnail Image Link (URL)";
+        bodyLabel.innerText = "Short Captions & Strategy Snippet";
+    } else {
+        mediaGroup.querySelector('label').innerText = "Chart Graphic (Direct Link Address / URL)";
+        bodyLabel.innerText = "Strategic Observations & Breakdown Summary";
+    }
+}
+
+// Form Submission Compiler Local Simulation Pipeline
+function compileStudioAsset() {
+    const type = document.getElementById('content-type').value;
+    const title = document.getElementById('content-title').value;
+    const media = document.getElementById('content-media').value || "https://unsplash.com";
+    const body = document.getElementById('content-body').value;
+
+    if (!title || !body) {
+        alert("Please complete the required titles and asset parameter fields.");
+        return;
+    }
+
+    const currentFormattedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+    if (type === 'technical') {
+        mockTechnicalDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
+    } else if (type === 'fundamental') {
+        mockFundamentalDatabase.unshift({ id: Date.now(), title, date: currentFormattedDate, media, body });
+    } else if (type === 'reel') {
+        mockReelsDatabase.unshift({ id: Date.now(), title, desc: body, thumbnail: media });
+    }
+
+    // Reset Input Form Areas Safely
+    document.getElementById('content-title').value = '';
+    document.getElementById('content-media').value = '';
+    document.getElementById('content-body').value = '';
+
+    renderAllContentStreams();
+    alert("Asset processed successfully into your layout cache! Switching screens.");
+}
+
+// Rendering Matrix Layer
+function renderAllContentStreams() {
+    const techVault = document.getElementById('tech-cards-vault');
+    const fundVault = document.getElementById('fund-cards-vault');
+    const reelsVault = document.getElementById('reels-cards-vault');
+
+    // Clear Previous Container Templates
+    techVault.innerHTML = '';
+    fundVault.innerHTML = '';
+    reelsVault.innerHTML = '';
+
+    // Technical Cards Execution Loop
+    mockTechnicalDatabase.forEach(item => {
+        techVault.innerHTML += `
+            <article class="display-card">
+                <h3>${item.title}</h3>
+                <p class="card-meta">Log compiled on ${item.date}</p>
+                <img src="${item.media}" class="card-graphic" alt="Chart Structure">
+                <p class="card-body-text">${item.body}</p>
+            </article>
+        `;
+    });
+
+    // Fundamental Cards Execution Loop
+    mockFundamentalDatabase.forEach(item => {
+        fundVault.innerHTML += `
+            <article class="display-card">
+                <h3>${item.title}</h3>
+                <p class="card-meta">Analysis created on ${item.date}</p>
+                <img src="${item.media}" class="card-graphic" alt="Valuation Summary Graphic">
+                <p class="card-body-text">${item.body}</p>
+            </article>
+        `;
+    });
+
+    // Reels Simulation Grid Execution Loop
+    mockReelsDatabase.forEach(reel => {
+        reelsVault.innerHTML += `
+            <article class="reel-card">
+                <div class="reel-video-simulation-box">
+                    <img src="${reel.thumbnail}" class="reel-media-placeholder" alt="Video Cover">
+                    <div style="position: absolute; font-size: 2rem; opacity: 0.85; cursor: pointer;">▶️</div>
+                    <div class="reel-overlay-info">
+                        <h4>${reel.title}</h4>
+                        <p>${reel.desc}</p>
+                    </div>
+                </div>
+            </article>
+        `;
+    });
 }
