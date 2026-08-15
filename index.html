@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Live Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase CDN Architecture -->
+    <!-- ✅ FIXED: Correct and working Supabase CDN library line -->
     <script src="https://jsdelivr.net"></script>
 </head>
 <body>
@@ -69,6 +69,130 @@
         </aside>
     </div>
 
-    <script src="script.js"></script>
+    <!-- ✅ FIXED: Script code connection mapping directly to your live Render backend app -->
+    <script>
+        const BACKEND_URL = "https://onrender.com"; 
+        let authToken = null;
+
+        // Fetch permanent data for all global visitors via the Render server
+        async function fetchCloudPosts() {
+            const techContainer = document.getElementById('technical-posts-container');
+            const fundContainer = document.getElementById('fundamental-posts-container');
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/posts`);
+                const posts = await res.json();
+                
+                techContainer.innerHTML = '';
+                fundContainer.innerHTML = '';
+
+                if (!posts || posts.length === 0) {
+                    const fallback = `<article class="post-card"><h2>No Entries Yet</h2><p>Admin hasn't published analyses yet.</p></article>`;
+                    techContainer.innerHTML = fallback;
+                    fundContainer.innerHTML = fallback;
+                    return;
+                }
+
+                posts.forEach(post => {
+                    let imgTag = post.image_url ? `<img src="${post.image_url}" class="post-chart" alt="Analysis Graphic" style="width:100%; border-radius:8px; margin:15px 0; background:#000;">` : '';
+                    let dateStr = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    let postHTML = `
+                        <article class="post-card" style="background:#121620; border:1px solid #1e2538; border-radius:12px; padding:2rem; margin-bottom:1.5rem;">
+                            <h2>${post.title}</h2>
+                            <p class="meta-info" style="font-size:0.85rem; color:#9aa2b5; margin-bottom:1.25rem;">Published on ${dateStr}</p>
+                            ${imgTag}
+                            <p style="white-space: pre-line;">${post.body}</p>
+                        </article>
+                    `;
+
+                    if (post.category === 'technical') techContainer.innerHTML += postHTML;
+                    if (post.category === 'fundamental') fundContainer.innerHTML += postHTML;
+                });
+            } catch (err) {
+                console.error("Connection error:", err);
+            }
+        }
+
+        // Secure Login Logic Engine targeting our remote server routing pipeline
+        async function loginAdmin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-pass').value;
+
+            const res = await fetch(`${BACKEND_URL}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                authToken = data.token;
+                document.getElementById('auth-box').classList.add('hidden');
+                document.getElementById('editor-controls').classList.remove('hidden');
+            } else {
+                alert("Authentication failed: " + data.error);
+            }
+        }
+
+        // Global Cloud Write Publication routed safely via Render authorization headers
+        async function publishToCloud() {
+            const category = document.getElementById('post-category').value;
+            const title = document.getElementById('post-title').value;
+            const image_url = document.getElementById('post-image').value;
+            const body = document.getElementById('post-body').value;
+
+            if (!title || !body) {
+                alert("Title and content are required fields!");
+                return;
+            }
+
+            const res = await fetch(`${BACKEND_URL}/api/posts`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': authToken
+                },
+                body: JSON.stringify({ title, category, image_url, body })
+            });
+
+            if (res.ok) {
+                alert("Published Live Globally!");
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-image').value = '';
+                document.getElementById('post-body').value = '';
+                fetchCloudPosts();
+            } else {
+                const data = await res.json();
+                alert("Publishing error: " + data.error);
+            }
+        }
+
+        function logoutAdmin() {
+            authToken = null;
+            window.location.reload();
+        }
+
+        // Tab Switches Controls with Smooth Mobile Anchor Navigation handling
+        function switchTab(targetTabId) {
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if(targetTabId === 'technical') {
+                document.getElementById('technical-tab').classList.add('active');
+            } else {
+                document.getElementById('fundamental-tab').classList.add('active');
+            }
+            event.currentTarget.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('admin-panel').classList.toggle('hidden');
+        }
+
+        // Start fetching data automatically when the screen mounts
+        window.onload = fetchCloudPosts;
+    </script>
 </body>
 </html>
