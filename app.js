@@ -135,98 +135,147 @@ async function fetchCloudAndFlatData() {
     } catch (err) { 
         console.error("Cloud tracking stream offline:", err); 
     }
-    // 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE
+// 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE (NON-BLOCKING PARALLEL IMPLEMENTATION)
     try {
         const today = new Date();
-        
-        // Loop backwards cleanly through the last 4 calendar days (e.g. tracking across Sep1 -> Aug31 smoothly)
+        const fetchPromises = [];
+
+        // 1. Queue all network request promises up in memory simultaneously (No sequential blocking)
         for (let i = 0; i < 4; i++) {
             const targetDate = new Date();
             targetDate.setDate(today.getDate() - i);
             
             const year = targetDate.getFullYear().toString(); 
-            const month = targetDate.toLocaleString('en-US', { month: 'long' }); // e.g. "September", "August"
-            const dayNum = targetDate.getDate().toString(); // Extracted strictly as raw numeric string ("16")
-            const dateStr = targetDate.toLocaleString('en-US', { month: 'short' }) + dayNum; // Kept for labeling elements ("Aug16")
+            const month = targetDate.toLocaleString('en-US', { month: 'long' }); 
+            const dayNum = targetDate.getDate().toString(); 
+            const dateStr = targetDate.toLocaleString('en-US', { month: 'short' }) + dayNum; 
 
-            // Parameters assembly passes raw numbers to the backend endpoint engine
-            const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dayNum}`);
-            if (res.ok) {
-                const data = await res.json();
-                const formattedBucketDateKey = targetDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                initializeDateBucket(formattedBucketDateKey);
-                const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
+            const requestPromise = fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dayNum}`)
+                .then(res => res.ok ? res.json() : null)
+                .then(data => {
+                    if (!data) return null;
+                    return { data, targetDate, dateStr, dayNum };
+                })
+                .catch(() => null);
 
-                // ✅ FIXED & ROBUST LAYOUT REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
-                if (data.summary) {
-                    // Extract data.summary directly or parse structural object formats safely
-                    const isSummaryObject = (data.summary && typeof data.summary === 'object' && !Array.isArray(data.summary));
-                    const rawTextContent = isSummaryObject ? data.summary.fullContent : data.summary;
-                    
-                    const dailyArray = [{ 
-                        title: `${dateStr}_chart.txt`, 
-                        content: data.summary, // Pass entire object structure down to handle accordion truncations
-                        image: data.imageUrl 
-                    }];
-                    
-                    dailyArray.forEach((item, idx) => {
-                        if (!item.content) return;
-                        // Added explicit responsive style controls to chart wrapper rules
-                        let imgHtml = item.image ? `
-                            <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
-                                <img src="${item.image}" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid #30363d;">
-                            </div>
-                        ` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title || "📈 Daily Chart Log", '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
-                        combinedTimeline[formattedBucketDateKey].daily.push(html);
-                    });
-                }
-
-                // ✅ TYPE-SAFE REPAIR LOOP FOR TODAY'S LEARNING SECTION
-                if (data.learning) {
-                    const learningArray = [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
-                    learningArray.forEach((item, idx) => {
-                        if (!item.content) return;
-                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><img src="${item.image}" style="width:100%; max-width:100%; height:auto; display:block; border-radius:6px; border:1px solid #30363d;"></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title || "💡 Learning Vector", '💡 Learning Vector', '#00e676', imgHtml, item.content, `local-learn-${dateStr}-${idx}`);
-                        combinedTimeline[formattedBucketDateKey].learning.push(html);
-                    });
-                }
-
-                // ✅ TYPE-SAFE REPAIR LOOP FOR SYSTEMATIC STRATEGIES
-                if (data.strategy) {
-                    const strategyArray = [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
-                    strategyArray.forEach((item, idx) => {
-                        if (!item.content) return;
-                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><img src="${item.image}" style="width:100%; max-width:100%; height:auto; display:block; border-radius:6px; border:1px solid #30363d;"></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎯 System Playbook", '🎯 System Playbook', '#ffea00', imgHtml, item.content, `local-strat-${dateStr}-${idx}`);
-                        combinedTimeline[formattedBucketDateKey].strategy.push(html);
-                    });
-                }
-
-                // ✅ TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
-                if (data.reels || data.videoUrl) {
-                    const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
-                    reelsArray.forEach((item, idx) => {
-                        let videoUrlSrc = item.video || data.videoUrl;
-                        if (!videoUrlSrc) return;
-                        let videoHtml = `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><video src="${videoUrlSrc}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video></div>`;
-                        
-                        const contentPayload = isTodayActiveSession ? (item.content || "") : {
-                            header: item.title || "Market Walkthrough Reel",
-                            hasMore: false,
-                            fullContent: item.content || "Daily Video Summary Documentation"
-                        };
-                        
-                        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Market Reel", '🎬 Market Reel', '#a004ff', videoHtml, contentPayload, `local-reel-${dateStr}-${idx}`);
-                        combinedTimeline[formattedBucketDateKey].reels.push(html);
-                    });
-                }
-            }
+            fetchPromises.push(requestPromise);
         }
+
+        // 2. Wait for all requests to finish at once (Eliminates NS_BINDING_ABORTED socket wipes)
+        const resolvedSessions = await Promise.all(fetchPromises);
+
+        resolvedSessions.forEach(session => {
+            if (!session) return;
+            const { data, targetDate, dateStr, dayNum } = session;
+
+            const formattedBucketDateKey = targetDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            initializeDateBucket(formattedBucketDateKey);
+            const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
+
+            // ✅ TYPE-SAFE REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
+            if (data.summary) {
+                const dailyArray = [{ title: `${dateStr}_chart.txt`, content: data.summary, image: data.imageUrl }];
+                dailyArray.forEach((item, idx) => {
+                    if (!item.content) return;
+                    
+                    // Added crossorigin attributes to bypass OpaqueResponseBlocking security barriers safely
+                    let imgHtml = item.image ? `
+                        <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
+                            <img src="${item.image}" crossorigin="anonymous" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid #30363d;">
+                        </div>
+                    ` : '';
+                    let html = compileCardMarkup(isTodayActiveSession, item.title || "📈 Daily Chart Log", '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
+                    combinedTimeline[formattedBucketDateKey].daily.push(html);
+                });
+            }
+
+            // ✅ TYPE-SAFE REPAIR LOOP FOR TODAY'S LEARNING SECTION
+            if (data.learning) {
+                const learningArray = [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
+                learningArray.forEach((item, idx) => {
+                    if (!item.content) return;
+                    let html = compileCardMarkup(isTodayActiveSession, item.title || "💡 Learning Vector", '💡 Learning Vector', '#00e676', '', item.content, `local-learn-${dateStr}-${idx}`);
+                    combinedTimeline[formattedBucketDateKey].learning.push(html);
+                });
+            }
+
+            // ✅ TYPE-SAFE REPAIR LOOP FOR SYSTEMATIC STRATEGIES
+            if (data.strategy) {
+                const strategyArray = [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
+                strategyArray.forEach((item, idx) => {
+                    if (!item.content) return;
+                    let html = compileCardMarkup(isTodayActiveSession, item.title || "🎯 System Playbook", '🎯 System Playbook', '#ffea00', '', item.content, `local-strat-${dateStr}-${idx}`);
+                    combinedTimeline[formattedBucketDateKey].strategy.push(html);
+                });
+            }
+
+            // ✅ TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
+            if (data.reels || data.videoUrl) {
+                const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
+                reelsArray.forEach((item, idx) => {
+                    let videoUrlSrc = item.video || data.videoUrl;
+                    if (!videoUrlSrc) return;
+                    
+                    // Added crossorigin="anonymous" and custom preload layout blocks to fix media blocking policies
+                    let videoHtml = `
+                        <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
+                            <video src="${videoUrlSrc}" crossorigin="anonymous" controls preload="metadata" style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video>
+                        </div>
+                    `;
+                    
+                    const contentPayload = isTodayActiveSession ? (item.content || "") : {
+                        header: item.title || "Market Walkthrough Reel",
+                        hasMore: false,
+                        fullContent: item.content || "Daily Video Summary Documentation"
+                    };
+                    
+                    let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Market Reel", '🎬 Market Reel', '#a004ff', videoHtml, contentPayload, `local-reel-${dateStr}-${idx}`);
+                    combinedTimeline[formattedBucketDateKey].reels.push(html);
+                });
+            }
+        });
     } catch (flatErr) { 
         console.warn("Flat file engine pipeline log bypass:", flatErr.message); 
     }
+
+    // --- Post-Processing Timeline Reductions ---
+    const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
+    
+    const verifyEmptyState = (el) => {
+        if (!el) return;
+        if (el.innerHTML.trim() === "") {
+            el.innerHTML = `
+                <div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem; width:100%; box-sizing:border-box;">
+                    No entries filed for active matrix tracking streams today.
+                </div>
+            `;
+        }
+    };
+
+    // 🔄 Render timeline headers and append historical tracks cleanly (RUNS EXACTLY ONCE AT THE END)
+    sortedDates.forEach(dateGroupKey => {
+        const bucket = combinedTimeline[dateGroupKey];
+        const isToday = (dateGroupKey === todayLabelString);
+        const labelBannerText = isToday ? `Today - ${dateGroupKey}` : dateGroupKey;
+
+        const generateDateDividerHeader = () => `
+            <div class="timeline-date-header" style="padding: 0.4rem 0.75rem; background: #21262d; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; font-size: 0.75rem; font-weight: 600; margin: 1rem 0 0.5rem 0; width:100%; clear:both; font-family:monospace; box-sizing:border-box;">
+                📅 ${labelBannerText}
+            </div>
+        `;
+
+        if (bucket.daily && bucket.daily.length > 0) dailyContainer.innerHTML += generateDateDividerHeader() + bucket.daily.join('');
+        if (bucket.learning && bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader() + bucket.learning.join('');
+        if (bucket.strategy && bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader() + bucket.strategy.join('');
+        if (bucket.reels && bucket.reels.length > 0) reelsContainer.innerHTML += generateDateDividerHeader() + bucket.reels.join('');
+    });
+
+    verifyEmptyState(dailyContainer); 
+    verifyEmptyState(learningContainer);
+    verifyEmptyState(strategyContainer); 
+    verifyEmptyState(reelsContainer);
+}
+
     // --- Post-Processing Timeline Reductions ---
     const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
     
