@@ -355,3 +355,47 @@ header {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- Append to absolute bottom of existing style.css to fix gadget layouts --- */
+
+@media (max-width: 950px) {
+    /* Forces the split layout columns to turn into a clean single vertical stack */
+    .workspace-wrapper {
+        grid-template-columns: 1fr !important;
+        padding: 0 1rem;
+        gap: 1.25rem;
+    }
+
+    /* Moves the profile and calculator sidebar down below your charts and analysis posts */
+    .right-widget-stack {
+        order: 2;
+        width: 100%;
+    }
+
+    /* Pushes your primary chart feed to the top so it displays first */
+    .primary-feed {
+        order: 1;
+        width: 100%;
+    }
+    
+    /* Expands the dashboard cards to take up the full available width of mobile screens */
+    .display-card-v2 {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Adds a responsive touchscreen scrollbar to your stock ticker so cards do not clip on mobile */
+    .ticker-widget {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0.75rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .ticker-item {
+        flex: 0 0 auto;
+        margin-right: 1.5rem;
+    }
+}
