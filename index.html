@@ -99,7 +99,7 @@
                 </div>
                 <div id="stream-strategy-container"></div>
             </div>
-
+            <!-- Isolated Video Reels Section -->
             <div id="reels-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Market Bytes & Short Reels</h2>
@@ -108,46 +108,49 @@
                 <div id="stream-reels-container"></div>
             </div>
 
+            <!-- 🧮 POSITION RISK CALCULATOR: Shifted Cleanly to the Bottom Layout of the Main Feed Column -->
+            <div class="calculator-widget-card" style="margin-top: 2.5rem; border-top: 1px solid #30363d; padding-top: 2rem; width: 100%;">
+                <div class="stream-header" style="margin-bottom: 1.25rem;">
+                    <h2>🧮 Portfolio Position Risk Calculator</h2>
+                    <span class="badge" style="background: #21262d; color: #8b949e; border: 1px solid #30363d;">Risk Utility Tool</span>
+                </div>
+                
+                <div class="calc-inputs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                    <div class="form-element">
+                        <label for="calc-capital">Trading Capital (₹)</label>
+                        <input type="number" id="calc-capital" value="100000" min="1" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-risk-pct">Risk Tolerance (%)</label>
+                        <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-entry">Entry Price (₹)</label>
+                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-target">Target Price (₹)</label>
+                        <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-stop">Stop Loss (₹)</label>
+                        <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
+                    </div>
+                </div>
+
+                <div class="calc-output-display-box" style="margin-top: 1.25rem; padding: 1rem; background: #0d1117; border-radius: 8px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;">
+                    <div id="calc-output-metrics" style="font-weight: 600; font-size: 1rem; color: #c9d1d9;">Ratio: Calculating...</div>
+                </div>
+            </div>
+
         </main>
+
 
         <!-- Sidebar Management Panel Right Stack Column Space -->
         <aside class="right-widget-stack">
             <div class="profile-widget-card">
                 <h4>👨‍💻 Trade Sahi Hai Admin</h4>
                 <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
-            </div>
-
-            <!-- Position Risk Calculator Widget -->
-            <div class="calculator-widget-card">
-                <h4>🧮 Position Risk Calculator</h4>
-                <p style="font-size: 0.75rem; margin-bottom: 0.75rem; color: #8b949e;">Enter trade bounds to calculate risk metrics.</p>
-                
-                <div class="calc-inputs-grid">
-                    <div class="form-element">
-                        <label for="calc-capital">Trading Capital (₹)</label>
-                        <input type="number" id="calc-capital" value="100000" min="1">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-risk-pct">Risk Tolerance (%)</label>
-                        <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-entry">Entry Price (₹)</label>
-                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-target">Target Price (₹)</label>
-                        <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-stop">Stop Loss (₹)</label>
-                        <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()">
-                    </div>
-                </div>
-
-                <div class="calc-output-display-box" style="margin-top: 1rem; padding: 0.75rem; background: #0d1117; border-radius: 6px;">
-                    <div id="calc-output-metrics" style="font-weight: 600; font-size: 0.9rem; color: #c9d1d9;">Ratio: Synchronizing...</div>
-                </div>
             </div>
         </aside>
     </div> <!-- Close workspace-wrapper -->
