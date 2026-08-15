@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Premium Analysis Hub</title>
+    <!-- Link connection pulling variables straight from your stylesheet section -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,9 +26,15 @@
     <!-- Global App Layout Wrapper -->
     <div class="workspace-wrapper">
         
-        <!-- Interactive Analytics Component Block -->
-        <section id="interactive-widget-anchor" style="grid-column: span 2; margin-bottom: 1rem; width: 100%;">
-            <!-- Widget layout placeholder handled by dynamic script injection -->
+        <!-- Live Ticker Component Row -->
+        <section class="ticker-section">
+            <div class="ticker-widget">
+                <div class="ticker-item"><span>NIFTY 50</span> <span class="green-pct">24,380.50 (+1.14%) ▲</span></div>
+                <div class="ticker-item"><span>BANK NIFTY</span> <span class="red-pct">51,210.20 (-0.32%) ▼</span></div>
+                <div class="ticker-item"><span>RELIANCE</span> <span class="green-pct">2,945.00 (+2.45%) ▲</span></div>
+                <div class="ticker-item"><span>TATA MOTORS</span> <span class="green-pct">1,012.40 (+1.85%) ▲</span></div>
+                <div class="ticker-item"><span>HDFC BANK</span> <span class="red-pct">1,610.15 (-0.74%) ▼</span></div>
+            </div>
         </section>
 
         <!-- Main Content Area Streams -->
@@ -40,7 +47,7 @@
                     <span class="badge blue">Live Charts</span>
                 </div>
                 <div id="tech-cards-vault" class="cards-grid">
-                    <!-- Core data layout generates dynamically here -->
+                    <!-- Dynamic client-side javascript data cards inject here -->
                 </div>
             </div>
 
@@ -51,7 +58,7 @@
                     <span class="badge gold">Valuation</span>
                 </div>
                 <div id="fund-cards-vault" class="cards-grid">
-                    <!-- Core data layout generates dynamically here -->
+                    <!-- Dynamic client-side javascript data cards inject here -->
                 </div>
             </div>
 
@@ -62,7 +69,7 @@
                     <span class="badge purple">Video Stream</span>
                 </div>
                 <div id="reels-cards-vault" class="reels-vertical-grid">
-                    <!-- Reels embed or mock rendering frames populate here -->
+                    <!-- Dynamic video blocks populate here -->
                 </div>
             </div>
         </main>
@@ -105,6 +112,7 @@
         </aside>
     </div>
 
+    <!-- Script routing file link reference logic -->
     <script src="script.js"></script>
 </body>
 </html>
