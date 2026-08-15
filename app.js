@@ -212,50 +212,47 @@ async function fetchCloudAndFlatData() {
     };
 
     // Render logic loop mapping compiled entries into their responsive layout targets
+       // --- Post-Processing Timeline Reductions ---
+    const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
+    
+    const verifyEmptyState = (el) => {
+        if (!el) return;
+        if (el.innerHTML.trim() === "") {
+            el.innerHTML = `
+                <div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem; width:100%; box-sizing:border-box;">
+                    No entries filed for active matrix tracking streams today.
+                </div>
+            `;
+        }
+    };
+
+    // 🔄 Render timeline headers and append historical tracks cleanly
     sortedDates.forEach(dateGroupKey => {
         const bucket = combinedTimeline[dateGroupKey];
         const isToday = (dateGroupKey === todayLabelString);
         const labelBannerText = isToday ? `Today - ${dateGroupKey}` : dateGroupKey;
 
-        const generateDateDividerHeader = (titleText) => `
-            <div class="timeline-date-header" style="padding: 0.4rem 0.75rem; background: #21262d; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; font-size: 0.75rem; font-weight: 600; margin: 1rem 0 0.5rem 0; width:100%; clear:both; font-family:monospace;">
-                📅 ${titleText}
-            </div>
-        `;
-
-        if (bucket.daily.length > 0) {
-            dailyContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.daily.join('');
-        }
-        if (bucket.learning.length > 0) {
-            learningContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.learning.join('');
-        }
-        if (bucket.strategy.length > 0) {
-            strategyContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.strategy.join('');
-        }
-        if (bucket.reels.length > 0) {
-            reelsContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.reels.join('');
-        }
-    });
-
-    // Run fallback visibility checks for today's columns
-    verifyEmptyState(dailyContainer);
-    verifyEmptyState(learningContainer);
-    verifyEmptyState(strategyContainer);
-    verifyEmptyState(reelsContainer);
-}
         const generateDateDividerHeader = () => `
-            <div class="timeline-date-header" style="padding: 0.4rem 0.75rem; background: #21262d; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; font-size: 0.75rem; font-weight: 600; margin: 1rem 0 0.5rem 0; width:100%; clear:both; font-family:monospace; box-sizing: border-box;">
+            <div class="timeline-date-header" style="padding: 0.4rem 0.75rem; background: #21262d; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; font-size: 0.75rem; font-weight: 600; margin: 1rem 0 0.5rem 0; width:100%; clear:both; font-family:monospace; box-sizing:border-box;">
                 📅 ${labelBannerText}
             </div>
         `;
 
-        if (bucket.daily.length > 0) dailyContainer.innerHTML += generateDateDividerHeader() + bucket.daily.join('');
-        if (bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader() + bucket.learning.join('');
-        if (bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader() + bucket.strategy.join('');
-        if (bucket.reels.length > 0) reelsContainer.innerHTML += generateDateDividerHeader() + bucket.reels.join('');
+        if (bucket.daily && bucket.daily.length > 0) {
+            dailyContainer.innerHTML += generateDateDividerHeader() + bucket.daily.join('');
+        }
+        if (bucket.learning && bucket.learning.length > 0) {
+            learningContainer.innerHTML += generateDateDividerHeader() + bucket.learning.join('');
+        }
+        if (bucket.strategy && bucket.strategy.length > 0) {
+            strategyContainer.innerHTML += generateDateDividerHeader() + bucket.strategy.join('');
+        }
+        if (bucket.reels && bucket.reels.length > 0) {
+            reelsContainer.innerHTML += generateDateDividerHeader() + bucket.reels.join('');
+        }
     });
 
-    // Run safe fallback empty checks across tracking targets
+    // Run safe fallback empty status checks across tracking column elements
     verifyEmptyState(dailyContainer); 
     verifyEmptyState(learningContainer);
     verifyEmptyState(strategyContainer); 
@@ -282,16 +279,18 @@ window.toggleHistoricalDrawer = function(drawerId) {
         trigger.style.color = "#2962ff";
     }
 };
-// Add this snippet at the absolute end of your app.js file to handle the layout adjustment
+
+/**
+ * 🧮 FIXED BOTTOM MATRIX PINNING ENGINE
+ * Extracts the layout element and anchors it to the baseline of the screen
+ */
 document.addEventListener("DOMContentLoaded", () => {
     const targetCalculatorElement = document.querySelector('.calculator-widget-card');
     
     if (targetCalculatorElement) {
-        // 1. Create a modern floating bar baseline node element wrapper
         const pinnedFooterContainer = document.createElement("div");
         pinnedFooterContainer.id = "global-portal-fixed-footer";
         
-        // 2. Set structural styles to force layout alignment properties over the application page view
         pinnedFooterContainer.style.cssText = `
             position: fixed; 
             bottom: 0; 
@@ -305,26 +304,20 @@ document.addEventListener("DOMContentLoaded", () => {
             display: block !important;
         `;
 
-        // 3. Move the internal container content safely to maintain styling formats
         pinnedFooterContainer.innerHTML = `
             <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; width: 100%; box-sizing: border-box;">
                 ${targetCalculatorElement.innerHTML}
             </div>
         `;
 
-        // 4. Safely purge the old element to prevent duplicate element operations on input tracking changes
         const parentCardContainer = targetCalculatorElement.closest('footer') || targetCalculatorElement.parentElement;
         if (parentCardContainer && parentCardContainer.tagName === 'FOOTER') {
-            // If it is inside a footer tag wrapper, only remove the calculator row but leave copyright line intact
             targetCalculatorElement.remove();
         } else {
             targetCalculatorElement.remove();
         }
 
-        // 5. Append cleanly onto core window body flow layers
         document.body.appendChild(pinnedFooterContainer);
-
-        // 6. Force safety bottom scroll padding across the template background context
         document.body.style.setProperty("padding-bottom", "85px", "important");
     }
 });
