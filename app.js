@@ -203,15 +203,6 @@ async function fetchCloudAndFlatData() {
         console.warn("Flat file engine pipeline log bypass:", flatErr.message); 
     }
 
-    const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
-    
-    const verifyEmptyState = (el) => {
-        if (el.innerHTML.trim() === "") {
-            el.innerHTML = `<div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem; width:100%; box-sizing:border-box;">No entries filed for active matrix tracking streams today.</div>`;
-        }
-    };
-
-    // Render logic loop mapping compiled entries into their responsive layout targets
        // --- Post-Processing Timeline Reductions ---
     const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
     
