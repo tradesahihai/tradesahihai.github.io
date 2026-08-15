@@ -17,7 +17,7 @@ let mockFundamentalDatabase = [
         media: "https://unsplash.com",
         body: "Detailed review of quarterly performance metrics reveals a 120bps margin expansion across core operating arrays. Cash conversion parameters remain highly positive, justifying historical valuation expansion runways."
     }
-);
+];
 
 let mockReelsDatabase = [
     {
