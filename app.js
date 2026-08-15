@@ -35,11 +35,12 @@ async function fetchCloudAndFlatData() {
             rawContentText = textBody || "";
         }
 
-        // ✅ INLINE PURGE SYSTEM: Completely ignore if the file layout is missing or null
+        // INLINE PURGE SYSTEM: Completely ignore if the file layout is missing or null
         let sanitizedMediaHtml = mediaHtml || "";
         if (!mediaHtml || sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || sanitizedMediaHtml.trim() === "") {
             sanitizedMediaHtml = "";
         }
+
         if (isToday) {
             return `
                 <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box; clear: both; overflow: hidden;">
@@ -48,7 +49,7 @@ async function fetchCloudAndFlatData() {
                         <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
                     
-                    <!-- ✅ IMAGE FIRST: Chart graphic moved right below title headers -->
+                    <!-- IMAGE FIRST: Chart graphic right below title headers -->
                     ${sanitizedMediaHtml}
                     
                     <!-- TEXT CONTENT SECOND: Summary context block aligned lower on the card layout frame -->
@@ -67,8 +68,11 @@ async function fetchCloudAndFlatData() {
                         </div>
                     </div>
                     <div id="${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
-                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin:0 0 1rem 0;">${rawContentText}</p>
+                        <!-- ✅ IMAGE FIRST FOR OLDER DATA: Chart renders right when accordion opens -->
                         ${sanitizedMediaHtml}
+
+                        <!-- TEXT CONTENT SECOND FOR OLDER DATA: Placed below the chart asset layout -->
+                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0;">${rawContentText}</p>
                     </div>
                 </div>
             `;
