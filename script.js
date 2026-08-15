@@ -1,7 +1,24 @@
-// ✅ SINGLE ABSOLUTE DEFINITION: Points directly to your custom live Render Web Service
-const REFINED_BACKEND_URL = "https://tradesahihai-backend.onrender.com";
+const REFINED_BACKEND_URL = "https://onrender.com"; 
+
+// 🚀 EXECUTE INSTANTLY: Intercepts the rendering timeline before layout painted elements can flicker
+(function applyInstantTabPersistence() {
+    const cachedActiveTab = localStorage.getItem('activeTradingTab') || 'daily';
+    
+    // Inject a global fallback dynamic rule to display your saved tab instantly
+    const dynamicStyleNode = document.createElement('style');
+    dynamicStyleNode.id = "instant-tab-cache-rule";
+    dynamicStyleNode.innerHTML = `
+        #${cachedActiveTab}-panel { display: block !important; opacity: 1 !important; visibility: visible !important; }
+    `;
+    document.head.appendChild(dynamicStyleNode);
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
+    const cachedActiveTab = localStorage.getItem('activeTradingTab') || 'daily';
+    
+    // Synchronize your tab button visibility highlights
+    initializeTabStateView(cachedActiveTab);
+    
     fetchCloudData();
     fetchDailyFlatFiles();
 });
@@ -146,9 +163,30 @@ async function fetchCloudData() {
 }
 
 function navigateHub(targetTab, event) {
+    localStorage.setItem('activeTradingTab', targetTab);
+    
+    // Clear out the startup stylesheet constraint override cleanly
+    const overrideStyle = document.getElementById("instant-tab-cache-rule");
+    if (overrideStyle) overrideStyle.remove();
+
+    initializeTabStateView(targetTab, event ? event.target : null);
+}
+
+function initializeTabStateView(targetTab, targetButton = null) {
     document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-    if (event && event.target) event.target.classList.add('active');
     const panel = document.getElementById(`${targetTab}-panel`);
     if (panel) panel.classList.add('active');
+    
+    if (targetButton) {
+        targetButton.classList.add('active');
+    } else {
+        const navButtons = document.querySelectorAll('.nav-link');
+        navButtons.forEach(btn => {
+            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
+                btn.classList.add('active');
+            }
+        });
+    }
 }
+
