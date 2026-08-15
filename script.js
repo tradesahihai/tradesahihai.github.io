@@ -1,10 +1,10 @@
 const REFINED_BACKEND_URL = "https://onrender.com"; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 💾 Retrieve your persistent active tab state position configuration out of browser storage
+    // 💾 Restore your previously active tab session from local storage on refresh, default to 'daily'
     const cachedActiveTab = localStorage.getItem('activeTradingTab') || 'daily';
     
-    // Fire synchronization view loops immediately on UI initialization threads
+    // Switch on visibility rules for your active container instantly
     initializeTabStateView(cachedActiveTab);
     
     fetchCloudData();
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * 📈 FLAT-FILE FILES ENGINE: Fetches directly out of your flexible wildcard backend folders
+ * 📈 FLAT-FILE FILE ENGINE: Fetches directly out of your flexible backend folders
  */
 async function fetchDailyFlatFiles() {
     try {
@@ -84,7 +84,7 @@ function injectFlatFilesIntoVaults(data) {
         ` + strategyVault.innerHTML;
     }
 
-    // 4. Conditional Video Reels Layer (Injects native HTML5 mp4 video files natively)
+    // 4. Conditional Video Reels Layer (Injects native HTML5 mp4 media players natively)
     if (data.videoUrl) {
         reelsVault.innerHTML = `
             <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
@@ -157,36 +157,27 @@ async function fetchCloudData() {
     } catch (err) { console.error("Cloud syncing blocked", err); }
 }
 
-// 🎛️ Clean Hub Navigator Configuration Layout Settings
 function navigateHub(targetTab, event) {
     localStorage.setItem('activeTradingTab', targetTab);
     initializeTabStateView(targetTab, event ? event.target : null);
 }
 
 function initializeTabStateView(targetTab, targetButton = null) {
-    // Hide ALL styling panels and clear active classes safely
-    document.querySelectorAll('.viewport-panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none'; 
-    });
-    
+    // Cleanly strip active visibility states across all tracking modules
+    document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
 
-    // Display exclusively the matching viewport element container target
-    const targetPanel = document.getElementById(`${targetTab}-panel`);
-    if (targetPanel) {
-    targetPanel.classList.add('active');
-    targetPanel.style.display = 'block';
-}
+    // Re-apply active class descriptors to show your selected container card row
+    const panel = document.getElementById(`${targetTab}-panel`);
+    if (panel) panel.classList.add('active');
 
-if (targetButton) {
-    targetButton.classList.add('active');
-} else {
-    const navButtons = document.querySelectorAll('.nav-link');
-    navButtons.forEach(btn => {
-        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
-            btn.classList.add('active');
-        }
-    });
-}
+    if (targetButton) {
+        targetButton.classList.add('active');
+    } else {
+ const navButtons = document.querySelectorAll('.nav-link');
+navButtons.forEach(btn => {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
+        btn.classList.add('active');
+    }
+});
 }
