@@ -3,142 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Analysis Suite</title>
-    <!-- Optimized dark theme styles built for mobile smartphones and fast loading loops -->
-    <style>
-        :root { --bg: #0b0e14; --surface: #121622; --border: #1f2638; --text: #f3f5f9; --accent: #2962ff; }
-        html { scroll-behavior: smooth; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 40px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
-        .nav-tabs button { background: none; border: none; color: #8e98a9; padding: 8px 16px; font-weight: 600; cursor: pointer; border-radius: 4px; }
-        .nav-tabs button.active { color: #fff; background: var(--border); }
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 25px; margin-bottom: 20px; }
-        .post-card img { width: 100%; max-height: 450px; object-fit: contain; border-radius: 6px; margin: 15px 0; background: #000; }
-        .admin-sidebar { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; height: fit-content; position: sticky; top: 90px; }
-        input, select, textarea { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 4px; margin-bottom: 12px; }
-        button.action { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .hidden { display: none; }
-        @media(max-width: 800px) { .container { grid-template-columns: 1fr; } .admin-sidebar { position: static; } }
-    </style>
+    <title>Trade Sahi Hai | Premium Analysis Hub</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Main Navigation Header -->
     <header>
-        <h2>📈 Trade Sahi Hai</h2>
-        <div class="nav-tabs">
-            <button class="tab-trigger active" onclick="switchTab('technical', event)">Technical</button>
-            <button class="tab-trigger" onclick="switchTab('fundamental', event)">Fundamental</button>
+        <div class="logo-group">
+            <span class="trend-icon">📈</span>
+            <h1>Trade Sahi Hai</h1>
         </div>
+        <nav class="navigation-hub">
+            <button class="nav-link active" onclick="navigateHub('technical', event)">Technical Analysis</button>
+            <button class="nav-link" onclick="navigateHub('fundamental', event)">Fundamentals</button>
+            <button class="nav-link" onclick="navigateHub('reels', event)">Trading Reels</button>
+            <button class="nav-link system-trigger" onclick="togglePublishingDesk()">✏️ Studio Desk</button>
+        </nav>
     </header>
 
-    <div class="container">
-        <main>
-            <div id="technical-panel" class="tab-panel active"><p>Syncing cloud data arrays...</p></div>
-            <div id="fundamental-panel" class="tab-panel"><p>Syncing cloud data arrays...</p></div>
+    <!-- Global App Layout Wrapper -->
+    <div class="workspace-wrapper">
+        
+        <!-- Interactive Analytics Component Block -->
+        <section id="interactive-widget-anchor" style="grid-column: span 2; margin-bottom: 1rem; width: 100%;">
+            <!-- Widget layout placeholder handled by dynamic script injection -->
+        </section>
+
+        <!-- Main Content Area Streams -->
+        <main class="primary-feed">
+            
+            <!-- Technical Analysis Workspace Panel -->
+            <div id="technical-panel" class="viewport-panel active">
+                <div class="stream-header">
+                    <h2>Daily Chart Inferences</h2>
+                    <span class="badge blue">Live Charts</span>
+                </div>
+                <div id="tech-cards-vault" class="cards-grid">
+                    <!-- Core data layout generates dynamically here -->
+                </div>
+            </div>
+
+            <!-- Fundamental Deep-Dives Workspace Panel -->
+            <div id="fundamental-panel" class="viewport-panel">
+                <div class="stream-header">
+                    <h2>Equity & Valuation Logs</h2>
+                    <span class="badge gold">Valuation</span>
+                </div>
+                <div id="fund-cards-vault" class="cards-grid">
+                    <!-- Core data layout generates dynamically here -->
+                </div>
+            </div>
+
+            <!-- Video Reels Grid Workspace Panel -->
+            <div id="reels-panel" class="viewport-panel">
+                <div class="stream-header">
+                    <h2>Market Bytes & Short Reels</h2>
+                    <span class="badge purple">Video Stream</span>
+                </div>
+                <div id="reels-cards-vault" class="reels-vertical-grid">
+                    <!-- Reels embed or mock rendering frames populate here -->
+                </div>
+            </div>
         </main>
 
-        <aside class="admin-sidebar">
-            <div id="login-interface">
-                <h4>🔒 System Authentication</h4><br>
-                <input type="email" id="admin-email" placeholder="Admin Email ID">
-                <input type="password" id="admin-password" placeholder="Master Password">
-                <button class="action" onclick="executeLogin()">Secure Login</button>
-            </div>
-            <div id="editor-interface" class="hidden">
-                <h4>✍️ Publish Analysis</h4><br>
-                <select id="post-category"><option value="technical">Technical</option><option value="fundamental">Fundamental</option></select>
-                <input type="text" id="post-title" placeholder="Analysis Heading Title">
-                <input type="text" id="post-image" placeholder="Chart Snapshot Direct Image URL">
-                <textarea id="post-body" rows="6" placeholder="Strategic observations, stop loss boundaries..."></textarea>
-                <button class="action" onclick="submitPost()">Publish Globally</button>
+        <!-- Visual Content Management Studio Sidebar Panel -->
+        <aside id="studio-desk" class="management-sidebar hidden">
+            <div class="sticky-desk-wrapper">
+                <div class="desk-header">
+                    <h3>✍️ Production Studio Desk</h3>
+                    <button class="close-desk-btn" onclick="togglePublishingDesk()">✕</button>
+                </div>
+                <hr class="divider">
+                
+                <div class="form-element">
+                    <label for="content-type">Select Media Asset Pipeline</label>
+                    <select id="content-type" onchange="adjustFormFields()">
+                        <option value="technical">Technical Analysis Post</option>
+                        <option value="fundamental">Fundamental Analysis Post</option>
+                        <option value="reel">Short Video Reel Log</option>
+                    </select>
+                </div>
+
+                <div class="form-element">
+                    <label for="content-title">Asset/Stock Identifier Heading</label>
+                    <input type="text" id="content-title" placeholder="e.g., RELIANCE 1D Breakout">
+                </div>
+
+                <div id="media-link-group" class="form-element">
+                    <label for="content-media">Media Graphic (Direct Link Address / URL)</label>
+                    <input type="text" id="content-media" placeholder="Paste link address to image format asset">
+                </div>
+
+                <div class="form-element">
+                    <label for="content-body" id="body-label">Strategic Observations & Breakdown Summary</label>
+                    <textarea id="content-body" rows="6" placeholder="Document technical trendlines, stop loss regions, or valuation metrics..."></textarea>
+                </div>
+
+                <button class="studio-action-btn submit-btn" onclick="compileStudioAsset()">Publish Asset Live</button>
             </div>
         </aside>
     </div>
 
-    <script>
-        // Connecting your frontend architecture back to your new Render web api channel
-        //const BACKEND_URL = "https://onrender.com"; 
-        const BACKEND_URL = "https://tradesahihai-backend.onrender.com";
-        let sessionToken = null;
-
-        async function fetchPosts() {
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/posts`);
-                const posts = await res.json();
-                const techBox = document.getElementById('technical-panel');
-                const fundBox = document.getElementById('fundamental-panel');
-                techBox.innerHTML = ''; fundBox.innerHTML = '';
-
-                if(!posts || posts.length === 0) {
-                    const cleanHtml = `<div class="post-card"><h4>No Records Created Yet</h4><p>The system table database is functional but empty. Log in through your admin panel to publish entries.</p></div>`;
-                    techBox.innerHTML = cleanHtml; fundBox.innerHTML = cleanHtml;
-                    return;
-                }
-
-                posts.forEach(p => {
-                    let imageTag = p.image_url ? `<img src="${p.image_url}">` : '';
-                    let cardLayout = `<div class="post-card"><h2>${p.title}</h2>${imageTag}<p style="white-space: pre-wrap; margin-top:10px; color:#cbd5e1;">${p.body}</p></div>`;
-                    if(p.category === 'technical') techBox.innerHTML += cardLayout;
-                    else fundBox.innerHTML += cardLayout;
-                });
-            } catch (err) { console.error("Cloud syncing blocked", err); }
-        }
-
-        async function executeLogin() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if(res.ok) {
-                    sessionToken = data.token;
-                    document.getElementById('login-interface').classList.add('hidden');
-                    document.getElementById('editor-interface').classList.remove('hidden');
-                } else { alert(data.error); }
-            } catch(e) { alert("Server connectivity runtime exception"); }
-        }
-
-        async function submitPost() {
-            const title = document.getElementById('post-title').value;
-            const category = document.getElementById('post-category').value;
-            const image_url = document.getElementById('post-image').value;
-            const body = document.getElementById('post-body').value;
-
-            if(!title || !body) return alert("Title and strategic summaries are required parameters.");
-
-            const res = await fetch(`${BACKEND_URL}/api/posts`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': sessionToken },
-                body: JSON.stringify({ title, category, image_url, body })
-            });
-            if(res.ok) {
-                alert("Published live to permanent database cloud nodes!");
-                document.getElementById('post-title').value = '';
-                document.getElementById('post-image').value = '';
-                document.getElementById('post-body').value = '';
-                fetchPosts();
-            } else {
-                const errData = await res.json();
-                alert("Error during publication: " + errData.error);
-            }
-        }
-
-        function switchTab(tab, event) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(`${tab}-panel`).classList.add('active');
-        }
-
-        window.onload = fetchPosts;
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
