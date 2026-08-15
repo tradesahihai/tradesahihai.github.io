@@ -25,14 +25,10 @@
 
     <!-- Global App Layout Wrapper Split Container -->
     <div class="workspace-wrapper">
-        <!-- Live Performance Marquee Row -->
+        <!-- Live Performance Marquee Row (Dynamic Node Target) -->
         <section class="ticker-section" aria-label="Live Market Ticker">
-            <div class="ticker-widget">
-                <div class="ticker-item"><span>NIFTY 50</span> <span class="green-pct">24,380.50 (+1.14%) ▲</span></div>
-                <div class="ticker-item"><span>BANK NIFTY</span> <span class="red-pct">51,210.20 (-0.32%) ▼</span></div>
-                <div class="ticker-item"><span>RELIANCE</span> <span class="green-pct">2,945.00 (+2.45%) ▲</span></div>
-                <div class="ticker-item"><span>TATA MOTORS</span> <span class="green-pct">1,012.40 (+1.85%) ▲</span></div>
-                <div class="ticker-item"><span>HDFC BANK</span> <span class="red-pct">1,610.15 (-0.74%) ▼</span></div>
+            <div class="ticker-widget" id="liveTickerMarquee">
+                <!-- JavaScript handles programmatic injection of active stock cards -->
             </div>
         </section>
 
@@ -69,10 +65,7 @@
                     <h2>Daily Market Analysis Inferences</h2>
                     <span class="badge badge-charts">Live Charts</span>
                 </div>
-                <div class="stream-container" id="stream-daily">
-                    <div class="pulse-loader"></div>
-                    <p class="status-msg">Connecting to cloud stream...</p>
-                </div>
+                <div class="stream-container" id="stream-daily"></div>
             </section>
 
             <!-- Today's Learning Logs Feed Section -->
@@ -81,10 +74,7 @@
                     <h2>Today's Market Concepts & Learning Logs</h2>
                     <span class="badge badge-edu">Educational</span>
                 </div>
-                <div class="stream-container" id="stream-learning">
-                    <div class="pulse-loader"></div>
-                    <p class="status-msg">Connecting to cloud stream...</p>
-                </div>
+                <div class="stream-container" id="stream-learning"></div>
             </section>
 
             <!-- Systematic Strategy Rules Feed Section -->
@@ -93,10 +83,7 @@
                     <h2>Systematic Strategy Execution Rules</h2>
                     <span class="badge badge-playbook">Playbook</span>
                 </div>
-                <div class="stream-container" id="stream-strategy">
-                    <div class="pulse-loader"></div>
-                    <p class="status-msg">Connecting to cloud stream...</p>
-                </div>
+                <div class="stream-container" id="stream-strategy"></div>
             </section>
 
             <!-- Market Bytes & Video Reels Section -->
@@ -105,10 +92,7 @@
                     <h2>Market Bytes & Short Reels</h2>
                     <span class="badge badge-video">Video Stream</span>
                 </div>
-                <div class="stream-container" id="stream-reels">
-                    <div class="pulse-loader"></div>
-                    <p class="status-msg">Connecting to cloud stream...</p>
-                </div>
+                <div class="stream-container" id="stream-reels"></div>
             </section>
 
         </main>
@@ -121,7 +105,7 @@
                 <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks valuation breakdowns.</p>
             </div>
 
-            <!-- Position Risk Calculator Widget -->
+            <!-- Position Risk Calculator Widget (Added Safe HTML Bound Limits) -->
             <div class="widget calculator-widget">
                 <div class="widget-header">
                     <span>🧮</span>
@@ -131,19 +115,19 @@
                 <div class="calculator-form">
                     <div class="input-row">
                         <label for="calc-capital">Trading Capital (₹)</label>
-                        <input type="number" id="calc-capital" value="100000" oninput="calculateRisk()">
+                        <input type="number" id="calc-capital" value="100000" min="1" oninput="calculateRisk()">
                     </div>
                     <div class="input-row">
                         <label for="calc-risk-pct">Risk Tolerance (%)</label>
-                        <input type="number" id="calc-risk-pct" value="1" step="0.1" oninput="calculateRisk()">
+                        <input type="number" id="calc-risk-pct" value="1" min="0.01" max="100" step="0.1" oninput="calculateRisk()">
                     </div>
                     <div class="input-row">
                         <label for="calc-entry">Entry Price (₹)</label>
-                        <input type="number" id="calc-entry" value="2500" oninput="calculateRisk()">
+                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateRisk()">
                     </div>
                     <div class="input-row">
                         <label for="calc-sl">Stop Loss (₹)</label>
-                        <input type="number" id="calc-sl" value="2450" oninput="calculateRisk()">
+                        <input type="number" id="calc-sl" value="2450" min="0" oninput="calculateRisk()">
                     </div>
                     <div class="results-display">
                         <div class="res-item">Max Risk: <strong id="res-amt">₹1,000</strong></div>
@@ -223,10 +207,10 @@
 
         // Secure Risk Arithmetic Calculations Engine
         function calculateRisk() {
-            const capital = parseFloat(document.getElementById('calc-capital').value) || 0;
-            const riskPct = parseFloat(document.getElementById('calc-risk-pct').value) || 0;
-            const entry = parseFloat(document.getElementById('calc-entry').value) || 0;
-            const stopLoss = parseFloat(document.getElementById('calc-sl').value) || 0;
+            const capital = Math.max(0, parseFloat(document.getElementById('calc-capital').value) || 0);
+            const riskPct = Math.max(0, parseFloat(document.getElementById('calc-risk-pct').value) || 0);
+            const entry = Math.max(0, parseFloat(document.getElementById('calc-entry').value) || 0);
+            const stopLoss = Math.max(0, parseFloat(document.getElementById('calc-sl').value) || 0);
 
             const totalRiskAmt = capital * (riskPct / 100);
             const riskPerShare = Math.abs(entry - stopLoss);
@@ -236,7 +220,6 @@
                 quantity = Math.floor(totalRiskAmt / riskPerShare);
             }
 
-            // Validation Rule: Catch upside-down risk logic values
             if (entry <= stopLoss && entry > 0) {
                 document.getElementById('res-qty').innerText = 'Check Stop Loss (Long Trade)';
                 document.getElementById('res-amt').innerText = '₹' + totalRiskAmt.toLocaleString('en-IN');
@@ -303,10 +286,8 @@
                 </div>
             `;
             
-            const statusMsg = targetContainer.querySelector('.status-msg');
-            const loader = targetContainer.querySelector('.pulse-loader');
-            if (statusMsg) statusMsg.remove();
-            if (loader) loader.remove();
+            const loaderContainer = targetContainer.querySelector('.stream-loading-state');
+            if (loaderContainer) loaderContainer.remove();
 
             targetContainer.insertAdjacentHTML('afterbegin', cardMarkup);
             e.target.reset();
@@ -322,7 +303,36 @@
             });
         }
 
+        // Initialize Dynamic Feeds and Tickers Programmatically
         window.addEventListener('DOMContentLoaded', () => {
+            // Render Live Tickers
+            const tickers = [
+                { name: 'NIFTY 50', val: '24,380.50', pct: '+1.14%', upward: true },
+                { name: 'BANK NIFTY', val: '51,210.20', pct: '-0.32%', upward: false },
+                { name: 'RELIANCE', val: '2,945.00', pct: '+2.45%', upward: true },
+                { name: 'TATA MOTORS', val: '1,012.40', pct: '+1.85%', upward: true },
+                { name: 'HDFC BANK', val: '1,610.15', pct: '-0.74%', upward: false }
+            ];
+            
+            const tickerWrapper = document.getElementById('liveTickerMarquee');
+            tickerWrapper.innerHTML = tickers.map(t => `
+                <div class="ticker-item">
+                    <span>${t.name}</span> 
+                    <span class="${t.upward ? 'green-pct' : 'red-pct'}">${t.val} (${t.pct}) ${t.upward ? '▲' : '▼'}</span>
+                </div>
+            `).join('');
+
+            // Render Clean Streaming Placeholders
+            const streams = ['stream-daily', 'stream-learning', 'stream-strategy', 'stream-reels'];
+            streams.forEach(id => {
+                document.getElementById(id).innerHTML = `
+                    <div class="stream-loading-state">
+                        <div class="pulse-loader"></div>
+                        <p class="status-msg">Connecting to cloud stream...</p>
+                    </div>
+                `;
+            });
+
             calculateRisk();
         });
     </script>
