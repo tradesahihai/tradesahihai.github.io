@@ -282,3 +282,49 @@ window.toggleHistoricalDrawer = function(drawerId) {
         trigger.style.color = "#2962ff";
     }
 };
+// Add this snippet at the absolute end of your app.js file to handle the layout adjustment
+document.addEventListener("DOMContentLoaded", () => {
+    const targetCalculatorElement = document.querySelector('.calculator-widget-card');
+    
+    if (targetCalculatorElement) {
+        // 1. Create a modern floating bar baseline node element wrapper
+        const pinnedFooterContainer = document.createElement("div");
+        pinnedFooterContainer.id = "global-portal-fixed-footer";
+        
+        // 2. Set structural styles to force layout alignment properties over the application page view
+        pinnedFooterContainer.style.cssText = `
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: #0d1117; 
+            border-top: 1px solid #30363d; 
+            padding: 0.4rem 0; 
+            z-index: 99999; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+            display: block !important;
+        `;
+
+        // 3. Move the internal container content safely to maintain styling formats
+        pinnedFooterContainer.innerHTML = `
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; width: 100%; box-sizing: border-box;">
+                ${targetCalculatorElement.innerHTML}
+            </div>
+        `;
+
+        // 4. Safely purge the old element to prevent duplicate element operations on input tracking changes
+        const parentCardContainer = targetCalculatorElement.closest('footer') || targetCalculatorElement.parentElement;
+        if (parentCardContainer && parentCardContainer.tagName === 'FOOTER') {
+            // If it is inside a footer tag wrapper, only remove the calculator row but leave copyright line intact
+            targetCalculatorElement.remove();
+        } else {
+            targetCalculatorElement.remove();
+        }
+
+        // 5. Append cleanly onto core window body flow layers
+        document.body.appendChild(pinnedFooterContainer);
+
+        // 6. Force safety bottom scroll padding across the template background context
+        document.body.style.setProperty("padding-bottom", "85px", "important");
+    }
+});
