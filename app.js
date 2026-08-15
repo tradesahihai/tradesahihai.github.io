@@ -16,11 +16,7 @@ async function fetchCloudAndFlatData() {
     strategyContainer.innerHTML = ''; reelsContainer.innerHTML = '';
 
     let combinedTimeline = {};
-
-    // Get today's clean localized date string layout to evaluate older metrics (e.g., "August 16, 2026")
-    const todayLabelString = new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
-    });
+    const todayLabelString = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     const initializeDateBucket = (dateKey) => {
         if (!combinedTimeline[dateKey]) {
@@ -28,203 +24,142 @@ async function fetchCloudAndFlatData() {
         }
     };
 
-    /**
-     * 🎨 ACCORDION DRAWER GENERATOR: Wraps older content records cleanly into single-line expandable rows
-     */
-    const compileCardMarkup = (isToday, title, tagText, tagBg, dateLabel, mediaHtml, textBody, pId) => {
+    const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
         if (isToday) {
-            // Full expanded layout variant for today's live analysis entries
             return `
-                <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
-                        <h3 style="margin:0; color:#fff; font-size:1.15rem; font-weight:600;">${title}</h3>
-                        <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight:600;">${tagText}</span></div>
+                        <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600;">${title}</h3>
+                        <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
-                    <p style="font-size:0.75rem; color:#8b949e; margin: 0 0 12px 0;">Logged on active session workspace timeline</p>
                     ${mediaHtml}
-                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.925rem; margin-top:0.75rem;">${textBody}</p>
+                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.875rem; margin-top:0.5rem;">${textBody}</p>
                 </div>
             `;
         } else {
-            // Streamlined high-density accordion layout row with visibility controllers for legacy logs
             const uniqueId = `drawer-${pId || Math.random().toString(36).substr(2, 9)}`;
             return `
                 <div class="historical-accordion-row" style="background:#161b22; border:1px solid #21262d; border-radius:6px; margin-bottom:0.5rem; width:100%; overflow:hidden;">
-                    <!-- Headline Layer Header Bar -->
-                    <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1.25rem; cursor:pointer; background:#1f242c; user-select:none; transition: background 0.2s;">
+                    <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; cursor:pointer; background:#1f242c; user-select:none;">
+                        <span style="font-size:0.85rem; color:#f0f6fc; font-weight:500;">📁 ${title}</span>
                         <div style="display:flex; align-items:center; gap:0.75rem;">
-                            <span style="font-size:0.9rem; color:#f0f6fc; font-weight:500;">📁 ${title}</span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:1rem;">
                             <span class="localization-tag" style="background:#30363d; color:#8b949e; padding:2px 6px; border-radius:4px; font-size:0.65rem;">${tagText}</span>
-                            <span id="${uniqueId}-trigger-text" style="font-size:0.75rem; font-weight:600; color:#2962ff; letter-spacing:0.5px;">[ 📖 Read Analysis ]</span>
+                            <span id="${uniqueId}-trigger-text" style="font-size:0.7rem; font-weight:600; color:#2962ff;">[ 📖 View ]</span>
                         </div>
                     </div>
-                    <!-- Hidden Expandable Content Area Drop Drawer -->
-                    <div id="${uniqueId}" style="display:none; padding:1.25rem; border-top:1px solid #21262d; background:#161b22;">
+                    <div id="${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
                         ${mediaHtml}
-                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.9rem; margin:0;">${textBody}</p>
+                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin:0;">${textBody}</p>
                     </div>
                 </div>
             `;
         }
     };
 
-    // 1. Fetch Legacy Table Data rows out of Supabase Cloud Tables
+    // 1. Fetch Cloud Posts out of Supabase Tables
     try {
         const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/posts`);
         const posts = await res.json();
         if (posts && posts.length > 0) {
             posts.forEach((p, index) => {
-                let parsedDate = new Date(p.created_at || Date.now()).toLocaleDateString('en-US', { 
-                    year: 'numeric', month: 'long', day: 'numeric' 
-                });
+                let parsedDate = new Date(p.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 initializeDateBucket(parsedDate);
-                
                 const isToday = (parsedDate === todayLabelString);
                 let mediaHtml = p.image_url ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0;"><img src="${p.image_url}" class="chart-frame-img" style="max-width:100%; border-radius:4px;"></div>` : '';
 
-                if (p.category === 'daily') {
-                    combinedTimeline[parsedDate].daily.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', parsedDate, mediaHtml, p.body, `cloud-daily-${index}`));
-                }
-                if (p.category === 'learning') {
-                    combinedTimeline[parsedDate].learning.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', parsedDate, mediaHtml, p.body, `cloud-learn-${index}`));
-                }
-                if (p.category === 'strategy') {
-                    combinedTimeline[parsedDate].strategy.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', parsedDate, mediaHtml, p.body, `cloud-strat-${index}`));
-                }
-                if (p.category === 'reel') {
-                    let reelHtml = `
-                        <article class="reel-card" style="width:100%; max-width:360px; background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1rem; margin-bottom:1rem;">
-                            <div class="reel-video-simulation-box" style="position:relative; display:flex; justify-content:center; align-items:center; background:#000; border-radius:6px; height:200px; overflow:hidden;">
-                                <img src="${p.image_url}" style="width:100%; opacity:0.6;">
-                                <div style="position: absolute; font-size: 2rem; opacity: 0.85; cursor: pointer;">▶️</div>
-                                <div style="position:absolute; bottom:0; left:0; right:0; padding:10px; background:linear-gradient(transparent, rgba(0,0,0,0.8)); color:#fff;">
-                                    <h4 style="margin:0;">${p.title}</h4>
-                                    <p style="font-size:0.75rem; opacity:0.9; margin:4px 0 0 0;">${p.body}</p>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                    combinedTimeline[parsedDate].reels.push(reelHtml);
-                }
+                if (p.category === 'daily') combinedTimeline[parsedDate].daily.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, p.body, `cloud-daily-${index}`));
+                if (p.category === 'learning') combinedTimeline[parsedDate].learning.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, p.body, `cloud-learn-${index}`));
+                if (p.category === 'strategy') combinedTimeline[parsedDate].strategy.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, p.body, `cloud-strat-${index}`));
             });
         }
-    } catch (err) { console.error("Cloud data stream offline:", err); }
+    } catch (err) { console.error("Cloud tracking stream offline:", err); }
 
-    // 2. ✅ FIXED: Automated loop that safely loads available flat files without breaking the timeline layout
+    // 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE
     try {
         const today = new Date();
-        const year = today.getFullYear().toString(); 
-        const month = today.toLocaleString('en-US', { month: 'long' }); 
         
-        // Loop through multiple tracking day logs (e.g., today Aug16 and yesterday Aug15)
-        const targetDaysToFetch = ["Aug15", "Aug16", "Aug16_NSE"]; 
-
-        for (const targetDatePrefix of targetDaysToFetch) {
-            const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${targetDatePrefix}`);
+        // Loop backwards cleanly through the last 4 calendar days (e.g. tracking across Sep1 -> Aug31 smoothly)
+        for (let i = 0; i < 4; i++) {
+            const targetDate = new Date();
+            targetDate.setDate(today.getDate() - i);
             
+            const year = targetDate.getFullYear().toString(); 
+            const month = targetDate.toLocaleString('en-US', { month: 'long' }); // e.g. "September", "August"
+            const monthShort = targetDate.toLocaleString('en-US', { month: 'short' }); // e.g. "Sep", "Aug"
+            const dayNum = targetDate.getDate();
+            const dateStr = `${monthShort}${dayNum}`; // Generates clean lookup prefix tokens case-insensitively
+
+            const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dateStr}`);
             if (res.ok) {
                 const data = await res.json();
-                
-                // Formats the timestamp display key cleanly matching your accordion records
-                const dayNum = targetDatePrefix.replace(/^\D+/g, '');
-                const formattedBucketDateKey = `${month} ${dayNum}, ${year}`; // Outputs: "August 15, 2026" or "August 16, 2026"
-                
+                const formattedBucketDateKey = targetDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 initializeDateBucket(formattedBucketDateKey);
-                
                 const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
-                let imgHtml = data.imageUrl ? `<div class="chart-frame-wrapper"><img src="${data.imageUrl}" class="chart-frame-img" style="max-width:100%; border-radius:8px; margin: 0.5rem 0;"></div>` : '';
 
-                if (data.summary) {
-                    let html = compileCardMarkup(isTodayActiveSession, '📈 Performance Log Analysis Summary', '📁 Local File', '#2962ff', formattedBucketDateKey, imgHtml, data.summary, `local-daily-${targetDatePrefix}`);
-                    combinedTimeline[formattedBucketDateKey].daily.unshift(html);
+                if (data.daily && data.daily.length > 0) {
+                    data.daily.forEach((item, idx) => {
+                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        let html = compileCardMarkup(isTodayActiveSession, item.title, '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
+                        combinedTimeline[formattedBucketDateKey].daily.push(html);
+                    });
                 }
-                if (data.learning) {
-                    let html = compileCardMarkup(isTodayActiveSession, '💡 Market Core Concept Learnings', '📁 Local File', '#00e676', formattedBucketDateKey, '', data.learning, `local-learn-${targetDatePrefix}`);
-                    combinedTimeline[formattedBucketDateKey].learning.unshift(html);
+                if (data.learning && data.learning.length > 0) {
+                    data.learning.forEach((item, idx) => {
+                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        let html = compileCardMarkup(isTodayActiveSession, item.title, '💡 Learning Vector', '#00e676', imgHtml, item.content, `local-learn-${dateStr}-${idx}`);
+                        combinedTimeline[formattedBucketDateKey].learning.push(html);
+                    });
                 }
-                            if (data.strategy) {
-                // ✅ LINE 86: Added missing backticks around the unique ID template string
-                let html = compileCardMarkup(isTodayActiveSession, '🎯 Playbook Strategic Actions', '📁 Local File', '#ffea00', formattedBucketDateKey, '', data.strategy, `local-strat-${targetDatePrefix}`);
-                combinedTimeline[formattedBucketDateKey].strategy.unshift(html);
-            }
-            if (data.videoUrl) {
-                let html = `
-                    <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
-                        <video src="${data.videoUrl}" controls style="border-radius: 6px; background: #000; width:100%; max-height:450px;">
-                            Your browser environment context cannot stream native video frames.
-                        </video>
-                        <div style="padding: 10px 0 0 0;">
-                            <h4 style="margin:0; color:#fff;">🎬 Daily Review Reel Walkthrough</h4>
-                            <p style="font-size:0.75rem; color:#8b949e; margin:4px 0 0 0;">Streaming via public storage bucket root</p>
-                        </div>
-                    </article>
-                `;
-                combinedTimeline[formattedBucketDateKey].reels.unshift(html);
-            }
+                if (data.strategy && data.strategy.length > 0) {
+                    data.strategy.forEach((item, idx) => {
+                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        let html = compileCardMarkup(isTodayActiveSession, item.title, '🎯 System Playbook', '#ffea00', imgHtml, item.content, `local-strat-${dateStr}-${idx}`);
+                        combinedTimeline[formattedBucketDateKey].strategy.push(html);
+                    });
+                }
+                if (data.reels && data.reels.length > 0) {
+                    data.reels.forEach((item, idx) => {
+                        let videoHtml = item.video ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><video src="${item.video}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000;"></video></div>` : '';
+                        let html = compileCardMarkup(isTodayActiveSession, item.title, '🎬 Market Reel', '#a004ff', videoHtml, item.content, `local-reel-${dateStr}-${idx}`);
+                        combinedTimeline[formattedBucketDateKey].reels.push(html);
+                    });
+                }
             }
         }
-    }
-    catch (flatErr) { 
-    console.warn("Flat file metrics pending for active clock tracking layer:", flatErr);
-    }
+    } catch (flatErr) { console.warn("Flat file engine pipeline log bypass:", flatErr.message); }
 
-// 3. Render Sorted Chronological timelines grouped cleanly inside divided Date blocks
-const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
-
-if (sortedDates.length === 0) {
-    // Fixed: Wrapped raw HTML content inside proper backticks
-    const emptyFallback = `
-        <div class="display-card-v2" style="background:#161b22; padding:1.5rem; border:1px solid #30363d; border-radius:8px; color:#8b949e;">
-            <h4>Feed Repository Active</h4>
-            <p>Commit flat text files to your data/ workspace directory to publish trading logs.</p>
-        </div>
-    `;
+    const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
     
-    dailyContainer.innerHTML = emptyFallback; 
-    learningContainer.innerHTML = emptyFallback;
-    strategyContainer.innerHTML = emptyFallback; 
-    reelsContainer.innerHTML = emptyFallback;
-    return;
-}
+    const verifyEmptyState = (el) => {
+        if(el.innerHTML.trim() === "") el.innerHTML = `<div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem;">No entries filed for active matrix tracking streams today.</div>`;
+    };
+
     sortedDates.forEach(dateGroupKey => {
-    const bucket = combinedTimeline[dateGroupKey];
-    const isToday = (dateGroupKey === todayLabelString);
-    
-    // Dynamic banner wrapper changes title automatically if the timeline row matches today's diary
-    // Fixed: Added template backticks to correctly handle string evaluation
-    const labelBannerText = isToday ? `Today - ${dateGroupKey}` : dateGroupKey;
-    
-    // Fixed: Wrapped the raw HTML layout element inside missing backticks
-    const generateDateDividerHeader = (title) => `
-        <div class="timeline-date-divider" style="display: flex; align-items: center; margin: 2rem 0 1rem 0; width: 100%;"> 
-            <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: ${isToday ? '#58a6ff' : '#8b949e'}; background: ${isToday ? 'rgba(56,139,253,0.15)' : '#21262d'}; padding: 4px 14px; border-radius: 20px; border: 1px solid ${isToday ? '#388bfd' : '#30363d'}; shadow: 0 2px 5px rgba(0,0,0,0.2);">📅 ${title}</span> 
-            <div style="flex-grow: 1; height: 1px; background: ${isToday ? '#388bfd' : '#30363d'}; margin-left: 1rem; opacity: ${isToday ? '0.7' : '0.4'};"></div> 
-        </div>
-    `;
-        if (bucket.daily.length > 0) dailyContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.daily.join('');
-if (bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.learning.join('');
-if (bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.strategy.join('');
-if (bucket.reels.length > 0) {
-    reelsContainer.innerHTML += generateDateDividerHeader(labelBannerText) + `<div style="display:flex; flex-direction:column; gap:1rem;">${bucket.reels.join('')}</div>`;
-}});
-}/**
-🎛️ ACCORDION RUNTIME CONTROLLER: Slides open text descriptions seamlessly on user interactions*/
-function toggleHistoricalDrawer(drawerId) {
-    const targetDrawerElement = document.getElementById(drawerId);
-    const triggerTextElement = document.getElementById(`${drawerId}-trigger-text`);
-    if (!targetDrawerElement || !triggerTextElement) return;
+        const bucket = combinedTimeline[dateGroupKey];
+        const isToday = (dateGroupKey === todayLabelString);
+        const labelBannerText = isToday ? `Today - ${dateGroupKey}` : dateGroupKey;
 
-    if (targetDrawerElement.style.display === "none") {
-        targetDrawerElement.style.display = "block";
-        triggerTextElement.innerText = "[ ❌ Close Analysis ]";
-        triggerTextElement.style.color = "#f85149"; // Transitions text color alert to clear red alert metrics
-    } else {
-        targetDrawerElement.style.display = "none";
-        triggerTextElement.innerText = "[ 📖 Read Analysis ]";
-        triggerTextElement.style.color = "#2962ff"; // Reset state blue highlight
-    }
+        const generateDateDividerHeader = () => `
+        📅 ${labelBannerText}
+
+
+`;
+if (bucket.daily.length > 0) dailyContainer.innerHTML += generateDateDividerHeader() + bucket.daily.join('');
+if (bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader() + bucket.learning.join('');
+if (bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader() + bucket.strategy.join('');
+if (bucket.reels.length > 0) reelsContainer.innerHTML += generateDateDividerHeader() + bucket.reels.join('');
+});
+verifyEmptyState(dailyContainer); verifyEmptyState(learningContainer);
+verifyEmptyState(strategyContainer); verifyEmptyState(reelsContainer);
 }
-
+function toggleHistoricalDrawer(drawerId) {
+const target = document.getElementById(drawerId);
+const trigger = document.getElementById(`${drawerId}-trigger-text`);
+if (!target || !trigger) return;
+if (target.style.display === "none") {
+target.style.display = "block"; trigger.innerText = "[ ❌ Close ]"; trigger.style.color = "#f85149";
+} else {
+target.style.display = "none"; trigger.innerText = "[ 📖 View ]"; trigger.style.color = "#2962ff";
+}
+}
 
