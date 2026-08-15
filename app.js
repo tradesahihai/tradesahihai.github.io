@@ -1,13 +1,17 @@
-const REFINED_BACKEND_URL = "https://tradesahihai-backend.onrender.com"; 
+const REFINED_BACKEND_URL = "https://onrender.com"; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const cachedActiveTab = localStorage.getItem('activeTradingTab') || 'daily';
-    initializeTabStateView(cachedActiveTab);
+    // ✅ Reads exclusively from this isolated browser tab's session cache
+    const cachedActiveTab = sessionStorage.getItem('activeTradingTab') || 'daily';
     
+    initializeTabStateView(cachedActiveTab);
     fetchCloudData();
     fetchDailyFlatFiles();
 });
 
+/**
+ * 📈 FLAT-FILE FILE ENGINE: Fetches directly out of your flexible backend folders
+ */
 async function fetchDailyFlatFiles() {
     try {
         const year = "2026";
@@ -147,8 +151,14 @@ async function fetchCloudData() {
     } catch (err) { console.error("Cloud syncing blocked", err); }
 }
 
+// 🎛️ Navigation Manager using SessionStorage Caching
 function navigateHub(targetTab, event) {
-    localStorage.setItem('activeTradingTab', targetTab);
+    sessionStorage.setItem('activeTradingTab', targetTab);
+    
+    // Wipe the head styling nodes to allow smooth adjustments
+    const overrideStyle = document.getElementById("instant-persistence-css");
+    if (overrideStyle) overrideStyle.remove();
+
     initializeTabStateView(targetTab, event ? event.target : null);
 }
 
