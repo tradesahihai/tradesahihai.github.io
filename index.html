@@ -6,7 +6,7 @@
     <title>Trade Sahi Hai | Premium Hub</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- ⚡️ CLEAN TRACKING SESSIONS PERSISTENCE INTERCEPTOR ENGINE -->
+    <!-- ⚡️ ISOLATED SESSION PERSISTENCE INTERCEPTOR ENGINE -->
     <script>
         (function() {
             // Isolates active panel data boundaries specifically to this individual browser window tab
@@ -19,6 +19,17 @@
                 
                 /* Reveal exclusively this browser tab's isolated active workspace */
                 #${activeTab}-panel { display: block !important; }
+
+                /* CONDITIONAL FOOTER: Display footer ONLY if the current tab is set to daily analysis */
+                #global-portal-footer { display: ${activeTab === 'daily' ? 'block' : 'none'} !important; }
+                
+                /* Highlight only the corresponding active button anchor */
+                .navigation-hub button[onclick*="'${activeTab}'"] { 
+                    background-color: var(--button-active-bg, #21262d) !important; 
+                    color: #ffffff !important; 
+                    border-color: #2962ff !important;
+                    font-weight: 600 !important;
+                }
             `;
             document.head.appendChild(styleNode);
         })();
@@ -40,7 +51,7 @@
         </nav>
     </header>
 
-    <!-- Sleek, High-Speed Indian Market & Major Stocks Moving Ticker Banner (Replaces Global Reach Bar) -->
+    <!-- Sleek, High-Speed Indian Market & Major Stocks Moving Ticker Banner Slider -->
     <div class="market-ticker-banner">
         <div class="ticker-scroll-track">
             <!-- First loop iteration container group -->
@@ -70,8 +81,8 @@
         </div>
     </div>
 
-        </section>
-
+    <!-- Global App Layout Wrapper Split Container -->
+    <div class="workspace-wrapper">
         <!-- Main Layout Live Document Vault Feed Column Space -->
         <main class="primary-feed">
             
@@ -99,7 +110,7 @@
                 </div>
                 <div id="stream-strategy-container"></div>
             </div>
-            <!-- Isolated Video Reels Section -->
+
             <div id="reels-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Market Bytes & Short Reels</h2>
@@ -108,45 +119,8 @@
                 <div id="stream-reels-container"></div>
             </div>
 
-            <!-- 🧮 POSITION RISK CALCULATOR: Shifted Cleanly to the Bottom Layout of the Main Feed Column -->
-            <div class="calculator-widget-card" style="margin-top: 2.5rem; border-top: 1px solid #30363d; padding-top: 2rem; width: 100%;">
-                <div class="stream-header" style="margin-bottom: 1.25rem;">
-                    <h2>🧮 Portfolio Position Risk Calculator</h2>
-                    <span class="badge" style="background: #21262d; color: #8b949e; border: 1px solid #30363d;">Risk Utility Tool</span>
-                </div>
-                
-                <div class="calc-inputs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
-                    <div class="form-element">
-                        <label for="calc-capital">Trading Capital (₹)</label>
-                        <input type="number" id="calc-capital" value="100000" min="1" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-risk-pct">Risk Tolerance (%)</label>
-                        <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-entry">Entry Price (₹)</label>
-                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-target">Target Price (₹)</label>
-                        <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
-                    </div>
-                    <div class="form-element">
-                        <label for="calc-stop">Stop Loss (₹)</label>
-                        <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()" style="width:100%; padding:0.5rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:6px;">
-                    </div>
-                </div>
-
-                <div class="calc-output-display-box" style="margin-top: 1.25rem; padding: 1rem; background: #0d1117; border-radius: 8px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;">
-                    <div id="calc-output-metrics" style="font-weight: 600; font-size: 1rem; color: #c9d1d9;">Ratio: Calculating...</div>
-                </div>
-            </div>
-
         </main>
-
-
-        <!-- Sidebar Management Panel Right Stack Column Space -->
+        <!-- Sidebar Management Panel Right Stack Column Space (Streamlined for Bio Focus Only) -->
         <aside class="right-widget-stack">
             <div class="profile-widget-card">
                 <h4>👨‍💻 Trade Sahi Hai Admin</h4>
@@ -155,10 +129,53 @@
         </aside>
     </div> <!-- Close workspace-wrapper -->
 
-    <!-- ✅ SINGLE SYSTEM ENTRY POINT -->
-    <script src="app.js?v=9.0.0"></script>
+    <!-- 🧮 SYSTEM FOOTER LAYER: Hosts the calculator widget cleanly across the base baseline -->
+    <footer id="global-portal-footer" style="width: 100%; background: #0d1117; border-top: 1px solid #30363d; padding: 2rem 0; margin-top: 4rem; display: none;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; width: 100%;">
+            
+            <div class="calculator-widget-card" style="width: 100%;">
+                <div class="stream-header" style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="font-size: 1.25rem; margin: 0; color: #fff;">🧮 Portfolio Position Risk Calculator</h2>
+                    <span class="badge" style="background: #21262d; color: #8b949e; border: 1px solid #30363d; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">Risk Utility Tool</span>
+                </div>
+                
+                <div class="calc-inputs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="form-element">
+                        <label for="calc-capital" style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 6px;">Trading Capital (₹)</label>
+                        <input type="number" id="calc-capital" value="100000" min="1" style="width:100%; padding:0.6rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; font-weight: 500;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-risk-pct" style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 6px;">Risk Tolerance (%)</label>
+                        <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1" style="width:100%; padding:0.6rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; font-weight: 500;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-entry" style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 6px;">Entry Price (₹)</label>
+                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.6rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; font-weight: 500;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-target" style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 6px;">Target Price (₹)</label>
+                        <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.6rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; font-weight: 500;">
+                    </div>
+                    <div class="form-element">
+                        <label for="calc-stop" style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 6px;">Stop Loss (₹)</label>
+                        <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()" style="width:100%; padding:0.6rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; font-weight: 500;">
+                    </div>
+                </div>
+
+                <div class="calc-output-display-box" style="padding: 1rem; background: #161b22; border-radius: 8px; border: 1px solid #30363d;">
+                    <div id="calc-output-metrics" style="font-weight: 600; font-size: 1rem; color: #c9d1d9; font-family: monospace;">Ratio: Calculating...</div>
+                </div>
+            </div>
+
+            <!-- Footer Baseline Trademark Credits -->
+            <p style="margin: 2rem 0 0 0; text-align: center; color: #8b949e; font-size: 0.75rem; letter-spacing: 0.5px;">&copy; 2026 Trade Sahi Hai • Built for High-Frequency Systems Precision Analytics</p>
+        </div>
+    </footer>
+
+    <!-- ✅ THE SINGLE EXTERNAL PRODUCTION CORE SCRIPTS ROUTE SOURCE -->
+    <script src="app.js?v=9.5.0"></script>
     <script>
-        // Calculates trading risk-to-reward ratios
+        // Calculates trading risk-to-reward ratios based on template parameters
         function calculateTradeMetrics() {
             const entry = parseFloat(document.getElementById('calc-entry').value);
             const target = parseFloat(document.getElementById('calc-target').value);
@@ -181,7 +198,7 @@
         function navigateHub(targetTab, event) {
             sessionStorage.setItem('activeTradingTab', targetTab);
             
-            // Cleanly remove the instant persistence inline block to avoid style locks
+            // Cleanly remove the instant persistence inline block to avoid style locks on interaction
             const overrideStyle = document.getElementById("instant-persistence-css");
             if (overrideStyle) overrideStyle.remove();
 
@@ -194,6 +211,12 @@
                 p.classList.remove('active');
             });
             document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+
+            // INTERCEPT VISIBILITY: Toggle footer calculator node layout dynamically matching first tab
+            const globalFooterElement = document.getElementById('global-portal-footer');
+            if (globalFooterElement) {
+                globalFooterElement.style.setProperty('display', (targetTab === 'daily') ? 'block' : 'none', 'important');
+            }
 
             const panel = document.getElementById(`${targetTab}-panel`);
             if (panel) {
