@@ -448,3 +448,72 @@ header {
 .viewport-panel.active {
     display: block !important;
 }
+/* ==========================================================================
+   📈 SLICK HARDWARE-ACCELERATED LIVE MARKET INDICES TICKER SLIDER MODULE
+   ========================================================================== */
+.market-ticker-banner {
+    width: 100%;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    overflow: hidden;
+    padding: 0.65rem 0;
+    box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1.5rem;
+}
+
+.ticker-scroll-track {
+    display: flex;
+    width: max-content;
+}
+
+.ticker-cluster {
+    display: flex;
+    align-items: center;
+    gap: 3.5rem;
+    padding-right: 3.5rem;
+    animation: infiniteTickerScroll 25s linear infinite;
+    will-change: transform;
+}
+
+/* Pause scroll track cleanly on cursor interactions to facilitate deep observation */
+.market-ticker-banner:hover .ticker-cluster {
+    animation-play-state: paused;
+}
+
+.ticker-item {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 0.825rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #c9d1d9;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ticker-item b {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.ticker-item b.green {
+    color: #39d353;
+    background: rgba(57, 211, 83, 0.1);
+}
+
+.ticker-item b.red {
+    color: #f85149;
+    background: rgba(248, 81, 73, 0.1);
+}
+
+/* High-Performance 60FPS Infinite Loop Matrix */
+@keyframes infiniteTickerScroll {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
