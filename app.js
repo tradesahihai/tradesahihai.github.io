@@ -36,14 +36,21 @@ async function fetchCloudAndFlatData() {
             rawContentText = textBody || "";
         }
 
+        // Clean up media html string dynamically to inject error-hiding protections safely
+        let sanitizedMediaHtml = mediaHtml || "";
+        if (sanitizedMediaHtml.includes('<img')) {
+            // Adds an inline style layout fallback listener to hide the picture frame immediately if it can't render
+            sanitizedMediaHtml = sanitizedMediaHtml.replace('<img', '<img onerror="this.style.display=\'none\'; this.parentElement.style.display=\'none\';"');
+        }
+
         if (isToday) {
             return `
-                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%;">
+                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
                         <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600;">${title}</h3>
                         <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
-                    ${mediaHtml}
+                    ${sanitizedMediaHtml}
                     <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.875rem; margin-top:0.5rem;">${rawContentText}</p>
                 </div>
             `;
@@ -59,7 +66,7 @@ async function fetchCloudAndFlatData() {
                         </div>
                     </div>
                     <div id="${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
-                        ${mediaHtml}
+                        ${sanitizedMediaHtml}
                         <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin:0;">${rawContentText}</p>
                     </div>
                 </div>
@@ -84,7 +91,6 @@ async function fetchCloudAndFlatData() {
             targetTrigger.style.color = "#2962ff";
         }
     };
-
     // 1. Fetch Cloud Posts out of Supabase Tables
     try {
         const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/posts`);
@@ -100,7 +106,13 @@ async function fetchCloudAndFlatData() {
                 let parsedDate = new Date(p.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 initializeDateBucket(parsedDate);
                 const isToday = (parsedDate === todayLabelString);
-                let mediaHtml = p.image_url ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0;"><img src="${p.image_url}" class="chart-frame-img" style="max-width:100%; border-radius:4px;"></div>` : '';
+                
+                // ✅ UPDATED STRUCTURAL MEDIA DESIGN CONFIGURATION
+                let mediaHtml = p.image_url ? `
+                    <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
+                        <img src="${p.image_url}" class="chart-frame-img" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 4px;">
+                    </div>
+                ` : '';
 
                 // Build consistent structure payload for older entries pulled natively via table queries
                 const contentPayload = isToday ? p.body : {
@@ -123,7 +135,7 @@ async function fetchCloudAndFlatData() {
     } catch (err) { 
         console.error("Cloud tracking stream offline:", err); 
     }
-// 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE
+    // 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE
     try {
         const today = new Date();
         
@@ -134,10 +146,10 @@ async function fetchCloudAndFlatData() {
             
             const year = targetDate.getFullYear().toString(); 
             const month = targetDate.toLocaleString('en-US', { month: 'long' }); // e.g. "September", "August"
-            const dayNum = targetDate.getDate().toString(); // ✅ FIX: Extracted strictly as raw numeric string ("16") instead of "Aug16"
+            const dayNum = targetDate.getDate().toString(); // Extracted strictly as raw numeric string ("16")
             const dateStr = targetDate.toLocaleString('en-US', { month: 'short' }) + dayNum; // Kept for labeling elements ("Aug16")
 
-            // Corrected parameters assembly to pass raw numbers to the backend endpoint engine
+            // Parameters assembly passes raw numbers to the backend endpoint engine
             const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dayNum}`);
             if (res.ok) {
                 const data = await res.json();
@@ -145,12 +157,26 @@ async function fetchCloudAndFlatData() {
                 initializeDateBucket(formattedBucketDateKey);
                 const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
 
-                // ✅ TYPE-SAFE REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
+                // ✅ FIXED & ROBUST LAYOUT REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
                 if (data.summary) {
-                    const dailyArray = Array.isArray(data.summary) ? data.summary : [{ title: `${dateStr}_chart.txt`, content: data.summary, image: data.imageUrl }];
+                    // Extract data.summary directly or parse structural object formats safely
+                    const isSummaryObject = (data.summary && typeof data.summary === 'object' && !Array.isArray(data.summary));
+                    const rawTextContent = isSummaryObject ? data.summary.fullContent : data.summary;
+                    
+                    const dailyArray = [{ 
+                        title: `${dateStr}_chart.txt`, 
+                        content: data.summary, // Pass entire object structure down to handle accordion truncations
+                        image: data.imageUrl 
+                    }];
+                    
                     dailyArray.forEach((item, idx) => {
                         if (!item.content) return;
-                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        // Added explicit responsive style controls to chart wrapper rules
+                        let imgHtml = item.image ? `
+                            <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
+                                <img src="${item.image}" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid #30363d;">
+                            </div>
+                        ` : '';
                         let html = compileCardMarkup(isTodayActiveSession, item.title || "📈 Daily Chart Log", '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].daily.push(html);
                     });
@@ -158,10 +184,10 @@ async function fetchCloudAndFlatData() {
 
                 // ✅ TYPE-SAFE REPAIR LOOP FOR TODAY'S LEARNING SECTION
                 if (data.learning) {
-                    const learningArray = Array.isArray(data.learning) ? data.learning : [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
+                    const learningArray = [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
                     learningArray.forEach((item, idx) => {
                         if (!item.content) return;
-                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><img src="${item.image}" style="width:100%; max-width:100%; height:auto; display:block; border-radius:6px; border:1px solid #30363d;"></div>` : '';
                         let html = compileCardMarkup(isTodayActiveSession, item.title || "💡 Learning Vector", '💡 Learning Vector', '#00e676', imgHtml, item.content, `local-learn-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].learning.push(html);
                     });
@@ -169,10 +195,10 @@ async function fetchCloudAndFlatData() {
 
                 // ✅ TYPE-SAFE REPAIR LOOP FOR SYSTEMATIC STRATEGIES
                 if (data.strategy) {
-                    const strategyArray = Array.isArray(data.strategy) ? data.strategy : [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
+                    const strategyArray = [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
                     strategyArray.forEach((item, idx) => {
                         if (!item.content) return;
-                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                        let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><img src="${item.image}" style="width:100%; max-width:100%; height:auto; display:block; border-radius:6px; border:1px solid #30363d;"></div>` : '';
                         let html = compileCardMarkup(isTodayActiveSession, item.title || "🎯 System Playbook", '🎯 System Playbook', '#ffea00', imgHtml, item.content, `local-strat-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].strategy.push(html);
                     });
@@ -180,13 +206,12 @@ async function fetchCloudAndFlatData() {
 
                 // ✅ TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
                 if (data.reels || data.videoUrl) {
-                    const reelsArray = Array.isArray(data.reels) ? data.reels : [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
+                    const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
                     reelsArray.forEach((item, idx) => {
                         let videoUrlSrc = item.video || data.videoUrl;
                         if (!videoUrlSrc) return;
-                        let videoHtml = `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><video src="${videoUrlSrc}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000;"></video></div>`;
+                        let videoHtml = `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><video src="${videoUrlSrc}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video></div>`;
                         
-                        // Handled textBody object configuration to prevent empty object renderings inside old reels panels
                         const contentPayload = isTodayActiveSession ? (item.content || "") : {
                             header: item.title || "Market Walkthrough Reel",
                             hasMore: false,
@@ -202,8 +227,7 @@ async function fetchCloudAndFlatData() {
     } catch (flatErr) { 
         console.warn("Flat file engine pipeline log bypass:", flatErr.message); 
     }
-
-       // --- Post-Processing Timeline Reductions ---
+    // --- Post-Processing Timeline Reductions ---
     const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
     
     const verifyEmptyState = (el) => {
@@ -282,16 +306,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const pinnedFooterContainer = document.createElement("div");
         pinnedFooterContainer.id = "global-portal-fixed-footer";
         
+        // Added high specificity positioning properties to guarantee it stays locked down
         pinnedFooterContainer.style.cssText = `
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            background: #0d1117; 
-            border-top: 1px solid #30363d; 
-            padding: 0.4rem 0; 
-            z-index: 99999; 
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+            position: fixed !important; 
+            bottom: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            background: #0d1117 !important; 
+            border-top: 1px solid #30363d !important; 
+            padding: 0.4rem 0 !important; 
+            z-index: 999999 !important; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.6) !important;
             display: block !important;
         `;
 
@@ -309,6 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         document.body.appendChild(pinnedFooterContainer);
-        document.body.style.setProperty("padding-bottom", "85px", "important");
+        document.body.style.setProperty("padding-bottom", "95px", "important");
     }
 });
