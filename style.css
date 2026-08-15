@@ -5,16 +5,12 @@
     --text-header: #ffffff;
     --text-body: #9da6b8;
     --accent-blue: #2962ff;
-    --accent-gold: #ff9100;
-    --accent-purple: #b33cff;
     --accent-green: #00e676;
     --accent-red: #ff1744;
 }
 
-/* Device Optimization Hardening */
 html {
     scroll-behavior: smooth;
-    text-size-adjust: 100%;
 }
 
 * {
@@ -30,7 +26,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Header Structure Panel */
+/* Header & Menu Setup */
 header {
     background-color: var(--card-bg);
     border-bottom: 1px solid var(--border-line);
@@ -52,7 +48,6 @@ header {
 .logo-group h1 {
     font-size: 1.25rem;
     color: var(--text-header);
-    letter-spacing: -0.2px;
 }
 
 .navigation-hub {
@@ -83,41 +78,27 @@ header {
     margin-left: 0.5rem;
 }
 
-.nav-link.system-trigger:hover {
-    background-color: rgba(41, 98, 255, 0.1);
-}
-
-/* Grid Arena Layout */
+/* Responsive Main Sidebar Workspace Split Layout */
 .workspace-wrapper {
     max-width: 1200px;
     margin: 1.5rem auto;
     padding: 0 1.25rem;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2.2fr 1fr;
     gap: 1.5rem;
-    align-items: flex-start;
 }
 
 .ticker-section {
     grid-column: span 2;
     width: 100%;
-    margin-bottom: 0.5rem;
 }
 
 .primary-feed {
-    grid-column: span 2;
-    transition: grid-column 0.3s ease;
+    min-width: 0;
 }
 
-/* Layout Shift triggers when Studio opens */
-.workspace-wrapper:has(.management-sidebar:not(.hidden)) .primary-feed {
-    grid-column: span 1;
-}
-
-/* Viewport Panels Control Matrix */
 .viewport-panel {
     display: none;
-    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .viewport-panel.active {
@@ -136,31 +117,13 @@ header {
     color: var(--text-header);
 }
 
-.badge {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 4px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge.blue { background-color: rgba(41, 98, 255, 0.12); color: #448aff; }
-.badge.gold { background-color: rgba(255, 145, 0, 0.12); color: #ffb300; }
-.badge.purple { background-color: rgba(179, 60, 255, 0.12); color: #dfa3ff; }
-
-/* Content Cards Framework Architecture */
-.cards-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
+/* Trading Analysis Post Card Styles */
 .display-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
     border-radius: 10px;
     padding: 1.75rem;
+    margin-bottom: 1.5rem;
 }
 
 .display-card h3 {
@@ -178,11 +141,11 @@ header {
 .card-graphic {
     width: 100%;
     max-height: 480px;
-    object-fit: contain;
-    background-color: #05060a;
+    object-fit: cover;
     border-radius: 6px;
     border: 1px solid var(--border-line);
-    margin-bottom: 1rem;
+    margin: 1rem 0;
+    display: block;
 }
 
 .card-body-text {
@@ -192,99 +155,94 @@ header {
     white-space: pre-wrap;
 }
 
-/* Short Reels Layout Grid Engine */
-.reels-vertical-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+/* Persistent Profile and Risk Calculator Sidebar Container */
+.right-widget-stack {
+    display: flex;
+    flex-direction: column;
     gap: 1.25rem;
 }
 
-.reel-card {
+.profile-widget-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
 }
 
-.reel-video-simulation-box {
-    aspect-ratio: 9/16;
-    background-color: #000;
-    position: relative;
+.profile-avatar-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--border-line);
+    border: 2px solid var(--accent-blue);
+    margin: 0 auto 0.75rem auto;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
 }
 
-.reel-media-placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.6;
-}
-
-.reel-overlay-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.25rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.85));
-    color: #fff;
-}
-
-.reel-overlay-info h4 {
-    font-size: 0.95rem;
+.profile-widget-card h4 {
+    color: var(--text-header);
     margin-bottom: 0.25rem;
 }
 
-.reel-overlay-info p {
-    font-size: 0.75rem;
-    color: #cbd5e1;
+.profile-widget-card p {
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
-/* Production Management Sidebar System */
-.management-sidebar {
+.calculator-widget-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-line);
     border-radius: 10px;
     padding: 1.5rem;
 }
 
+.calculator-widget-card h4 {
+    color: var(--text-header);
+    margin-bottom: 1rem;
+}
+
+.calc-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.calc-inputs-grid input {
+    background-color: var(--app-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: #fff;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.calc-output-display-box {
+    background-color: var(--app-bg);
+    border: 1px dashed var(--border-line);
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Studio Production Drawer */
+.management-sidebar {
+    grid-column: span 2;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
 .management-sidebar.hidden {
     display: none;
-}
-
-.sticky-desk-wrapper {
-    position: sticky;
-    top: 5.5rem;
-}
-
-.desk-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.desk-header h3 {
-    color: var(--text-header);
-    font-size: 1.05rem;
-}
-
-.close-desk-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-body);
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-.divider {
-    border: 0;
-    height: 1px;
-    background-color: var(--border-line);
-    margin: 1.25rem 0;
 }
 
 .form-element {
@@ -294,23 +252,8 @@ header {
 .form-element label {
     display: block;
     font-size: 0.8rem;
-    font-weight: 600;
     margin-bottom: 0.4rem;
     color: #7f8b9e;
-}
-
-input, select, textarea {
-    width: 100%;
-    background-color: var(--app-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 6px;
-    padding: 0.75rem;
-    color: var(--text-header);
-    font-size: 0.9rem;
-}
-
-input:focus, select:focus, textarea:focus {
-    outline: 1px solid var(--accent-blue);
 }
 
 .studio-action-btn {
@@ -319,15 +262,12 @@ input:focus, select:focus, textarea:focus {
     border: none;
     border-radius: 6px;
     font-weight: 700;
+    background-color: var(--accent-blue);
+    color: #fff;
     cursor: pointer;
 }
 
-.studio-action-btn.submit-btn {
-    background-color: var(--accent-blue);
-    color: #fff;
-}
-
-/* Stock Simulation Watchlist Widget Container Styles */
+/* Ticker Marquee Component Layouts */
 .ticker-widget {
     width: 100%;
     background-color: var(--card-bg);
@@ -337,34 +277,21 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     gap: 1.5rem;
     overflow-x: auto;
-    white-space: nowrap;
 }
 
 .ticker-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
 .green-pct { color: var(--accent-green); }
 .red-pct { color: var(--accent-red); }
 
-/* Responsive Adaptive Interface Rules */
-@media (max-width: 900px) {
-    .workspace-wrapper { grid-template-columns: 1fr; }
-    .workspace-wrapper:has(.management-sidebar:not(.hidden)) .primary-feed { grid-column: span 1; }
-    .management-sidebar { width: 100%; position: static; margin-top: 1.5rem; }
-}
-
-@media (max-width: 600px) {
-    header { flex-direction: column; gap: 0.75rem; padding: 1rem; }
-    .navigation-hub { width: 100%; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; }
-    .nav-link { padding: 0.5rem 0.8rem; font-size: 0.8rem; white-space: nowrap; }
-}
-
-@keyframes slideUpFade {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+@media (max-width: 850px) {
+    .workspace-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
