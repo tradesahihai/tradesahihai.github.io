@@ -207,13 +207,13 @@ if (sortedDates.length === 0) {
 if (bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.learning.join('');
 if (bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader(labelBannerText) + bucket.strategy.join('');
 if (bucket.reels.length > 0) {
-    reelsContainer.innerHTML += generateDateDividerHeader(labelBannerText) + <div style="display:flex; flex-direction:column; gap:1rem;">${bucket.reels.join('')}</div>;
+    reelsContainer.innerHTML += generateDateDividerHeader(labelBannerText) + `<div style="display:flex; flex-direction:column; gap:1rem;">${bucket.reels.join('')}</div>`;
 }});
 }/**
 🎛️ ACCORDION RUNTIME CONTROLLER: Slides open text descriptions seamlessly on user interactions*/
 function toggleHistoricalDrawer(drawerId) {
     const targetDrawerElement = document.getElementById(drawerId);
-    const triggerTextElement = document.getElementById(${drawerId}-trigger-text);
+    const triggerTextElement = document.getElementById(`${drawerId}-trigger-text`);
     if (!targetDrawerElement || !triggerTextElement) return;
 
     if (targetDrawerElement.style.display === "none") {
