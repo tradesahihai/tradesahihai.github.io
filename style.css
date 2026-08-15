@@ -11,7 +11,6 @@
     --accent-red: #ff1744;
 }
 
-/* Base Device Layout Normalization Engine */
 html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
@@ -30,7 +29,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Header & Tab Navigation Panel Map */
+/* Header & Menu Setup */
 header {
     background-color: var(--card-bg);
     border-bottom: 1px solid var(--border-line);
@@ -87,7 +86,7 @@ header {
     color: var(--accent-blue);
 }
 
-/* Global Mobile-First Stacked Layout Framework */
+/* Global Layout Grid Framework */
 .workspace-wrapper {
     width: 100%;
     max-width: 1200px;
@@ -98,7 +97,49 @@ header {
     gap: 1.25rem;
 }
 
-/* Horizontal Scrolling Market Performance Ticker Section */
+/* New Global Metrics Component Bar Formatting */
+.global-reach-bar {
+    width: 100%;
+    background: linear-gradient(135deg, #121622 0%, #171d30 100%);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.reach-metric-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.reach-metric-icon {
+    font-size: 1.3rem;
+    background-color: var(--app-bg);
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-line);
+    flex-shrink: 0;
+}
+
+.reach-metric-data h5 {
+    color: var(--text-header);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.reach-metric-data p {
+    font-size: 0.75rem;
+    color: var(--text-body);
+}
+
+/* Market Performance Ticker Section */
 .ticker-section {
     width: 100%;
 }
@@ -127,7 +168,7 @@ header {
 .green-pct { color: var(--accent-green); }
 .red-pct { color: var(--accent-red); }
 
-/* Primary Columns Workspace Containers */
+/* Main Columns Vault Feed */
 .primary-feed {
     width: 100%;
 }
@@ -164,7 +205,7 @@ header {
 .badge.green { background-color: rgba(0, 230, 118, 0.15); color: #00e676; }
 .badge.purple { background-color: rgba(179, 60, 255, 0.15); color: #dfa3ff; }
 
-/* Analysis Card View Modules Layout Components */
+/* Analysis Card Modules Layout Components */
 .cards-grid {
     display: flex;
     flex-direction: column;
@@ -184,9 +225,16 @@ header {
     font-size: 1.2rem;
 }
 
-.card-meta {
-    font-size: 0.75rem;
-    color: #636d81;
+.localization-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-line);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--text-header);
 }
 
 .chart-frame-wrapper {
@@ -214,7 +262,7 @@ header {
     white-space: pre-wrap;
 }
 
-/* Vertical Reels Component Grid */
+/* Short Reels Grid View Module Layout Component */
 .reels-vertical-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -257,7 +305,7 @@ header {
 .reel-overlay-info h4 { font-size: 0.85rem; }
 .reel-overlay-info p { font-size: 0.7rem; color: #a0aec0; }
 
-/* Sidebar Interface System Configuration Rules */
+/* Sidebar Panels Containers */
 .right-widget-stack {
     width: 100%;
     display: flex;
@@ -290,16 +338,6 @@ header {
     margin-bottom: 0.75rem;
 }
 
-.calc-inputs-grid input, input, select, textarea {
-    background-color: var(--app-bg);
-    border: 1px solid var(--border-line);
-    border-radius: 6px;
-    padding: 0.65rem;
-    color: #fff;
-    font-size: 0.85rem;
-    width: 100%;
-}
-
 .calc-output-display-box {
     background-color: var(--app-bg);
     border: 1px dashed var(--border-line);
@@ -309,7 +347,7 @@ header {
     text-align: center;
 }
 
-/* Production Management Sidebar System */
+/* Production Management Drawer Component */
 .management-sidebar {
     width: 100%;
     background-color: var(--card-bg);
@@ -336,14 +374,13 @@ header {
     cursor: pointer;
 }
 
-/* --- Responsive Layout Breakpoint for Desktop Monitors --- */
+/* --- Responsive Desktop Breakpoint Grid Mapping --- */
 @media (min-width: 900px) {
     header {
         flex-direction: row;
         justify-content: space-between;
         padding: 1rem 5%;
     }
-    .logo-group h1 { font-size: 1.25rem; }
     .navigation-hub { width: auto; overflow-x: visible; }
     .nav-link { padding: 0.6rem 1.1rem; font-size: 0.9rem; }
     
@@ -354,75 +391,13 @@ header {
         padding: 0 1.25rem;
         margin: 1.5rem auto;
     }
+    .global-reach-bar {
+        grid-column: span 2;
+        flex-direction: row;
+        justify-content: space-between;
+    }
     .ticker-section { grid-column: span 2; }
     .management-sidebar { grid-column: span 2; }
-    .stream-header h2 { font-size: 1.35rem; }
     .display-card-v2 { padding: 1.75rem; }
     .chart-frame-img { max-height: 480px; }
-}
-
-/* --- Append to absolute bottom of existing style.css --- */
-
-.global-reach-bar {
-    width: 100%;
-    background: linear-gradient(135deg, #121622 0%, #171d30 100%);
-    border: 1px solid var(--border-line);
-    border-radius: 10px;
-    padding: 1.25rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.reach-metric-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.reach-metric-icon {
-    font-size: 1.5rem;
-    background-color: var(--app-bg);
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border-line);
-}
-
-.reach-metric-data h5 {
-    color: var(--text-header);
-    font-size: 0.95rem;
-    font-weight: 700;
-}
-
-.reach-metric-data p {
-    font-size: 0.75rem;
-    color: var(--text-body);
-}
-
-.localization-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-line);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    color: var(--text-header);
-    margin-right: 0.5rem;
-}
-
-/* Enhances readability of international currency or stock symbol notations */
-.stock-ticker-notation {
-    font-family: monospace;
-    font-weight: 600;
-    color: var(--accent-blue);
-    background-color: rgba(41, 98, 255, 0.1);
-    padding: 0.1rem 0.3rem;
-    border-radius: 4px;
 }
