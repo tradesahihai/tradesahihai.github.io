@@ -440,3 +440,11 @@ header {
     color: var(--accent-gold);
     cursor: wait;
 }
+/* 🎛️ Dynamic Tab Viewport Toggles */
+.viewport-panel {
+    display: none !important;
+}
+
+.viewport-panel.active {
+    display: block !important;
+}
