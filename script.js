@@ -1,4 +1,4 @@
-// Local Development Cache Memory Arrays
+// Local Development Cache Memory Arrays with Fixed and Secured Image Paths
 let mockTechnicalDatabase = [
     {
         id: 101,
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAllContentStreams();
 });
 
-// Dynamic Tab View Controller System - Fixed event parameter declaration
+// Dynamic Tab View Controller System
 function navigateHub(targetTab, evt) {
     document.querySelectorAll('.viewport-panel').forEach(panel => panel.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
@@ -106,6 +106,30 @@ function compileStudioAsset() {
     alert("Asset processed successfully into your layout cache!");
 }
 
+// Dynamic Interactive Risk-to-Reward Calculator Utility Script Logic
+function calculateTradeMetrics() {
+    const entry = parseFloat(document.getElementById('calc-entry').value);
+    const target = parseFloat(document.getElementById('calc-target').value);
+    const stop = parseFloat(document.getElementById('calc-stop').value);
+    const outBox = document.getElementById('calc-output-metrics');
+
+    if (!entry || !target || !stop) {
+        outBox.innerHTML = "<span style='color:#ff1744;'>Fill all math constraints.</span>";
+        return;
+    }
+
+    const reward = target - entry;
+    const risk = entry - stop;
+
+    if (risk <= 0 || reward <= 0) {
+        outBox.innerHTML = "<span style='color:#ff1744;'>Invalid Entry vs Risk profile boundaries.</span>";
+        return;
+    }
+
+    const ratio = (reward / risk).toFixed(2);
+    outBox.innerHTML = `Risk: <b style="color:#ff1744;">${risk.toFixed(2)}</b> | Reward: <b style="color:#00e676;">${reward.toFixed(2)}</b> <br> Ratio: <b style="color:#2962ff;">${ratio} : 1</b>`;
+}
+
 // Rendering Matrix Layer
 function renderAllContentStreams() {
     const techVault = document.getElementById('tech-cards-vault');
@@ -125,7 +149,7 @@ function renderAllContentStreams() {
             <article class="display-card">
                 <h3>${item.title}</h3>
                 <p class="card-meta">Log compiled on ${item.date}</p>
-                <img src="${item.media}" class="card-graphic" alt="Chart Structure">
+                <img src="${item.media}" class="card-graphic" alt="Chart Structure" onerror="this.src='https://unsplash.com'">
                 <p class="card-body-text">${item.body}</p>
             </article>
         `;
@@ -137,7 +161,7 @@ function renderAllContentStreams() {
             <article class="display-card">
                 <h3>${item.title}</h3>
                 <p class="card-meta">Analysis created on ${item.date}</p>
-                <img src="${item.media}" class="card-graphic" alt="Valuation Summary Graphic">
+                <img src="${item.media}" class="card-graphic" alt="Valuation Summary Graphic" onerror="this.src='https://unsplash.com'">
                 <p class="card-body-text">${item.body}</p>
             </article>
         `;
