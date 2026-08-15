@@ -6,14 +6,21 @@
     <title>Trade Sahi Hai | Premium Hub</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- ⚡️ INSTANT PERSISTENCE INTERCEPTOR ENGINE -->
+    <!-- ⚡️ ISOLATED SESSION PERSISTENCE ENGINE -->
     <script>
         (function() {
-            var activeTab = localStorage.getItem('activeTradingTab') || 'daily';
+            // ✅ Isolates memory specifically to this unique open browser tab
+            var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
             var styleNode = document.createElement('style');
             styleNode.id = "instant-persistence-css";
             styleNode.innerHTML = `
+                /* Hide all panels by default on startup */
+                .viewport-panel { display: none !important; }
+                
+                /* Target and reveal only this browser tab's active view */
                 #${activeTab}-panel { display: block !important; }
+                
+                /* Highlight only the corresponding active button anchor */
                 .navigation-hub button[onclick*="'${activeTab}'"] { 
                     background-color: var(--button-active-bg, #21262d) !important; 
                     color: #ffffff !important; 
