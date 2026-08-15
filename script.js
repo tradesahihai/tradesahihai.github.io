@@ -1,4 +1,5 @@
-const REFINED_BACKEND_URL = "https://onrender.com"; 
+// ✅ REFINED ABSOLUTE CONFIGURATION: Corrected variable routing
+const REFINED_BACKEND_URL = "https://tradesahihai-backend.onrender.com"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     // 💾 Restore your previously active tab session from local storage on refresh, default to 'daily'
@@ -163,21 +164,22 @@ function navigateHub(targetTab, event) {
 }
 
 function initializeTabStateView(targetTab, targetButton = null) {
-    // Cleanly strip active visibility states across all tracking modules
-    document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.viewport-panel').forEach(p => {
+        p.classList.remove('active');
+    });
     document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
 
-    // Re-apply active class descriptors to show your selected container card row
     const panel = document.getElementById(`${targetTab}-panel`);
     if (panel) panel.classList.add('active');
 
     if (targetButton) {
         targetButton.classList.add('active');
     } else {
- const navButtons = document.querySelectorAll('.nav-link');
-navButtons.forEach(btn => {
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
-        btn.classList.add('active');
-    }
-});
+        const navButtons = document.querySelectorAll('.nav-link');
+        navButtons.forEach(btn => {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${targetTab}`)) {
+            btn.classList.add('active');
+        }
+    });
+}
 }
