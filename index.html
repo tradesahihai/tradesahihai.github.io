@@ -3,196 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Live Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- ✅ FIXED: Correct and working Supabase CDN library line -->
-    <script src="https://jsdelivr.net"></script>
+    <title>Trade Sahi Hai | Analysis Suite</title>
+    <!-- Optimized dark theme styles built for mobile smartphones and fast loading loops -->
+    <style>
+        :root { --bg: #0b0e14; --surface: #121622; --border: #1f2638; --text: #f3f5f9; --accent: #2962ff; }
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 40px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+        .nav-tabs button { background: none; border: none; color: #8e98a9; padding: 8px 16px; font-weight: 600; cursor: pointer; border-radius: 4px; }
+        .nav-tabs button.active { color: #fff; background: var(--border); }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 25px; margin-bottom: 20px; }
+        .post-card img { width: 100%; max-height: 450px; object-fit: contain; border-radius: 6px; margin: 15px 0; background: #000; }
+        .admin-sidebar { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; height: fit-content; position: sticky; top: 90px; }
+        input, select, textarea { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 4px; margin-bottom: 12px; }
+        button.action { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .hidden { display: none; }
+        @media(max-width: 800px) { .container { grid-template-columns: 1fr; } .admin-sidebar { position: static; } }
+    </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">📈 Trade Sahi Hai</div>
-        <nav class="tab-navigation">
-            <button class="nav-btn active" onclick="switchTab('technical')">Technical Analysis</button>
-            <button class="nav-btn" onclick="switchTab('fundamental')">Fundamentals</button>
-            <button class="nav-btn admin-gateway" onclick="toggleAdminPanel()">🔒 Admin Portal</button>
-        </nav>
+        <h2>📈 Trade Sahi Hai</h2>
+        <div class="nav-tabs">
+            <button class="tab-trigger active" onclick="switchTab('technical', event)">Technical</button>
+            <button class="tab-trigger" onclick="switchTab('fundamental', event)">Fundamental</button>
+        </div>
     </header>
 
     <div class="container">
-        <main class="content-stream">
-            <section id="technical-tab" class="tab-panel active">
-                <div id="technical-posts-container">
-                    <p class="loading-text">Fetching latest cloud data...</p>
-                </div>
-            </section>
-
-            <section id="fundamental-tab" class="tab-panel">
-                <div id="fundamental-posts-container">
-                    <p class="loading-text">Fetching latest cloud data...</p>
-                </div>
-            </section>
+        <main>
+            <div id="technical-panel" class="tab-panel active"><p>Syncing cloud data arrays...</p></div>
+            <div id="fundamental-panel" class="tab-panel"><p>Syncing cloud data arrays...</p></div>
         </main>
 
-        <aside id="admin-panel" class="admin-sidebar hidden">
-            <div class="admin-wrapper">
-                <h3>Admin Authentication</h3>
-                <div id="auth-box">
-                    <input type="email" id="admin-email" placeholder="Admin Email">
-                    <input type="password" id="admin-pass" placeholder="Secure Password">
-                    <button class="action-btn positive" onclick="loginAdmin()">Secure Login</button>
-                </div>
-
-                <div id="editor-controls" class="hidden">
-                    <div class="admin-profile-badge">⚡ Authenticated Session Active</div>
-                    <hr class="divider">
-                    <h3>Publish New Analysis</h3>
-                    <label>Stream Classification</label>
-                    <select id="post-category">
-                        <option value="technical">Technical Analysis</option>
-                        <option value="fundamental">Fundamental Analysis</option>
-                    </select>
-
-                    <label>Analysis Heading</label>
-                    <input type="text" id="post-title" placeholder="e.g., NIFTY Breakout Confirmation">
-
-                    <label>Chart Graphic (Image URL)</label>
-                    <input type="text" id="post-image" placeholder="Paste link to chart image">
-
-                    <label>Strategic Observations & Insights</label>
-                    <textarea id="post-body" rows="6" placeholder="Document specific trendlines..."></textarea>
-
-                    <button class="action-btn complete" onclick="publishToCloud()">Publish Live Globally</button>
-                    <button class="action-btn negative" onclick="logoutAdmin()">Sign Out</button>
-                </div>
+        <aside class="admin-sidebar">
+            <div id="login-interface">
+                <h4>🔒 System Authentication</h4><br>
+                <input type="email" id="admin-email" placeholder="Admin Email ID">
+                <input type="password" id="admin-password" placeholder="Master Password">
+                <button class="action" onclick="executeLogin()">Secure Login</button>
+            </div>
+            <div id="editor-interface" class="hidden">
+                <h4>✍️ Publish Analysis</h4><br>
+                <select id="post-category"><option value="technical">Technical</option><option value="fundamental">Fundamental</option></select>
+                <input type="text" id="post-title" placeholder="Analysis Heading Title">
+                <input type="text" id="post-image" placeholder="Chart Snapshot Direct Image URL">
+                <textarea id="post-body" rows="6" placeholder="Strategic observations, stop loss boundaries..."></textarea>
+                <button class="action" onclick="submitPost()">Publish Globally</button>
             </div>
         </aside>
     </div>
 
-    <!-- ✅ FIXED: Script code connection mapping directly to your live Render backend app -->
     <script>
+        // Connecting your frontend architecture back to your new Render web api channel
         const BACKEND_URL = "https://onrender.com"; 
-        let authToken = null;
+        let sessionToken = null;
 
-        // Fetch permanent data for all global visitors via the Render server
-        async function fetchCloudPosts() {
-            const techContainer = document.getElementById('technical-posts-container');
-            const fundContainer = document.getElementById('fundamental-posts-container');
-
+        async function fetchPosts() {
             try {
                 const res = await fetch(`${BACKEND_URL}/api/posts`);
                 const posts = await res.json();
-                
-                techContainer.innerHTML = '';
-                fundContainer.innerHTML = '';
+                const techBox = document.getElementById('technical-panel');
+                const fundBox = document.getElementById('fundamental-panel');
+                techBox.innerHTML = ''; fundBox.innerHTML = '';
 
-                if (!posts || posts.length === 0) {
-                    const fallback = `<article class="post-card"><h2>No Entries Yet</h2><p>Admin hasn't published analyses yet.</p></article>`;
-                    techContainer.innerHTML = fallback;
-                    fundContainer.innerHTML = fallback;
+                if(!posts || posts.length === 0) {
+                    const cleanHtml = `<div class="post-card"><h4>No Records Created Yet</h4><p>The system table database is functional but empty. Log in through your admin panel to publish entries.</p></div>`;
+                    techBox.innerHTML = cleanHtml; fundBox.innerHTML = cleanHtml;
                     return;
                 }
 
-                posts.forEach(post => {
-                    let imgTag = post.image_url ? `<img src="${post.image_url}" class="post-chart" alt="Analysis Graphic" style="width:100%; border-radius:8px; margin:15px 0; background:#000;">` : '';
-                    let dateStr = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    
-                    let postHTML = `
-                        <article class="post-card" style="background:#121620; border:1px solid #1e2538; border-radius:12px; padding:2rem; margin-bottom:1.5rem;">
-                            <h2>${post.title}</h2>
-                            <p class="meta-info" style="font-size:0.85rem; color:#9aa2b5; margin-bottom:1.25rem;">Published on ${dateStr}</p>
-                            ${imgTag}
-                            <p style="white-space: pre-line;">${post.body}</p>
-                        </article>
-                    `;
-
-                    if (post.category === 'technical') techContainer.innerHTML += postHTML;
-                    if (post.category === 'fundamental') fundContainer.innerHTML += postHTML;
+                posts.forEach(p => {
+                    let imageTag = p.image_url ? `<img src="${p.image_url}">` : '';
+                    let cardLayout = `<div class="post-card"><h2>${p.title}</h2>${imageTag}<p style="white-space: pre-wrap; margin-top:10px; color:#cbd5e1;">${p.body}</p></div>`;
+                    if(p.category === 'technical') techBox.innerHTML += cardLayout;
+                    else fundBox.innerHTML += cardLayout;
                 });
-            } catch (err) {
-                console.error("Connection error:", err);
-            }
+            } catch (err) { console.error("Cloud syncing blocked", err); }
         }
 
-        // Secure Login Logic Engine targeting our remote server routing pipeline
-        async function loginAdmin() {
+        async function executeLogin() {
             const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-pass').value;
-
-            const res = await fetch(`${BACKEND_URL}/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
-            
-            if (res.ok) {
-                authToken = data.token;
-                document.getElementById('auth-box').classList.add('hidden');
-                document.getElementById('editor-controls').classList.remove('hidden');
-            } else {
-                alert("Authentication failed: " + data.error);
-            }
+            const password = document.getElementById('admin-password').value;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    sessionToken = data.token;
+                    document.getElementById('login-interface').classList.add('hidden');
+                    document.getElementById('editor-interface').classList.remove('hidden');
+                } else { alert(data.error); }
+            } catch(e) { alert("Server connectivity runtime exception"); }
         }
 
-        // Global Cloud Write Publication routed safely via Render authorization headers
-        async function publishToCloud() {
-            const category = document.getElementById('post-category').value;
+        async function submitPost() {
             const title = document.getElementById('post-title').value;
+            const category = document.getElementById('post-category').value;
             const image_url = document.getElementById('post-image').value;
             const body = document.getElementById('post-body').value;
 
-            if (!title || !body) {
-                alert("Title and content are required fields!");
-                return;
-            }
+            if(!title || !body) return alert("Title and strategic summaries are required parameters.");
 
             const res = await fetch(`${BACKEND_URL}/api/posts`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': authToken
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': sessionToken },
                 body: JSON.stringify({ title, category, image_url, body })
             });
-
-            if (res.ok) {
-                alert("Published Live Globally!");
+            if(res.ok) {
+                alert("Published live to permanent database cloud nodes!");
                 document.getElementById('post-title').value = '';
                 document.getElementById('post-image').value = '';
                 document.getElementById('post-body').value = '';
-                fetchCloudPosts();
+                fetchPosts();
             } else {
-                const data = await res.json();
-                alert("Publishing error: " + data.error);
+                const errData = await res.json();
+                alert("Error during publication: " + errData.error);
             }
         }
 
-        function logoutAdmin() {
-            authToken = null;
-            window.location.reload();
+        function switchTab(tab, event) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-panel`).classList.add('active');
         }
 
-        // Tab Switches Controls with Smooth Mobile Anchor Navigation handling
-        function switchTab(targetTabId) {
-            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if(targetTabId === 'technical') {
-                document.getElementById('technical-tab').classList.add('active');
-            } else {
-                document.getElementById('fundamental-tab').classList.add('active');
-            }
-            event.currentTarget.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleAdminPanel() {
-            document.getElementById('admin-panel').classList.toggle('hidden');
-        }
-
-        // Start fetching data automatically when the screen mounts
-        window.onload = fetchCloudPosts;
+        window.onload = fetchPosts;
     </script>
 </body>
 </html>
