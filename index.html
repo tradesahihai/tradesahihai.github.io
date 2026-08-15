@@ -25,42 +25,35 @@
 
     <!-- Global App Layout Wrapper Split Container -->
     <div class="workspace-wrapper">
-        <!-- Market Performance Ticker Section -->
-        <section class="ticker-section" aria-label="Live Market Ticker">
-            <div class="ticker-widget" id="liveTickerMarquee">
-                <!-- Content is dynamically rendered programmatically via client scripts -->
-            </div>
-        </section>
 
-        <!-- New Global Metrics Component Bar Formatting -->
+        <!-- Global Reach Information Components -->
         <section class="global-reach-bar" aria-label="System Metrics">
             <div class="reach-metric-item">
-                <div class="reach-metric-icon">🌍</div>
+                <span class="reach-metric-icon">🌍</span>
                 <div class="reach-metric-data">
                     <h5>Multi-Market Sync</h5>
                     <p>NSE / BSE / Global Indices</p>
                 </div>
             </div>
             <div class="reach-metric-item">
-                <div class="reach-metric-icon">⚡</div>
+                <span class="reach-metric-icon">⚡</span>
                 <div class="reach-metric-data">
                     <h5>CDN Edge Nodes</h5>
                     <p>Sub-100ms Worldwide Delivery</p>
                 </div>
             </div>
             <div class="reach-metric-item">
-                <div class="reach-metric-icon">🗣</div>
+                <span class="reach-metric-icon">🗣</span>
                 <div class="reach-metric-data">
                     <h5>Localized Engine</h5>
                     <p>English / International Formats</p>
                 </div>
             </div>
         </section>
-        <!-- Left Main Columns Vault Feed Area -->
+        <!-- Main Layout Live Document Vault Feed Column Space -->
         <main class="primary-feed">
             
-            <!-- Daily Market Analysis Panel View -->
-            <div id="daily-analysis" class="viewport-panel active">
+            <div id="daily-panel" class="viewport-panel active">
                 <div class="stream-header">
                     <h2>Daily Market Analysis Inferences</h2>
                     <span class="badge blue">Live Charts</span>
@@ -68,8 +61,7 @@
                 <div class="cards-grid" id="stream-daily"></div>
             </div>
 
-            <!-- Today's Learning Logs Panel View -->
-            <div id="learning-logs" class="viewport-panel">
+            <div id="learning-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Today's Market Concepts & Learning Logs</h2>
                     <span class="badge gold">Educational</span>
@@ -77,8 +69,7 @@
                 <div class="cards-grid" id="stream-learning"></div>
             </div>
 
-            <!-- Strategy Execution Rules Panel View -->
-            <div id="strategy-rules" class="viewport-panel">
+            <div id="strategy-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Systematic Strategy Execution Rules</h2>
                     <span class="badge green">Playbook</span>
@@ -86,8 +77,7 @@
                 <div class="cards-grid" id="stream-strategy"></div>
             </div>
 
-            <!-- Market Bytes Short Video Reels Grid Panel View -->
-            <div id="video-reels" class="viewport-panel">
+            <div id="reels-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Market Bytes & Short Reels</h2>
                     <span class="badge purple">Video Stream</span>
@@ -96,139 +86,127 @@
             </div>
 
         </main>
-        <!-- Sidebar Widget Right Column Stack Stack -->
-        <aside class="right-widget-stack">
+        <!-- Sidebar Management Panel Right Stack Column Space -->
+        <aside class="right-widget-stack" id="studio-desk">
             
-            <!-- Profile Analytics Widget Card Module -->
             <div class="profile-widget-card">
                 <h4>👨‍💻 Trade Sahi Hai Admin</h4>
-                <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks valuation breakdowns.</p>
+                <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
             </div>
 
-            <!-- Mathematical Position Risk Calculator Widget Component -->
+            <!-- Position Risk Calculator (Added Missing Target Element Input) -->
             <div class="calculator-widget-card">
                 <h4>🧮 Position Risk Calculator</h4>
-                <p style="font-size: 0.75rem; margin-bottom: 0.75rem; color: var(--text-body);">Enter trade bounds to calculate risk metrics.</p>
+                <p style="font-size: 0.75rem; margin-bottom: 0.75rem; color: #8b949e;">Enter trade bounds to calculate risk metrics.</p>
                 
                 <div class="calc-inputs-grid">
                     <div class="form-element">
                         <label for="calc-capital">Trading Capital (₹)</label>
-                        <input type="number" id="calc-capital" value="100000" min="1" oninput="calculateRisk()" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.4rem; border-radius:4px;">
+                        <input type="number" id="calc-capital" value="100000" min="1">
                     </div>
                     <div class="form-element">
                         <label for="calc-risk-pct">Risk Tolerance (%)</label>
-                        <input type="number" id="calc-risk-pct" value="1" min="0.01" max="100" step="0.1" oninput="calculateRisk()" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.4rem; border-radius:4px;">
+                        <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1">
                     </div>
                     <div class="form-element">
                         <label for="calc-entry">Entry Price (₹)</label>
-                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateRisk()" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.4rem; border-radius:4px;">
+                        <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()">
+                    </div>
+                    <!-- Added missing parameter input node target required by script -->
+                    <div class="form-element">
+                        <label for="calc-target">Target Price (₹)</label>
+                        <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()">
                     </div>
                     <div class="form-element">
-                        <label for="calc-sl">Stop Loss (₹)</label>
-                        <input type="number" id="calc-sl" value="2450" min="0" oninput="calculateRisk()" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.4rem; border-radius:4px;">
+                        <label for="calc-stop">Stop Loss (₹)</label>
+                        <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()">
                     </div>
                 </div>
 
-                <div class="calc-output-display-box">
-                    <p style="margin-bottom:0.25rem;">Max Risk Loss Alloc: <strong id="res-amt" style="color:var(--accent-red);">₹1,000</strong></p>
-                    <p>Allowed Size: <strong id="res-qty" style="color:var(--accent-green);">20 shares</strong></p>
+                <div class="calc-output-display-box" style="margin-top: 1rem; padding: 0.75rem; background: #0d1117; border-radius: 6px;">
+                    <div id="calc-output-metrics" style="font-weight: 600; font-size: 0.9rem; color: #c9d1d9;">Ratio: Synchronizing...</div>
                 </div>
+            </div>
+            <!-- Secure Admin Authentication Desktop Gateway -->
+            <div class="publishing-desk-widget-card" style="margin-top:1.5rem; border-top:1px solid #21262d; padding-top:1.5rem;">
+                <h4 style="margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">🔒 System Authentication</h4>
+                <button class="studio-action-btn" id="authBtn" onclick="handleAuthToggle()" style="background:#00e676; padding:0.5rem 1rem; border:0; border-radius:4px; font-weight:600; cursor:pointer;">Secure Login</button>
+
+                <form id="publishForm" onsubmit="handleFormSubmission(event)" style="margin-top:1rem; opacity:0.4; pointer-events:none;">
+                    <div class="form-element" style="margin-bottom:0.75rem;">
+                        <label for="workspace-target" style="display:block; font-size:12px; margin-bottom:4px;">Select Target Workspace</label>
+                        <select id="workspace-target" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
+                            <option value="daily">Daily Analysis Post</option>
+                            <option value="learning">Today's Learning Entry</option>
+                            <option value="strategy">Trading Strategy Playbook</option>
+                            <option value="reels">Short Video Reel Log</option>
+                        </select>
+                    </div>
+
+                    <div class="form-element" style="margin-bottom:0.75rem;">
+                        <label for="asset-title" style="display:block; font-size:12px; margin-bottom:4px;">Asset/Stock Heading Title</label>
+                        <input type="text" id="asset-title" required placeholder="e.g., RELIANCE Trend Channel" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
+                    </div>
+
+                    <div class="form-element" style="margin-bottom:0.75rem;">
+                        <label for="chart-url" style="display:block; font-size:12px; margin-bottom:4px;">Chart Graphic Image Link URL</label>
+                        <input type="url" id="chart-url" required placeholder="https://example.com" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
+                    </div>
+
+                    <div class="form-element" style="margin-bottom:1rem;">
+                        <label for="analysis-summary" style="display:block; font-size:12px; margin-bottom:4px;">Strategic Annotations & Analysis Body Summary</label>
+                        <textarea id="analysis-summary" rows="4" required style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px; font-family:inherit;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit-global" style="width:100%; padding:0.6rem; background:#2962ff; border:0; color:#fff; font-weight:600; border-radius:4px; cursor:pointer;">Publish Live Globally</button>
+                </form>
             </div>
 
         </aside>
-        <!-- Management Studio Authentication Drawer Layout Block Component -->
-        <section class="management-sidebar hidden" id="studioDesk">
-            <h4 style="color: var(--text-header); margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.5rem;">
-                <span>🔒</span> System Authentication
-            </h4>
-            <button class="studio-action-btn" id="authBtn" onclick="handleAuthToggle()" style="margin-bottom: 1.25rem; background-color: var(--accent-green);">Secure Login</button>
-
-            <form id="publishForm" onsubmit="handleFormSubmission(event)">
-                <div class="form-element">
-                    <label for="workspace-target">Select Target Workspace</label>
-                    <select id="workspace-target" disabled style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.5rem; border-radius:6px;">
-                        <option value="daily">Daily Analysis Post</option>
-                        <option value="learning">Today's Learning Entry</option>
-                        <option value="strategy">Trading Strategy Playbook</option>
-                        <option value="reels">Short Video Reel Log</option>
-                    </select>
-                </div>
-
-                <div class="form-element">
-                    <label for="asset-title">Asset/Stock Heading Title</label>
-                    <input type="text" id="asset-title" required disabled placeholder="e.g., NIFTY Reversal Pattern" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.5rem; border-radius:6px;">
-                </div>
-
-                <div class="form-element">
-                    <label for="chart-url">Chart Graphic Image Link URL</label>
-                    <input type="url" id="chart-url" required disabled placeholder="https://example.com" style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.5rem; border-radius:6px;">
-                </div>
-
-                <div class="form-element">
-                    <label for="analysis-summary">Strategic Annotations & Analysis Body Summary</label>
-                    <textarea id="analysis-summary" rows="4" required disabled placeholder="Outline technical structures, indicators, execution blueprints..." style="width:100%; background:var(--app-bg); border:1px solid var(--border-line); color:#fff; padding:0.5rem; border-radius:6px; font-family:inherit;"></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn" class="studio-action-btn" disabled>Publish Live Globally</button>
-            </form>
-        </section>
-
     </div> <!-- Close workspace-wrapper -->
-
-    <!-- Core Interactive Client Controller Script Engine -->
+    <!-- Script Controllers Core Engine -->
     <script>
-        // Tabbed Panel Viewport Content Feed Toggle Switch
-        function navigateHub(targetKey, event) {
-            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
-            if(event) event.target.classList.add('active');
+        // Calculates trading risk-to-reward ratios based on fixed template formats
+        function calculateTradeMetrics() {
+            const entry = parseFloat(document.getElementById('calc-entry').value);
+            const target = parseFloat(document.getElementById('calc-target').value);
+            const stop = parseFloat(document.getElementById('calc-stop').value);
+            const outBox = document.getElementById('calc-output-metrics');
             
-            const panels = {
-                'daily': 'daily-analysis',
-                'learning': 'learning-logs',
-                'strategy': 'strategy-rules',
-                'reels': 'video-reels'
-            };
+            if (!entry || !target || !stop || !outBox) return;
             
-            document.querySelectorAll('.viewport-panel').forEach(panel => {
-                panel.classList.remove('active');
-                if(panel.id === panels[targetKey]) {
-                    panel.classList.add('active');
-                }
-            });
+            const reward = target - entry; 
+            const risk = entry - stop;
+            
+            if (risk <= 0 || reward <= 0) { 
+                outBox.innerHTML = "Invalid bounds."; 
+                return; 
+            }
+            
+            outBox.innerHTML = `Ratio: <b style="color:#2962ff;">${(reward / risk).toFixed(2)} : 1</b>`;
+        }
+
+        // Tabbed Panel Viewport Switching Controller
+        function navigateHub(targetTab, event) {
+            document.querySelectorAll('.viewport-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            const targetPanel = document.getElementById(`${targetTab}-panel`);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
         }
 
         // Drop Drawer Control Workspace Panel Switch
-        function togglePublishingDesk() {
-            const drawer = document.getElementById('studioDesk');
-            drawer.classList.toggle('hidden');
-            if(!drawer.classList.contains('hidden')) {
-                drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        function togglePublishingDesk() { 
+            const desk = document.getElementById('studio-desk');
+            if (desk) {
+                desk.classList.toggle('hidden'); 
             }
-        }
-
-        // Secure Position Risk Size Calculators Rules
-        function calculateRisk() {
-            const capital = Math.max(0, parseFloat(document.getElementById('calc-capital').value) || 0);
-            const riskPct = Math.max(0, parseFloat(document.getElementById('calc-risk-pct').value) || 0);
-            const entry = Math.max(0, parseFloat(document.getElementById('calc-entry').value) || 0);
-            const stopLoss = Math.max(0, parseFloat(document.getElementById('calc-sl').value) || 0);
-
-            const totalRiskAmt = capital * (riskPct / 100);
-            const riskPerShare = Math.abs(entry - stopLoss);
-
-            let quantity = 0;
-            if (riskPerShare > 0) {
-                quantity = Math.floor(totalRiskAmt / riskPerShare);
-            }
-
-            if (entry <= stopLoss && entry > 0) {
-                document.getElementById('res-qty').innerText = 'Check SL Target (Long Trade)';
-                document.getElementById('res-amt').innerText = '₹' + totalRiskAmt.toLocaleString('en-IN');
-                return;
-            }
-
-            document.getElementById('res-amt').innerText = '₹' + totalRiskAmt.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-            document.getElementById('res-qty').innerText = riskPerShare > 0 ? `${quantity} shares` : '0 shares';
         }
 
         // Security Field Form Authorization Locker Toggle
@@ -237,67 +215,38 @@
             isAuthenticated = !isAuthenticated;
             const form = document.getElementById('publishForm');
             const authBtn = document.getElementById('authBtn');
-            const formElements = form.querySelectorAll('input, select, textarea, button');
             
             if(isAuthenticated) {
-                authBtn.innerText = "Log Out System Workspace";
+                authBtn.innerText = "Log Out Workspace";
                 authBtn.style.background = "#ff1744";
-                formElements.forEach(el => el.removeAttribute('disabled'));
+                form.style.opacity = "1";
+                form.style.pointerEvents = "auto";
             } else {
-                authBtn.innerText = "Secure Login Access";
+                authBtn.innerText = "Secure Login";
                 authBtn.style.background = "#00e676";
-                formElements.forEach(el => el.setAttribute('disabled', 'true'));
+                form.style.opacity = "0.4";
+                form.style.pointerEvents = "none";
+                form.reset();
             }
         }
 
-        // XSS Injection String Protection Escaper
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
-        // Live Operational Feed Update Node Engine
+        // Dynamic Runtime Node Form Publisher Integration Handler
         function handleFormSubmission(e) {
             e.preventDefault();
             if(!isAuthenticated) return;
 
             const targetWorkspace = document.getElementById('workspace-target').value;
-            const title = escapeHTML(document.getElementById('asset-title').value);
-            const url = encodeURI(document.getElementById('chart-url').value);
-            const summary = escapeHTML(document.getElementById('analysis-summary').value);
+            const title = document.getElementById('asset-title').value;
+            const url = document.getElementById('chart-url').value;
+            const summary = document.getElementById('analysis-summary').value;
 
-            if(targetWorkspace === 'reels') {
-                const targetContainer = document.getElementById('stream-reels');
-                const cleanLoader = targetContainer.querySelector('.stream-loading-wrapper');
-                if(cleanLoader) cleanLoader.remove();
-
-                const reelMarkup = `
-                    <div class="reel-card">
-                        <div class="reel-video-simulation-box">
-                            <img src="${url}" alt="${title}" class="reel-media-placeholder" style="opacity:1;">
-                            <div class="reel-overlay-info">
-                                <h4>${title}</h4>
-                                <p>${summary.substring(0, 45)}...</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                targetContainer.insertAdjacentHTML('afterbegin', reelMarkup);
-            } else {
-                const mapping = { 'daily': 'stream-daily', 'learning': 'stream-learning', 'strategy': 'stream-strategy' };
-                const targetContainer = document.getElementById(mapping[targetWorkspace]);
-                const cleanLoader = targetContainer.querySelector('.stream-loading-wrapper');
-                if(cleanLoader) cleanLoader.remove();
-
+            const targetContainer = document.getElementById(`stream-${targetWorkspace}`);
+            if (targetContainer) {
                 const standardCard = `
-                    <div class="display-card-v2">
-                        <div style="display:flex; justify-content:between; align-items:center; margin-bottom:1rem; justify-content: space-between;">
-                            <h3>${title}</h3>
-                            <span class="localization-tag">🌐 Secured Cluster</span>
-                        </div>
-                        ${url ? `<div class="chart-frame-wrapper"><img src="${url}" alt="${title} Analysis View" class="chart-frame-img"></div>` : ''}
-                        <p class="card-body-text">${summary}</p>
+                    <div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem;">
+                        <h3 style="margin-top:0;">${title}</h3>
+                        ${url ? `<img src="${url}" alt="Analysis" style="max-width:100%; border-radius:4px; margin:0.5rem 0;">` : ''}
+                        <p style="color:#8b949e; font-size:14px; margin-bottom:0;">${summary}</p>
                     </div>
                 `;
                 targetContainer.insertAdjacentHTML('afterbegin', standardCard);
@@ -305,53 +254,12 @@
 
             e.target.reset();
             navigateHub(targetWorkspace, null);
-            togglePublishingDesk();
-            
-            document.querySelectorAll('.nav-link').forEach(btn => {
-                if(btn.getAttribute('onclick').includes(`'${targetWorkspace}'`)) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
         }
 
-        // Mount Initial Dynamic DOM Content States
+        // Fire initialization metrics setup on launch load
         window.addEventListener('DOMContentLoaded', () => {
-            const tickers = [
-                { name: 'NIFTY 50', val: '24,380.50', pct: '+1.14%', upward: true },
-                { name: 'BANK NIFTY', val: '51,210.20', pct: '-0.32%', upward: false },
-                { name: 'RELIANCE', val: '2,945.00', pct: '+2.45%', upward: true },
-                { name: 'TATA MOTORS', val: '1,012.40', pct: '+1.85%', upward: true },
-                 { name: 'HDFC BANK', val: '1,610.15', pct: '-0.74%', upward: false }
-            ];
-
-        // Process and render out the marquee elements
-        document.getElementById('liveTickerMarquee').innerHTML = tickers.map(t => `
-            <div class="ticker-item">
-                <span>${t.name}</span> 
-                <span class="${t.upward ? 'green-pct' : 'red-pct'}">${t.val} (${t.pct}) ${t.upward ? '▲' : '▼'}</span>
-            </div>
-        `).join('');
-
-        // Mount Analytical Feed Streams Loading States
-        const regularFeeds = ['stream-daily', 'stream-learning', 'stream-strategy'];
-        regularFeeds.forEach(id => {
-            document.getElementById(id).innerHTML = `
-                <div class="stream-loading-wrapper" style="padding:2rem; text-align:center; color:var(--text-body); border:1px dashed var(--border-line); border-radius:8px;">
-                    <p>Connecting to secure cloud data stream...</p>
-                </div>
-            `;
+            calculateTradeMetrics();
         });
-
-        // Mount Short Reels Grid Column Loading State 
-        document.getElementById('stream-reels').innerHTML = `
-            <div class="stream-loading-wrapper" style="grid-column:1/-1; padding:2rem; text-align:center; color:var(--text-body); border:1px dashed var(--border-line); border-radius:8px;">
-                <p>Connecting to video server cluster...</p>
-            </div>
-        `;
-
-        // Initialize equations balance allocations on launch
-        calculateRisk();
-    });
-</script>
+    </script>
+</body>
+</html>
