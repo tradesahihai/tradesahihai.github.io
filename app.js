@@ -23,6 +23,7 @@ async function fetchCloudAndFlatData() {
             combinedTimeline[dateKey] = { daily: [], learning: [], strategy: [], reels: [] };
         }
     };
+
         const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
         let rawContentText = "";
         let displayedHeader = title;
@@ -34,13 +35,10 @@ async function fetchCloudAndFlatData() {
             rawContentText = textBody || "";
         }
 
-        // ✅ SANITIZATION OVERRIDE: If the image source string contains "null" or is structurally blank, completely purge the markup string
+        // ✅ INLINE PURGE SYSTEM: Completely ignore if the file layout is missing or null
         let sanitizedMediaHtml = mediaHtml || "";
-        if (sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || !mediaHtml) {
+        if (!mediaHtml || sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || sanitizedMediaHtml.trim() === "") {
             sanitizedMediaHtml = "";
-        } else if (sanitizedMediaHtml.includes('<img')) {
-            // Self-healing fallback event handler: Hides everything automatically if a 404 or 400 error occurs
-            sanitizedMediaHtml = sanitizedMediaHtml.replace('<img', '<img onerror="this.style.display=\'none\'; this.parentElement.style.display=\'none\';"');
         }
 
         if (isToday) {
@@ -50,11 +48,7 @@ async function fetchCloudAndFlatData() {
                         <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${title}</h3>
                         <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
-                    
-                    <!-- Text content body rendered cleanly up top -->
                     <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.5rem 0 1rem 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${rawContentText}</p>
-                    
-                    <!-- ✅ RENDERING BLOCK SHIFT: Placed safely underneath content logs to optimize layout readability -->
                     ${sanitizedMediaHtml}
                 </div>
             `;
