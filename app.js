@@ -23,9 +23,7 @@ async function fetchCloudAndFlatData() {
             combinedTimeline[dateKey] = { daily: [], learning: [], strategy: [], reels: [] };
         }
     };
-
-    const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
-        // If textBody is an object from an older file entry request, extract its metrics safely
+        const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
         let rawContentText = "";
         let displayedHeader = title;
 
@@ -36,22 +34,28 @@ async function fetchCloudAndFlatData() {
             rawContentText = textBody || "";
         }
 
-        // Clean up media html string dynamically to inject error-hiding protections safely
+        // ✅ SANITIZATION OVERRIDE: If the image source string contains "null" or is structurally blank, completely purge the markup string
         let sanitizedMediaHtml = mediaHtml || "";
-        if (sanitizedMediaHtml.includes('<img')) {
-            // Adds an inline style layout fallback listener to hide the picture frame immediately if it can't render
+        if (sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || !mediaHtml) {
+            sanitizedMediaHtml = "";
+        } else if (sanitizedMediaHtml.includes('<img')) {
+            // Self-healing fallback event handler: Hides everything automatically if a 404 or 400 error occurs
             sanitizedMediaHtml = sanitizedMediaHtml.replace('<img', '<img onerror="this.style.display=\'none\'; this.parentElement.style.display=\'none\';"');
         }
 
         if (isToday) {
             return `
-                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box;">
+                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box; clear: both; overflow: hidden;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
-                        <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600;">${title}</h3>
+                        <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${title}</h3>
                         <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
+                    
+                    <!-- Text content body rendered cleanly up top -->
+                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.5rem 0 1rem 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${rawContentText}</p>
+                    
+                    <!-- ✅ RENDERING BLOCK SHIFT: Placed safely underneath content logs to optimize layout readability -->
                     ${sanitizedMediaHtml}
-                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.875rem; margin-top:0.5rem;">${rawContentText}</p>
                 </div>
             `;
         } else {
@@ -66,8 +70,8 @@ async function fetchCloudAndFlatData() {
                         </div>
                     </div>
                     <div id="${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
+                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin:0 0 1rem 0;">${rawContentText}</p>
                         ${sanitizedMediaHtml}
-                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin:0;">${rawContentText}</p>
                     </div>
                 </div>
             `;
