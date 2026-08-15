@@ -144,31 +144,34 @@ async function fetchCloudAndFlatData() {
                     let html = compileCardMarkup(isTodayActiveSession, '💡 Market Core Concept Learnings', '📁 Local File', '#00e676', formattedBucketDateKey, '', data.learning, `local-learn-${targetDatePrefix}`);
                     combinedTimeline[formattedBucketDateKey].learning.unshift(html);
                 }
-                if (data.strategy) {
-                    let html = compileCardMarkup(isTodayActiveSession, '🎯 Playbook Strategic Actions', '📁 Local File', '#ffea00', formattedBucketDateKey, '', data.strategy, `local-strat-${targetDatePrefix}`);
-                    combinedTimeline[formattedBucketDateKey].strategy.unshift(html);
-                }
-                if (data.videoUrl) {
-                    let html = `
-                        <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
-                            <video src="${data.videoUrl}" controls style="border-radius: 6px; background: #000; width:100%; max-height:450px;">
-                                Your browser environment context cannot stream native video frames.
-                            </video>
-                            <div style="padding: 10px 0 0 0;">
-                                <h4 style="margin:0; color:#fff;">🎬 Daily Review Reel Walkthrough</h4>
-                                <p style="font-size:0.75rem; color:#8b949e; margin:4px 0 0 0;">Streaming via public storage bucket root</p>
-                            </div>
-                        </article>
-                    `;
-                    combinedTimeline[formattedBucketDateKey].reels.unshift(html);
-                }
+                            if (data.strategy) {
+                // ✅ LINE 86: Added missing backticks around the unique ID template string
+                let html = compileCardMarkup(isTodayActiveSession, '🎯 Playbook Strategic Actions', '📁 Local File', '#ffea00', formattedBucketDateKey, '', data.strategy, `local-strat-${targetDatePrefix}`);
+                combinedTimeline[formattedBucketDateKey].strategy.unshift(html);
+            }
+            if (data.videoUrl) {
+                let html = `
+                    <article class="reel-card" style="width: 100%; max-width: 360px; background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom: 1.5rem;">
+                        <video src="${data.videoUrl}" controls style="border-radius: 6px; background: #000; width:100%; max-height:450px;">
+                            Your browser environment context cannot stream native video frames.
+                        </video>
+                        <div style="padding: 10px 0 0 0;">
+                            <h4 style="margin:0; color:#fff;">🎬 Daily Review Reel Walkthrough</h4>
+                            <p style="font-size:0.75rem; color:#8b949e; margin:4px 0 0 0;">Streaming via public storage bucket root</p>
+                        </div>
+                    </article>
+                `;
+                combinedTimeline[formattedBucketDateKey].reels.unshift(html);
+            }
             }
         }
-    } catch (flatErr) { 
+    } 
+    catch (flatErr) { 
         print("System data log streaming bypassed safely:", flatErr.message); 
     }
     catch (flatErr) { 
-    console.warn("Flat file metrics pending for active clock tracking layer:", flatErr); 
+    console.warn("Flat file metrics pending for active clock tracking layer:", flatErr);
+    }
 }
 
 // 3. Render Sorted Chronological timelines grouped cleanly inside divided Date blocks
