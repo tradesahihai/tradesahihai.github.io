@@ -40,16 +40,19 @@ async function fetchCloudAndFlatData() {
         if (!mediaHtml || sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || sanitizedMediaHtml.trim() === "") {
             sanitizedMediaHtml = "";
         }
-
         if (isToday) {
             return `
                 <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box; clear: both; overflow: hidden;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
                         <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${title}</h3>
                         <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
                     </div>
-                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.5rem 0 1rem 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${rawContentText}</p>
+                    
+                    <!-- ✅ IMAGE FIRST: Chart graphic moved right below title headers -->
                     ${sanitizedMediaHtml}
+                    
+                    <!-- TEXT CONTENT SECOND: Summary context block aligned lower on the card layout frame -->
+                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.75rem 0 0 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${rawContentText}</p>
                 </div>
             `;
         } else {
