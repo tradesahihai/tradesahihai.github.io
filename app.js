@@ -119,7 +119,7 @@ async function fetchCloudAndFlatData() {
         const month = today.toLocaleString('en-US', { month: 'long' }); 
         
         // Loop through multiple tracking day logs (e.g., today Aug16 and yesterday Aug15)
-        const targetDaysToFetch = ["Aug15", "Aug16"]; 
+        const targetDaysToFetch = ["Aug15", "Aug16", "Aug16_NSE"]; 
 
         for (const targetDatePrefix of targetDaysToFetch) {
             const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${targetDatePrefix}`);
