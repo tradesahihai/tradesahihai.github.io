@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Premium Analysis Hub</title>
-    <!-- Link connection pulling variables straight from your stylesheet section -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -46,9 +45,7 @@
                     <h2>Daily Chart Inferences</h2>
                     <span class="badge blue">Live Charts</span>
                 </div>
-                <div id="tech-cards-vault" class="cards-grid">
-                    <!-- Dynamic client-side javascript data cards inject here -->
-                </div>
+                <div id="tech-cards-vault" class="cards-grid"></div>
             </div>
 
             <!-- Fundamental Deep-Dives Workspace Panel -->
@@ -57,9 +54,7 @@
                     <h2>Equity & Valuation Logs</h2>
                     <span class="badge gold">Valuation</span>
                 </div>
-                <div id="fund-cards-vault" class="cards-grid">
-                    <!-- Dynamic client-side javascript data cards inject here -->
-                </div>
+                <div id="fund-cards-vault" class="cards-grid"></div>
             </div>
 
             <!-- Video Reels Grid Workspace Panel -->
@@ -68,14 +63,36 @@
                     <h2>Market Bytes & Short Reels</h2>
                     <span class="badge purple">Video Stream</span>
                 </div>
-                <div id="reels-cards-vault" class="reels-vertical-grid">
-                    <!-- Dynamic video blocks populate here -->
-                </div>
+                <div id="reels-cards-vault" class="reels-vertical-grid"></div>
             </div>
         </main>
 
+        <!-- Dynamic Persistent Widget Stack Sidebar -->
+        <aside class="right-widget-stack" id="constant-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+            
+            <!-- Profile Biography Component Card -->
+            <div class="profile-widget-card">
+                <div class="profile-avatar-avatar">👨‍💻</div>
+                <h4>Trade Sahi Hai Admin</h4>
+                <p>Technical chartist specializing in price action, momentum metrics, and equity research logs.</p>
+            </div>
+
+            <!-- Risk Management Metric Calculator Card -->
+            <div class="calculator-widget-card">
+                <h4>🧮 Strategy Risk Calculator</h4>
+                <div class="calc-inputs-grid">
+                    <input type="number" id="calc-entry" placeholder="Entry" oninput="calculateTradeMetrics()">
+                    <input type="number" id="calc-target" placeholder="Target" oninput="calculateTradeMetrics()">
+                    <input type="number" id="calc-stop" placeholder="Stop" oninput="calculateTradeMetrics()">
+                </div>
+                <div class="calc-output-display-box" id="calc-output-metrics">
+                    Enter trade bounds to calculate risk metrics.
+                </div>
+            </div>
+        </aside>
+
         <!-- Visual Content Management Studio Sidebar Panel -->
-        <aside id="studio-desk" class="management-sidebar hidden">
+        <aside id="studio-desk" class="management-sidebar hidden" style="grid-column: span 2; margin-top: 1rem; width: 100%;">
             <div class="sticky-desk-wrapper">
                 <div class="desk-header">
                     <h3>✍️ Production Studio Desk</h3>
@@ -112,7 +129,6 @@
         </aside>
     </div>
 
-    <!-- Script routing file link reference logic -->
     <script src="script.js"></script>
 </body>
 </html>
