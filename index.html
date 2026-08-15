@@ -204,7 +204,6 @@
 
             initializeTabStateView(targetTab, event ? event.target : null);
         }
-
         function initializeTabStateView(targetTab, targetButton = null) {
             document.querySelectorAll('.viewport-panel').forEach(p => {
                 p.style.setProperty('display', 'none', 'important');
@@ -212,10 +211,10 @@
             });
             document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
 
-            // INTERCEPT VISIBILITY: Toggle footer calculator node layout dynamically matching first tab
-            const globalFooterElement = document.getElementById('global-portal-footer');
-            if (globalFooterElement) {
-                globalFooterElement.style.setProperty('display', (targetTab === 'daily') ? 'block' : 'none', 'important');
+            // ✅ DISPLAY ALWAYS: Anchor container visible, toggle ONLY inputs block under daily view tab
+            const calcWidgetNode = document.getElementById('risk-calc-container-block');
+            if (calcWidgetNode) {
+                calcWidgetNode.style.display = (targetTab === 'daily') ? 'block' : 'none';
             }
 
             const panel = document.getElementById(`${targetTab}-panel`);
