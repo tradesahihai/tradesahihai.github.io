@@ -1,161 +1,307 @@
 :root {
-    --bg-main: #0b0e14;
-    --surface-bg: #121620;
-    --border-color: #1e2538;
-    --text-primary: #f5f7fa;
-    --text-secondary: #9aa2b5;
+    --app-bg: #090b10;
+    --card-bg: #111420;
+    --border-line: #1e2436;
+    --text-header: #ffffff;
+    --text-body: #9da6b8;
     --accent-blue: #2962ff;
-    --accent-green: #00c853;
-    --accent-red: #d50000;
+    --accent-gold: #ff9100;
+    --accent-purple: #b33cff;
+    --accent-green: #00e676;
+    --accent-red: #ff1744;
 }
 
-/* Hardware Accelerated Smooth Scroll Injections */
+/* Device Optimization Hardening */
 html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-primary);
+    background-color: var(--app-bg);
+    color: var(--text-body);
     overflow-x: hidden;
 }
 
+/* Header Structure Panel */
 header {
-    background-color: var(--surface-bg);
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-line);
     padding: 1rem 5%;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
-.logo {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-/* Gadget Responsive Tab Interface System */
-.tab-navigation {
+.logo-group {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.6rem;
 }
 
-.nav-btn {
+.logo-group h1 {
+    font-size: 1.25rem;
+    color: var(--text-header);
+    letter-spacing: -0.2px;
+}
+
+.navigation-hub {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.nav-link {
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-body);
     padding: 0.6rem 1.1rem;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     border-radius: 6px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
-.nav-btn.active, .nav-btn:hover {
-    color: var(--text-primary);
-    background-color: var(--border-color);
+.nav-link.active, .nav-link:hover {
+    color: var(--text-header);
+    background-color: var(--border-line);
 }
 
-.nav-btn.admin-gateway {
+.nav-link.system-trigger {
     border: 1px dashed var(--accent-blue);
     color: var(--accent-blue);
+    margin-left: 0.5rem;
 }
 
-/* Flex Grid Workspace Layout */
-.container {
+.nav-link.system-trigger:hover {
+    background-color: rgba(41, 98, 255, 0.1);
+}
+
+/* Grid Arena Layout */
+.workspace-wrapper {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-    display: flex;
-    gap: 2rem;
+    margin: 1.5rem auto;
+    padding: 0 1.25rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
     align-items: flex-start;
 }
 
-.content-stream {
-    flex: 2;
-    min-width: 0; /* Prevents container blowout on mobile screens */
+.primary-feed {
+    grid-column: span 2;
+    transition: grid-column 0.3s ease;
 }
 
-/* Tab Panel Active Engine */
-.tab-panel {
+/* Layout Shift triggers when Studio opens */
+.workspace-wrapper:has(.management-sidebar:not(.hidden)) .primary-feed {
+    grid-column: span 1;
+}
+
+/* Viewport Panels Control Matrix */
+.viewport-panel {
     display: none;
-    animation: fadeIn 0.35s ease;
+    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tab-panel.active {
+.viewport-panel.active {
     display: block;
 }
 
-.post-card {
-    background-color: var(--surface-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
+.stream-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
 }
 
-.post-card h2 {
-    font-size: 1.6rem;
+.stream-header h2 {
+    font-size: 1.35rem;
+    color: var(--text-header);
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge.blue { background-color: rgba(41, 98, 255, 0.12); color: #448aff; }
+.badge.gold { background-color: rgba(255, 145, 0, 0.12); color: #ffb300; }
+.badge.purple { background-color: rgba(179, 60, 255, 0.12); color: #dfa3ff; }
+
+/* Content Cards Framework Architecture */
+.cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.display-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.75rem;
+    transition: transform 0.2s ease;
+}
+
+.display-card h3 {
+    color: var(--text-header);
+    font-size: 1.4rem;
     margin-bottom: 0.5rem;
 }
 
-.meta-info {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.25rem;
+.card-meta {
+    font-size: 0.8rem;
+    color: #636d81;
+    margin-bottom: 1rem;
 }
 
-.post-chart {
+.card-graphic {
     width: 100%;
-    max-height: 500px;
+    max-height: 480px;
     object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 1.25rem;
-    background-color: #000;
+    background-color: #05060a;
+    border-radius: 6px;
+    border: 1px solid var(--border-line);
+    margin-bottom: 1rem;
 }
 
-/* Sidebar Styling Blocks */
-.admin-sidebar {
-    flex: 1;
-    background-color: var(--surface-bg);
-    border: 1px solid var(--border-color);
+.card-body-text {
+    line-height: 1.6;
+    color: #cbd3e1;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+
+/* Short Reels Layout Grid Engine */
+.reels-vertical-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.reel-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
     border-radius: 12px;
-    padding: 1.5rem;
-    position: sticky;
-    top: 5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.admin-sidebar.hidden {
+.reel-video-simulation-box {
+    aspect-ratio: 9/16;
+    background-color: #000;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reel-media-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+}
+
+.reel-overlay-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.25rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    color: #fff;
+}
+
+.reel-overlay-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.reel-overlay-info p {
+    font-size: 0.75rem;
+    color: #cbd5e1;
+}
+
+/* Production Management Sidebar System */
+.management-sidebar {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.management-sidebar.hidden {
     display: none;
 }
 
-.admin-wrapper h3 {
+.sticky-desk-wrapper {
+    position: sticky;
+    top: 5.5rem;
+}
+
+.desk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.desk-header h3 {
+    color: var(--text-header);
+    font-size: 1.05rem;
+}
+
+.close-desk-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-body);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-line);
+    margin: 1.25rem 0;
+}
+
+.form-element {
     margin-bottom: 1rem;
-    font-size: 1.1rem;
+}
+
+.form-element label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #7f8b9e;
 }
 
 input, select, textarea {
     width: 100%;
-    background-color: var(--bg-main);
-    border: 1px solid var(--border-color);
+    background-color: var(--app-bg);
+    border: 1px solid var(--border-line);
     border-radius: 6px;
     padding: 0.75rem;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
+    color: var(--text-header);
     font-size: 0.9rem;
 }
 
@@ -163,56 +309,34 @@ input:focus, select:focus, textarea:focus {
     outline: 1px solid var(--accent-blue);
 }
 
-.action-btn {
+.studio-action-btn {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.8rem;
     border: none;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    margin-bottom: 0.5rem;
 }
 
-.action-btn.positive { background-color: var(--accent-blue); color: #fff; }
-.action-btn.complete { background-color: var(--accent-green); color: #fff; }
-.action-btn.negative { background-color: transparent; color: var(--accent-red); border: 1px solid var(--accent-red); }
-
-.divider {
-    border: 0;
-    height: 1px;
-    background: var(--border-color);
-    margin: 1.5rem 0;
+.studio-action-btn.submit-btn {
+    background-color: var(--accent-blue);
+    color: #fff;
 }
 
-/* Adaptive Media Gadget Queries */
+/* Responsive Adaptive Interface Rules */
 @media (max-width: 900px) {
-    .container {
-        flex-direction: column;
-    }
-    .admin-sidebar {
-        width: 100%;
-        position: static;
-    }
+    .workspace-wrapper { grid-template-columns: 1fr !map; }
+    .workspace-wrapper:has(.management-sidebar:not(.hidden)) .primary-feed { grid-column: span 1; }
+    .management-sidebar { width: 100%; position: static; margin-top: 1.5rem; }
 }
 
 @media (max-width: 600px) {
-    header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    .tab-navigation {
-        width: 100%;
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-    .nav-btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
+    header { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+    .navigation-hub { width: 100%; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; }
+    .nav-link { padding: 0.5rem 0.8rem; font-size: 0.8rem; white-space: nowrap; }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
 }
