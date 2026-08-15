@@ -15,8 +15,9 @@
             <h1>Trade Sahi Hai</h1>
         </div>
         <nav class="navigation-hub">
-            <button class="nav-link active" onclick="navigateHub('technical', event)">Technical Analysis</button>
-            <button class="nav-link" onclick="navigateHub('fundamental', event)">Fundamentals</button>
+            <button class="nav-link active" onclick="navigateHub('daily', event)">Daily Analysis</button>
+            <button class="nav-link" onclick="navigateHub('learning', event)">Today's Learning</button>
+            <button class="nav-link" onclick="navigateHub('strategy', event)">Strategies</button>
             <button class="nav-link" onclick="navigateHub('reels', event)">Trading Reels</button>
             <button class="nav-link system-trigger" onclick="togglePublishingDesk()">✏️ Studio Desk</button>
         </nav>
@@ -38,25 +39,41 @@
 
         <!-- Main Display Post Columns Feed -->
         <main class="primary-feed">
-            <div id="technical-panel" class="viewport-panel active">
+            
+            <!-- Section 1: Daily Analysis Workspace Panel -->
+            <div id="daily-panel" class="viewport-panel active">
                 <div class="stream-header">
-                    <h2>Daily Chart Inferences</h2>
+                    <h2>Daily Market Analysis Inferences</h2>
+                    <span class="badge blue">Live Charts</span>
                 </div>
-                <div id="tech-cards-vault"></div>
+                <div id="daily-cards-vault" class="cards-grid"></div>
             </div>
 
-            <div id="fundamental-panel" class="viewport-panel">
+            <!-- Section 2: Today's Learning Workspace Panel -->
+            <div id="learning-panel" class="viewport-panel">
                 <div class="stream-header">
-                    <h2>Equity & Valuation Logs</h2>
+                    <h2>Today's Market Concepts & Learning Logs</h2>
+                    <span class="badge gold">Educational</span>
                 </div>
-                <div id="fund-cards-vault"></div>
+                <div id="learning-cards-vault" class="cards-grid"></div>
             </div>
 
+            <!-- Section 3: Trading Strategies Playbook Panel -->
+            <div id="strategy-panel" class="viewport-panel">
+                <div class="stream-header">
+                    <h2>Systematic Strategy Execution Rules</h2>
+                    <span class="badge green">Playbook</span>
+                </div>
+                <div id="strategy-cards-vault" class="cards-grid"></div>
+            </div>
+
+            <!-- Section 4: Video Reels Grid Workspace Panel -->
             <div id="reels-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Market Bytes & Short Reels</h2>
+                    <span class="badge purple">Video Stream</span>
                 </div>
-                <div id="reels-cards-vault" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:1rem;"></div>
+                <div id="reels-cards-vault" class="reels-vertical-grid"></div>
             </div>
         </main>
 
@@ -85,22 +102,23 @@
             <div class="form-element">
                 <label>Select Target Workspace</label>
                 <select id="content-type" onchange="adjustFormFields()">
-                    <option value="technical">Technical Analysis Post</option>
-                    <option value="fundamental">Fundamental Analysis Post</option>
+                    <option value="daily">Daily Analysis Post</option>
+                    <option value="learning">Today's Learning Entry</option>
+                    <option value="strategy">Trading Strategy Playbook</option>
                     <option value="reel">Short Video Reel Log</option>
                 </select>
             </div>
             <div class="form-element">
-                <label>Asset/Stock Heading Title</label>
-                <input type="text" id="content-title" placeholder="e.g., NIFTY Flag Breakout">
+                <label>Asset/Stock/Concept Heading Title</label>
+                <input type="text" id="content-title" placeholder="e.g., Understanding Price Action Confluence">
             </div>
             <div id="media-link-group" class="form-element">
-                <label>Chart Graphic Image Link URL</label>
+                <label>Media Graphic Image Link URL</label>
                 <input type="text" id="content-media" placeholder="Paste direct image link location">
             </div>
             <div class="form-element">
                 <label id="body-label">Strategic Annotations & Analysis Body Summary</label>
-                <textarea id="content-body" rows="5" placeholder="Enter target patterns, indicators, or balance sheet review details..."></textarea>
+                <textarea id="content-body" rows="5" placeholder="Enter target patterns, indicators, or system parameters..."></textarea>
             </div>
             <button class="studio-action-btn" onclick="compileStudioAsset()">Publish Content Card Live</button>
         </aside>
