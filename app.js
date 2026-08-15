@@ -1,4 +1,4 @@
-const DYNAMIC_BACKEND_PORTAL_URL = "https://onrender.com"; 
+const DYNAMIC_BACKEND_PORTAL_URL = "https://tradesahihai-backend.onrender.com"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchCloudAndFlatData();
