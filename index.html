@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- Main Navigation Top Bar -->
+    <!-- Main Navigation Top Bar (Studio Desk Trigger Removed Cleanly) -->
     <header>
         <div class="logo-group">
             <span class="trend-icon" aria-hidden="true">📈</span>
@@ -19,7 +19,6 @@
             <button class="nav-link" onclick="navigateHub('learning', event)">Today's Learning</button>
             <button class="nav-link" onclick="navigateHub('strategy', event)">Strategies</button>
             <button class="nav-link" onclick="navigateHub('reels', event)">Trading Reels</button>
-            <button class="nav-link system-trigger" onclick="togglePublishingDesk()">✏️ Studio Desk</button>
         </nav>
     </header>
 
@@ -87,14 +86,14 @@
 
         </main>
         <!-- Sidebar Management Panel Right Stack Column Space -->
-        <aside class="right-widget-stack" id="studio-desk">
+        <aside class="right-widget-stack">
             
             <div class="profile-widget-card">
                 <h4>👨‍💻 Trade Sahi Hai Admin</h4>
                 <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
             </div>
 
-            <!-- Position Risk Calculator (Added Missing Target Element Input) -->
+            <!-- Position Risk Calculator -->
             <div class="calculator-widget-card">
                 <h4>🧮 Position Risk Calculator</h4>
                 <p style="font-size: 0.75rem; margin-bottom: 0.75rem; color: #8b949e;">Enter trade bounds to calculate risk metrics.</p>
@@ -112,7 +111,6 @@
                         <label for="calc-entry">Entry Price (₹)</label>
                         <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()">
                     </div>
-                    <!-- Added missing parameter input node target required by script -->
                     <div class="form-element">
                         <label for="calc-target">Target Price (₹)</label>
                         <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()">
@@ -127,44 +125,11 @@
                     <div id="calc-output-metrics" style="font-weight: 600; font-size: 0.9rem; color: #c9d1d9;">Ratio: Synchronizing...</div>
                 </div>
             </div>
-            <!-- Secure Admin Authentication Desktop Gateway -->
-            <div class="publishing-desk-widget-card" style="margin-top:1.5rem; border-top:1px solid #21262d; padding-top:1.5rem;">
-                <h4 style="margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">🔒 System Authentication</h4>
-                <button class="studio-action-btn" id="authBtn" onclick="handleAuthToggle()" style="background:#00e676; padding:0.5rem 1rem; border:0; border-radius:4px; font-weight:600; cursor:pointer;">Secure Login</button>
-
-                <form id="publishForm" onsubmit="handleFormSubmission(event)" style="margin-top:1rem; opacity:0.4; pointer-events:none;">
-                    <div class="form-element" style="margin-bottom:0.75rem;">
-                        <label for="workspace-target" style="display:block; font-size:12px; margin-bottom:4px;">Select Target Workspace</label>
-                        <select id="workspace-target" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
-                            <option value="daily">Daily Analysis Post</option>
-                            <option value="learning">Today's Learning Entry</option>
-                            <option value="strategy">Trading Strategy Playbook</option>
-                            <option value="reels">Short Video Reel Log</option>
-                        </select>
-                    </div>
-
-                    <div class="form-element" style="margin-bottom:0.75rem;">
-                        <label for="asset-title" style="display:block; font-size:12px; margin-bottom:4px;">Asset/Stock Heading Title</label>
-                        <input type="text" id="asset-title" required placeholder="e.g., RELIANCE Trend Channel" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
-                    </div>
-
-                    <div class="form-element" style="margin-bottom:0.75rem;">
-                        <label for="chart-url" style="display:block; font-size:12px; margin-bottom:4px;">Chart Graphic Image Link URL</label>
-                        <input type="url" id="chart-url" required placeholder="https://example.com" style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px;">
-                    </div>
-
-                    <div class="form-element" style="margin-bottom:1rem;">
-                        <label for="analysis-summary" style="display:block; font-size:12px; margin-bottom:4px;">Strategic Annotations & Analysis Body Summary</label>
-                        <textarea id="analysis-summary" rows="4" required style="width:100%; padding:0.4rem; background:#0d1117; color:#fff; border:1px solid #30363d; border-radius:4px; font-family:inherit;"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit-global" style="width:100%; padding:0.6rem; background:#2962ff; border:0; color:#fff; font-weight:600; border-radius:4px; cursor:pointer;">Publish Live Globally</button>
-                </form>
-            </div>
-
         </aside>
     </div> <!-- Close workspace-wrapper -->
+
     <!-- Script Controllers Core Engine -->
+    <script src="script.js"></script>
     <script>
         // Calculates trading risk-to-reward ratios based on fixed template formats
         function calculateTradeMetrics() {
@@ -199,61 +164,6 @@
             if (targetPanel) {
                 targetPanel.classList.add('active');
             }
-        }
-
-        // Drop Drawer Control Workspace Panel Switch
-        function togglePublishingDesk() { 
-            const desk = document.getElementById('studio-desk');
-            if (desk) {
-                desk.classList.toggle('hidden'); 
-            }
-        }
-
-        // Security Field Form Authorization Locker Toggle
-        let isAuthenticated = false;
-        function handleAuthToggle() {
-            isAuthenticated = !isAuthenticated;
-            const form = document.getElementById('publishForm');
-            const authBtn = document.getElementById('authBtn');
-            
-            if(isAuthenticated) {
-                authBtn.innerText = "Log Out Workspace";
-                authBtn.style.background = "#ff1744";
-                form.style.opacity = "1";
-                form.style.pointerEvents = "auto";
-            } else {
-                authBtn.innerText = "Secure Login";
-                authBtn.style.background = "#00e676";
-                form.style.opacity = "0.4";
-                form.style.pointerEvents = "none";
-                form.reset();
-            }
-        }
-
-        // Dynamic Runtime Node Form Publisher Integration Handler
-        function handleFormSubmission(e) {
-            e.preventDefault();
-            if(!isAuthenticated) return;
-
-            const targetWorkspace = document.getElementById('workspace-target').value;
-            const title = document.getElementById('asset-title').value;
-            const url = document.getElementById('chart-url').value;
-            const summary = document.getElementById('analysis-summary').value;
-
-            const targetContainer = document.getElementById(`stream-${targetWorkspace}`);
-            if (targetContainer) {
-                const standardCard = `
-                    <div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem;">
-                        <h3 style="margin-top:0;">${title}</h3>
-                        ${url ? `<img src="${url}" alt="Analysis" style="max-width:100%; border-radius:4px; margin:0.5rem 0;">` : ''}
-                        <p style="color:#8b949e; font-size:14px; margin-bottom:0;">${summary}</p>
-                    </div>
-                `;
-                targetContainer.insertAdjacentHTML('afterbegin', standardCard);
-            }
-
-            e.target.reset();
-            navigateHub(targetWorkspace, null);
         }
 
         // Fire initialization metrics setup on launch load
