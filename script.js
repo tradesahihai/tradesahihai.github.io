@@ -24,39 +24,49 @@ async function fetchCloudData() {
             strategyVault.innerHTML = fallback; reelsVault.innerHTML = fallback;
             return;
         }
-
-        posts.forEach(p => {
-            let img = p.image_url ? `<div class="chart-frame-wrapper"><img src="${p.image_url}" class="chart-frame-img"></div>` : '';
-            let dateStr = new Date(p.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            
-            let cardHtml = `
-                <div class="display-card-v2">
-                    <h3>${p.title}</h3>
-                    <p style="font-size:0.8rem; color:#636d81; margin-bottom:10px;">Published on ${dateStr}</p>
-                    ${img}
-                    <p class="card-body-text">${p.body}</p>
+        // --- Locate this loop inside fetchCloudData() and replace the p.forEach(p => { ... }) loop block ---
+posts.forEach(p => {
+    let img = p.image_url ? `<div class="chart-frame-wrapper"><img src="${p.image_url}" class="chart-frame-img"></div>` : '';
+    let dateStr = new Date(p.created_at || Date.now()).toLocaleDateString(undefined, { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    }); // Automatically formats dates based on the user's localized device region settings
+    
+    let cardHtml = `
+        <div class="display-card-v2">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                <h3 style="margin:0;">${p.title}</h3>
+                <div>
+                    <span class="localization-tag">🌐 Global Sync</span>
                 </div>
-            `;
+            </div>
+            <p style="font-size:0.75rem; color:#636d81; margin-bottom:12px;">Logged securely on ${dateStr}</p>
+            ${img}
+            <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6;">${p.body}</p>
+        </div>
+    `;
 
-            if(p.category === 'daily') dailyVault.innerHTML += cardHtml;
-            if(p.category === 'learning') learningVault.innerHTML += cardHtml;
-            if(p.category === 'strategy') strategyVault.innerHTML += cardHtml;
-            
-            if(p.category === 'reel') {
-                reelsVault.innerHTML += `
-                    <article class="reel-card">
-                        <div class="reel-video-simulation-box">
-                            <img src="${p.image_url}" class="reel-media-placeholder">
-                            <div style="position: absolute; font-size: 2rem; opacity: 0.85; cursor: pointer;">▶️</div>
-                            <div class="reel-overlay-info">
-                                <h4>${p.title}</h4>
-                                <p>${p.body}</p>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            }
-        });
+    if(p.category === 'daily') dailyVault.innerHTML += cardHtml;
+    if(p.category === 'learning') learningVault.innerHTML += cardHtml;
+    if(p.category === 'strategy') strategyVault.innerHTML += cardHtml;
+    
+    if(p.category === 'reel') {
+        reelsVault.innerHTML += `
+            <article class="reel-card">
+                <div class="reel-video-simulation-box">
+                    <img src="${p.image_url}" class="reel-media-placeholder">
+                    <div style="position: absolute; font-size: 2rem; opacity: 0.85; cursor: pointer;">▶️</div>
+                    <div class="reel-overlay-info">
+                        <h4>${p.title}</h4>
+                        <p style="font-size:0.75rem; opacity:0.9;">${p.body}</p>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+});
+
     } catch (err) { console.error("Cloud syncing blocked", err); }
 }
 
