@@ -96,31 +96,47 @@ async function fetchCloudAndFlatData() {
                 initializeDateBucket(formattedBucketDateKey);
                 const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
 
-                if (data.daily && data.daily.length > 0) {
-                    data.daily.forEach((item, idx) => {
+                // ✅ TYPE-SAFE REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
+                if (data.daily) {
+                    const dailyArray = Array.isArray(data.daily) ? data.daily : [{ title: `${dateStr}_chart.txt`, content: data.daily, image: data.imageUrl }];
+                    dailyArray.forEach((item, idx) => {
+                        if (!item.content) return;
                         let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title, '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
+                        let html = compileCardMarkup(isTodayActiveSession, item.title || "📈 Daily Chart Log", '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].daily.push(html);
                     });
                 }
-                if (data.learning && data.learning.length > 0) {
-                    data.learning.forEach((item, idx) => {
+
+                // ✅ TYPE-SAFE REPAIR LOOP FOR TODAY'S LEARNING SECTION
+                if (data.learning) {
+                    const learningArray = Array.isArray(data.learning) ? data.learning : [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
+                    learningArray.forEach((item, idx) => {
+                        if (!item.content) return;
                         let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title, '💡 Learning Vector', '#00e676', imgHtml, item.content, `local-learn-${dateStr}-${idx}`);
+                        let html = compileCardMarkup(isTodayActiveSession, item.title || "💡 Learning Vector", '💡 Learning Vector', '#00e676', imgHtml, item.content, `local-learn-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].learning.push(html);
                     });
                 }
-                if (data.strategy && data.strategy.length > 0) {
-                    data.strategy.forEach((item, idx) => {
+
+                // ✅ TYPE-SAFE REPAIR LOOP FOR SYSTEMATIC STRATEGIES
+                if (data.strategy) {
+                    const strategyArray = Array.isArray(data.strategy) ? data.strategy : [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
+                    strategyArray.forEach((item, idx) => {
+                        if (!item.content) return;
                         let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><img src="${item.image}" style="max-width:100%; border-radius:6px; border:1px solid #30363d;"></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title, '🎯 System Playbook', '#ffea00', imgHtml, item.content, `local-strat-${dateStr}-${idx}`);
+                        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎯 System Playbook", '🎯 System Playbook', '#ffea00', imgHtml, item.content, `local-strat-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].strategy.push(html);
                     });
                 }
-                if (data.reels && data.reels.length > 0) {
-                    data.reels.forEach((item, idx) => {
-                        let videoHtml = item.video ? `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><video src="${item.video}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000;"></video></div>` : '';
-                        let html = compileCardMarkup(isTodayActiveSession, item.title, '🎬 Market Reel', '#a004ff', videoHtml, item.content, `local-reel-${dateStr}-${idx}`);
+
+                // ✅ TYPE-SAFE REPAIR LOOP FOR TRADING REELS VIDEO PANELS
+                if (data.reels || data.videoUrl) {
+                    const reelsArray = Array.isArray(data.reels) ? data.reels : [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
+                    reelsArray.forEach((item, idx) => {
+                        let videoUrlSrc = item.video || data.videoUrl;
+                        if (!videoUrlSrc) return;
+                        let videoHtml = `<div class="chart-frame-wrapper" style="margin-top:0.5rem;"><video src="${videoUrlSrc}" controls style="width:100%; max-height:360px; border-radius:6px; background:#000;"></video></div>`;
+                        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Market Reel", '🎬 Market Reel', '#a004ff', videoHtml, item.content || "", `local-reel-${dateStr}-${idx}`);
                         combinedTimeline[formattedBucketDateKey].reels.push(html);
                     });
                 }
