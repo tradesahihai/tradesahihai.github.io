@@ -183,3 +183,78 @@ function renderAllContentStreams() {
         `;
     });
 }
+/* Custom Added Sidebar Component Layout Blocks */
+.profile-widget-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-avatar-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--border-line);
+    border: 2px solid var(--accent-blue);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+.profile-widget-card h4 {
+    color: var(--text-header);
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+}
+
+.profile-widget-card p {
+    font-size: 0.8rem;
+    color: var(--text-body);
+}
+
+.calculator-widget-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.calculator-widget-card h4 {
+    color: var(--text-header);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.calc-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.calc-inputs-grid input {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.calc-output-display-box {
+    background-color: var(--app-bg);
+    border: 1px dashed var(--border-line);
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    text-align: center;
+}
