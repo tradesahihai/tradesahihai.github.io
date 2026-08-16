@@ -409,21 +409,37 @@ function renderNewsList(source, articles) {
     const html = articles.map(item => {
         const timeAgo = formatTimeAgo(item.pubDate);
         const tagClass = getTagClass(item.category);
-        const categoryLabel = item.category || (source === 'mc' ? 'Markets' : 'Global');
-
+        const categoryLabel = (item.category || (source === 'mc' ? 'Markets' : 'Global')).toUpperCase();
         const sourceName = (typeof item.source === 'object' ? item.source['#text'] : item.source) || (source === 'mc' ? 'Moneycontrol' : 'Yahoo Finance');
 
+        let badgeBg = 'rgba(57, 211, 83, 0.15)';
+        let badgeColor = '#39d353';
+        let badgeBorder = 'rgba(57, 211, 83, 0.3)';
+        if (tagClass === 'stocks') {
+            badgeBg = 'rgba(88, 166, 255, 0.15)';
+            badgeColor = '#58a6ff';
+            badgeBorder = 'rgba(88, 166, 255, 0.3)';
+        } else if (tagClass === 'economy') {
+            badgeBg = 'rgba(255, 179, 0, 0.15)';
+            badgeColor = '#ffb300';
+            badgeBorder = 'rgba(255, 179, 0, 0.3)';
+        } else if (tagClass === 'global') {
+            badgeBg = 'rgba(179, 60, 255, 0.15)';
+            badgeColor = '#d2a8ff';
+            badgeBorder = 'rgba(179, 60, 255, 0.3)';
+        }
+
         return `
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-article-item" style="display:block; background:#121824; border:1px solid #1e273a; border-radius:6px; padding:0.75rem; text-decoration:none; color:inherit; margin-bottom:0.45rem; transition:all 0.2s ease;">
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-article-item" style="display:block; background:#161b22; border:1px solid #30363d; border-radius:8px; padding:0.85rem; text-decoration:none; color:inherit; margin-bottom:0.55rem; transition:all 0.2s ease;">
                 <div class="news-meta-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-                    <span class="news-tag ${tagClass}" style="font-size:0.62rem; font-weight:600; padding:2px 6px; border-radius:3px; text-transform:uppercase;">${categoryLabel}</span>
-                    <span class="news-time" style="font-size:0.65rem; color:#657185;">⏱️ ${timeAgo}</span>
+                    <span class="news-tag ${tagClass}" style="font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:4px; text-transform:uppercase; background:${badgeBg}; color:${badgeColor}; border:1px solid ${badgeBorder}; letter-spacing:0.3px;">${categoryLabel}</span>
+                    <span class="news-time" style="font-size:0.68rem; color:#8b949e; display:flex; align-items:center; gap:0.25rem;">⏱️ ${timeAgo}</span>
                 </div>
-                <div class="news-headline" style="font-size:0.8rem; font-weight:600; color:#e6edf3; line-height:1.35; margin-bottom:0.25rem;">${item.title}</div>
-                <div class="news-snippet" style="font-size:0.72rem; color:#8b949e; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.description}</div>
-                <div class="news-source-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.4rem; font-size:0.64rem; color:#657185;">
-                    <span>${sourceName}</span>
-                    <span style="color:#2962ff; font-weight:600;">Read Story ↗</span>
+                <div class="news-headline" style="font-size:0.85rem; font-weight:600; color:#f0f6fc; line-height:1.4; margin-bottom:0.35rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.title}</div>
+                <div class="news-snippet" style="font-size:0.75rem; color:#8b949e; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.description}</div>
+                <div class="news-source-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem; padding-top:0.4rem; border-top:1px solid #21262d; font-size:0.68rem; color:#8b949e;">
+                    <span style="font-weight:500;">${sourceName}</span>
+                    <span style="color:#58a6ff; font-weight:600; display:inline-flex; align-items:center; gap:0.2rem;">Read Story ↗</span>
                 </div>
             </a>
         `;

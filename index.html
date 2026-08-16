@@ -512,57 +512,66 @@
 
     </div> <!-- Close workspace-wrapper -->
 
-    <!-- 🧮 SYSTEM FIXED FOOTER: Portfolio Position Risk Calculator -->
-    <div id="global-portal-fixed-footer" style="position:fixed; bottom:0; left:0; width:100%; background:#0d1117; border-top:1px solid #30363d; padding:0.6rem 1rem; z-index:99999; box-shadow:0 -4px 16px rgba(0,0,0,0.6); box-sizing:border-box;">
-        <div class="calc-footer-inner" style="max-width:1440px; margin:0 auto; width:100%;">
-            <div class="calc-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-                <h3 style="margin:0; font-size:0.8rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.35rem;">🧮 Portfolio Position Risk Calculator</h3>
-                <span class="badge blue" style="font-size:0.62rem; background:#2962ff; color:#fff; padding:2px 6px; border-radius:3px; font-weight:600;">Risk Utility Tool</span>
+    <!-- 🧮 BOTTOM FOOTER: Portfolio Position Risk Calculator & System Brand -->
+    <footer id="global-portal-footer" style="width:100%; background:#0d1117; border-top:1px solid #30363d; padding:1.5rem 1rem 2rem 1rem; margin-top:2.5rem; box-sizing:border-box;">
+        <div class="calc-footer-inner" style="max-width:1360px; margin:0 auto; width:100%;">
+            <div class="calc-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <h3 style="margin:0; font-size:0.95rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">🧮 Portfolio Position Risk & Lot Size Calculator</h3>
+                    <span class="badge blue" style="font-size:0.65rem; background:rgba(41,98,255,0.15); color:#58a6ff; border:1px solid rgba(41,98,255,0.3); padding:2px 7px; border-radius:4px; font-weight:600;">Risk Utility Engine</span>
+                </div>
+                <span style="font-size:0.72rem; color:#8b949e;">Interactive Risk Management Matrix</span>
             </div>
 
-            <div class="calc-grid-controls" style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:flex-end;">
-                <div class="calc-input-group" style="flex:1 1 120px; display:flex; flex-direction:column; gap:2px;">
-                    <label for="calc-capital" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Trading Capital (₹)</label>
-                    <input type="number" id="calc-capital" value="100000" min="1000" step="5000" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
+            <div class="calc-grid-controls" style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:flex-end;">
+                <div class="calc-input-group" style="flex:1 1 140px; display:flex; flex-direction:column; gap:4px;">
+                    <label for="calc-capital" style="font-size:0.7rem; color:#8b949e; font-weight:600;">Trading Capital (₹)</label>
+                    <input type="number" id="calc-capital" value="100000" min="1000" step="5000" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; height:36px; padding:0 0.65rem; font-size:0.82rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
-                    <label for="calc-risk-pct" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Risk Tolerance (%)</label>
-                    <input type="number" id="calc-risk-pct" value="1" min="0.1" max="10" step="0.1" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 110px; display:flex; flex-direction:column; gap:4px;">
+                    <label for="calc-risk-pct" style="font-size:0.7rem; color:#8b949e; font-weight:600;">Risk Tolerance (%)</label>
+                    <input type="number" id="calc-risk-pct" value="1" min="0.1" max="10" step="0.1" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; height:36px; padding:0 0.65rem; font-size:0.82rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
-                    <label for="calc-entry" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Entry Price (₹)</label>
-                    <input type="number" id="calc-entry" value="2500" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 110px; display:flex; flex-direction:column; gap:4px;">
+                    <label for="calc-entry" style="font-size:0.7rem; color:#8b949e; font-weight:600;">Entry Price (₹)</label>
+                    <input type="number" id="calc-entry" value="2500" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; height:36px; padding:0 0.65rem; font-size:0.82rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
-                    <label for="calc-target" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Target Price (₹)</label>
-                    <input type="number" id="calc-target" value="2600" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 110px; display:flex; flex-direction:column; gap:4px;">
+                    <label for="calc-target" style="font-size:0.7rem; color:#8b949e; font-weight:600;">Target Price (₹)</label>
+                    <input type="number" id="calc-target" value="2600" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; height:36px; padding:0 0.65rem; font-size:0.82rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
-                    <label for="calc-stop" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Stop Loss (₹)</label>
-                    <input type="number" id="calc-stop" value="2450" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 110px; display:flex; flex-direction:column; gap:4px;">
+                    <label for="calc-stop" style="font-size:0.7rem; color:#8b949e; font-weight:600;">Stop Loss (₹)</label>
+                    <input type="number" id="calc-stop" value="2450" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:6px; height:36px; padding:0 0.65rem; font-size:0.82rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
+            </div>
 
-                <!-- Calculated Metrics Display Summary Pills -->
-                <div class="calc-output-summary-pills" style="display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center; margin-left:auto;">
-                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
-                        <span>Pos Size:</span> <b id="out-qty" style="color:#58a6ff;">20 Qty</b>
-                    </div>
-                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
-                        <span>Risk Amount:</span> <b id="out-risk-amt" style="color:#f85149;">₹1,000.00</b>
-                    </div>
-                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
-                        <span>Target Profit:</span> <b id="out-profit" style="color:#39d353;">₹2,000.00</b>
-                    </div>
-                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
-                        <span>R:R Ratio:</span> <b id="out-rr" style="color:#39d353;">1 : 2.00</b>
-                    </div>
-                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
-                        <span>Capital Utilized:</span> <b id="out-capital-used" style="color:#fff;">₹50,000.00</b>
-                    </div>
+            <!-- Calculated Metrics Display Summary Pills -->
+            <div class="calc-output-summary-pills" style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; margin-top:1rem; padding-top:0.75rem; border-top:1px solid #21262d;">
+                <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:6px 12px; font-size:0.78rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.4rem;">
+                    <span>Pos Size:</span> <b id="out-qty" style="color:#58a6ff; font-weight:700;">20 Qty</b>
                 </div>
+                <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:6px 12px; font-size:0.78rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.4rem;">
+                    <span>Risk Amount:</span> <b id="out-risk-amt" style="color:#f85149; font-weight:700;">₹1,000.00</b>
+                </div>
+                <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:6px 12px; font-size:0.78rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.4rem;">
+                    <span>Target Profit:</span> <b id="out-profit" style="color:#39d353; font-weight:700;">₹2,000.00</b>
+                </div>
+                <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:6px 12px; font-size:0.78rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.4rem;">
+                    <span>R:R Ratio:</span> <b id="out-rr" style="color:#39d353; font-weight:700;">1 : 2.00</b>
+                </div>
+                <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:6px 12px; font-size:0.78rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.4rem;">
+                    <span>Capital Utilized:</span> <b id="out-capital-used" style="color:#f0f6fc; font-weight:700;">₹50,000.00</b>
+                </div>
+            </div>
+
+            <!-- Footer Branding & Disclaimer -->
+            <div style="margin-top:1.25rem; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#657185; flex-wrap:wrap; gap:0.5rem;">
+                <div>© 2026 Trade Sahi Hai • Built for High-Frequency Systems & Precision Analytics</div>
+                <div>Educational & Informational Analysis Only • Not Financial Advisory</div>
             </div>
         </div>
-    </div>
+    </footer>
 
     <!-- Production App Scripts -->
     <script src="app.js?v=9.6.0"></script>
