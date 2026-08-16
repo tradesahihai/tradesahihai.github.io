@@ -69,6 +69,8 @@ function getSupabaseImageCandidates(fileName) {
         exactPriorities.push(rawBase.toLowerCase());
     }
     if (datePrefix.toLowerCase() === 'aug15') {
+        exactPriorities.push('Aug15_reel');
+        exactPriorities.push('Aug15_reels');
         exactPriorities.push('Aug15_learning');
         exactPriorities.push('Aug15');
         exactPriorities.push('Aug15_pnb');
@@ -76,6 +78,9 @@ function getSupabaseImageCandidates(fileName) {
         exactPriorities.push('Aug15_chart');
     }
     if (datePrefix.toLowerCase() === 'aug16') {
+        exactPriorities.push('Aug16_reel');
+        exactPriorities.push('Aug16_reels');
+        exactPriorities.push('Aug16_strategy');
         exactPriorities.push('Aug16_learning');
         exactPriorities.push('Aug16_nse');
         exactPriorities.push('Aug16');
@@ -99,12 +104,25 @@ function getSupabaseImageCandidates(fileName) {
     ];
 
     const candidates = [];
+    const isReelOrVideo = (fileName || '').toLowerCase().includes('reel') || (fileName || '').toLowerCase().includes('video');
+    
     prefixes.forEach(p => {
         if (!p) return;
-        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
-        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
-        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpeg`);
-        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webp`);
+        if (isReelOrVideo) {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mp4`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webm`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mov`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
+        } else {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpeg`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webp`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mp4`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webm`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mov`);
+        }
     });
 
     return [...new Set(candidates)];
@@ -622,6 +640,7 @@ async function fetchCloudAndFlatData() {
     const learningContainer = document.getElementById('stream-learning-container');
     const strategyContainer = document.getElementById('stream-strategy-container');
     const reelsContainer = document.getElementById('stream-reels-container');
+    const reelsTodayContainer = document.getElementById('stream-reels-today-container');
 
     if (!dailyContainer) return;
 
@@ -794,19 +813,21 @@ async function fetchCloudAndFlatData() {
 
         const formattedHtml = formatMarkdownBody(cleanedRawText);
 
+        const startOpen = isToday;
+
         return `
             <div class="display-card-v2" style="background:#161b22; padding:1.15rem; border:1px solid #30363d; border-radius:8px; margin-bottom:0.75rem; transition:border-color 0.2s ease;">
                 <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; gap:0.75rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; flex:1; min-width:0;">
                         <span style="font-size:0.9rem; color:#f0f6fc; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📄 ${title}</span>
-                        <span style="font-size:0.72rem; color:#8b949e; white-space:nowrap;">• Today</span>
+                        <span style="font-size:0.72rem; color:${isToday ? '#39d353' : '#8b949e'}; white-space:nowrap;">• ${isToday ? 'Today' : dateString}</span>
                     </div>
                     <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
                         <span class="localization-tag" style="background:${tagBg}; color:#fff; padding:2px 8px; border-radius:4px; font-size:0.65rem; font-weight:600;">${tagText}</span>
-                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="background:#21262d; border:1px solid #30363d; color:#58a6ff; padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">📖 Details ▾</button>
+                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="background:#21262d; border:1px solid ${startOpen ? 'rgba(248, 81, 73, 0.4)' : '#30363d'}; color:${startOpen ? '#f85149' : '#58a6ff'}; padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">${startOpen ? '✖️ Collapse ▴' : '📖 Details ▾'}</button>
                     </div>
                 </div>
-                <div id="${uniqueId}" style="display:none; padding-top:0.75rem; margin-top:0.75rem; border-top:1px solid #21262d;">
+                <div id="${uniqueId}" style="display:${startOpen ? 'block' : 'none'}; padding-top:0.75rem; margin-top:0.75rem; border-top:1px solid #21262d;">
                     ${mediaHtml}
                     ${techLevelsHtml}
                     <div class="card-body-text" style="line-height: 1.6; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0; background:#0d1117; padding:1rem; border-radius:6px; border:1px solid #21262d;">
@@ -907,21 +928,31 @@ async function fetchCloudAndFlatData() {
         }
         processedFileNames.add(lowerName);
 
-        // Match Image in Supabase Public Storage
+        // Match Image/Video in Supabase Public Storage
         const imageCandidates = getSupabaseImageCandidates(fileName);
         const firstImageSrc = imageCandidates[0];
         const remainingCandidatesJson = JSON.stringify(imageCandidates.slice(1)).replace(/"/g, '&quot;');
 
+        const isVideoCandidate = firstImageSrc.endsWith('.mp4') || firstImageSrc.endsWith('.webm') || firstImageSrc.endsWith('.mov') || category === 'reels';
+
         let mediaHtml = `
             <div style="margin:0.75rem 0; border-radius:6px; overflow:hidden; border:1px solid #30363d; background:#0d1117;">
-                <img src="${firstImageSrc}" 
-                     data-candidates="${remainingCandidatesJson}"
-                     alt="${title}" 
-                     onerror="handleImageFallback(this)" 
-                     style="width:100%; display:block; max-height:520px; object-fit:contain; background:#0a0e14; cursor:pointer;" 
-                     onclick="window.open(this.src, '_blank')"
-                     title="Click to open chart in high-resolution"
-                     loading="lazy" />
+                ${isVideoCandidate ? `
+                    <video controls playsinline preload="metadata" style="width:100%; max-height:540px; background:#000; border-radius:6px; display:block;" onerror="this.style.display='none'">
+                        <source src="${firstImageSrc}" type="video/mp4">
+                        <source src="${firstImageSrc.replace(/\.[^/.]+$/, '.webm')}" type="video/webm">
+                        Your browser does not support HTML5 video.
+                    </video>
+                ` : `
+                    <img src="${firstImageSrc}" 
+                         data-candidates="${remainingCandidatesJson}"
+                         alt="${title}" 
+                         onerror="handleImageFallback(this)" 
+                         style="width:100%; display:block; max-height:520px; object-fit:contain; background:#0a0e14; cursor:pointer;" 
+                         onclick="window.open(this.src, '_blank')"
+                         title="Click to open chart in high-resolution"
+                         loading="lazy" />
+                `}
             </div>
         `;
 
@@ -1029,6 +1060,14 @@ ORDER FLOW & FOOTPRINT IMBALANCE TRADING STRATEGY
 • Key Confirmation: Stacked buying imbalances during a breakout above a daily pivot point provide high-probability continuation setups with defined risk.`
         },
         {
+            name: "Aug16_reel.txt",
+            text: `======================================================================
+NIFTY 50 LIVE INTRADAY BREAKOUT REEL & ORDER FLOW REACTION
+======================================================================
+• Video Breakdown: Quick 60-second recap of today's key pivot breakout above 24,350.
+• Watch the video above for tape reading, buyer imbalance spikes, and volume surge cues.`
+        },
+        {
             name: "strategy_gap_and_go_setup.txt",
             text: `======================================================================
 GAP & GO INTRADAY MOMENTUM PLAYBOOK
@@ -1125,6 +1164,7 @@ GAP & GO INTRADAY MOMENTUM PLAYBOOK
     learningContainer.innerHTML = '';
     strategyContainer.innerHTML = '';
     reelsContainer.innerHTML = '';
+    if (reelsTodayContainer) reelsTodayContainer.innerHTML = '';
 
     // 5. Render timeline date buckets sorted in descending chronological order
     const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
@@ -1165,6 +1205,7 @@ GAP & GO INTRADAY MOMENTUM PLAYBOOK
 
     sortedDates.forEach(dateGroupKey => {
         const bucket = combinedTimeline[dateGroupKey];
+        const isBucketToday = (dateGroupKey === todayLabelString);
 
         if (bucket.daily && bucket.daily.length > 0 && dailyContainer) {
             dailyContainer.innerHTML += bucket.daily.join('');
@@ -1175,8 +1216,12 @@ GAP & GO INTRADAY MOMENTUM PLAYBOOK
         if (bucket.strategy && bucket.strategy.length > 0 && strategyContainer) {
             strategyContainer.innerHTML += bucket.strategy.join('');
         }
-        if (bucket.reels && bucket.reels.length > 0 && reelsContainer) {
-            reelsContainer.innerHTML += bucket.reels.join('');
+        if (bucket.reels && bucket.reels.length > 0) {
+            if (isBucketToday && reelsTodayContainer) {
+                reelsTodayContainer.innerHTML += bucket.reels.join('');
+            } else if (reelsContainer) {
+                reelsContainer.innerHTML += bucket.reels.join('');
+            }
         }
     });
 }
