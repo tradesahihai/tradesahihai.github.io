@@ -11,9 +11,81 @@ const GITHUB_REPO_BRANCH = "main";
 const SUPABASE_STORAGE_URL = "https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking";
 const DYNAMIC_BACKEND_PORTAL_URL = "https://tradesahihai-backend.onrender.com";
 
-// In-memory news store for instant tab filtering
-let mcNewsData = [];
-let yfNewsData = [];
+// Fallback & Multi-candidate Image Resolver for Supabase Storage
+window.handleImageFallback = function(img) {
+    try {
+        const raw = img.getAttribute('data-candidates');
+        if (!raw) {
+            if (img.parentElement) img.parentElement.style.display = 'none';
+            return;
+        }
+        const candidates = JSON.parse(raw);
+        if (candidates && candidates.length > 0) {
+            const nextSrc = candidates.shift();
+            img.setAttribute('data-candidates', JSON.stringify(candidates));
+            img.src = nextSrc;
+        } else {
+            if (img.parentElement) img.parentElement.style.display = 'none';
+        }
+    } catch (e) {
+        if (img.parentElement) img.parentElement.style.display = 'none';
+    }
+};
+
+window.handlePrimaryChartFallback = function(img) {
+    try {
+        const raw = img.getAttribute('data-candidates');
+        if (raw) {
+            const candidates = JSON.parse(raw);
+            if (candidates && candidates.length > 0) {
+                const nextSrc = candidates.shift();
+                img.setAttribute('data-candidates', JSON.stringify(candidates));
+                img.src = nextSrc;
+                return;
+            }
+        }
+    } catch (e) {}
+    // If all Supabase chart image variations fail, gracefully show interactive TradingView iframe
+    img.style.display = 'none';
+    const iframeWrap = document.getElementById('tv-chart-iframe-wrap');
+    if (iframeWrap) iframeWrap.style.display = 'block';
+};
+
+function getSupabaseImageCandidates(fileName) {
+    const rawBase = fileName.replace(/\.txt$/i, '');
+    const dateMatch = fileName.match(/^([A-Za-z]+)(\d+)/);
+    const datePrefix = dateMatch ? dateMatch[0] : '';
+    
+    const prefixes = [
+        rawBase,
+        rawBase.toLowerCase(),
+        rawBase.toUpperCase(),
+        datePrefix,
+        datePrefix.toLowerCase(),
+        datePrefix.toUpperCase(),
+        `${datePrefix}_nse`,
+        `${datePrefix}_NSE`,
+        `${datePrefix.toLowerCase()}_nse`,
+        `${datePrefix}_pnb`,
+        `${datePrefix}_PNB`,
+        `${datePrefix.toLowerCase()}_pnb`,
+        `${datePrefix}_chart`,
+        `${datePrefix.toLowerCase()}_chart`,
+        `${rawBase}_chart`,
+        `${rawBase.toLowerCase()}_chart`,
+    ];
+
+    const candidates = [];
+    prefixes.forEach(p => {
+        if (!p) return;
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpeg`);
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webp`);
+    });
+
+    return [...new Set(candidates)];
+}
 
 // Current selected TV chart symbol & interval
 let currentTvSymbol = "NSE:NIFTY";
@@ -667,17 +739,20 @@ async function fetchCloudAndFlatData() {
                         }
 
                         // Match Image in Supabase Public Storage
-                        // Candidates: e.g. Aug16_nse.png, Aug16.png, Aug15.png, Aug15_pnb.png, etc.
-                        const baseFilePrefix = fileName.replace('.txt', '');
-                        const supabaseImgUrlPrimary = `${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${baseFilePrefix.toLowerCase()}.png`;
-                        const supabaseImgUrlFallback = `${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${dateMatch ? dateMatch[0].toLowerCase() : 'chart'}.png`;
+                        // Candidates: e.g. Aug15.png, Aug15_pnb.png, Aug16_nse.png, etc.
+                        const imageCandidates = getSupabaseImageCandidates(fileName);
+                        const firstImageSrc = imageCandidates[0];
+                        const remainingCandidatesJson = JSON.stringify(imageCandidates.slice(1)).replace(/"/g, '&quot;');
 
                         let mediaHtml = `
                             <div style="margin:0.75rem 0; border-radius:6px; overflow:hidden; border:1px solid #30363d; background:#0d1117;">
-                                <img src="${supabaseImgUrlPrimary}" 
+                                <img src="${firstImageSrc}" 
+                                     data-candidates="${remainingCandidatesJson}"
                                      alt="${title}" 
-                                     onerror="if(this.src!=='${supabaseImgUrlFallback}'){this.src='${supabaseImgUrlFallback}'}else{this.parentElement.style.display='none'}" 
-                                     style="width:100%; display:block; max-height:450px; object-fit:contain; background:#000;" 
+                                     onerror="handleImageFallback(this)" 
+                                     style="width:100%; display:block; max-height:520px; object-fit:contain; background:#000; cursor:pointer;" 
+                                     onclick="window.open(this.src, '_blank')"
+                                     title="Click to open chart in high-resolution"
                                      loading="lazy" />
                             </div>
                         `;

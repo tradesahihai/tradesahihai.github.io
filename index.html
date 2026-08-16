@@ -117,10 +117,12 @@
                         <!-- Live Chart Container: Tries Supabase uploaded Chart first, with fallback to Live TradingView Embed -->
                         <div class="tv-chart-frame-box" id="tv-chart-container" style="background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d; border-top:none;">
                             <img id="primary-daily-chart-img" 
-                                 src="https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16_nse.png" 
+                                 src="https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/Aug16_nse.png" 
+                                 data-candidates='["https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/Aug16.png", "https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16_nse.png", "https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16.png"]'
                                  alt="Daily Technical Chart" 
-                                 onerror="this.style.display='none'; document.getElementById('tv-chart-iframe-wrap').style.display='block';" 
-                                 style="width:100%; display:block; max-height:420px; object-fit:contain; background:#0a0e14;" />
+                                 onerror="handlePrimaryChartFallback(this)" 
+                                 style="width:100%; display:block; max-height:420px; object-fit:contain; background:#0a0e14; cursor:pointer;"
+                                 onclick="window.open(this.src, '_blank')" />
                             <div id="tv-chart-iframe-wrap" style="display:none; width:100%; height:380px;">
                                 <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=BSE%3ARELIANCE&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>
                             </div>
