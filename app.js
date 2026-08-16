@@ -137,7 +137,15 @@ function switchTvChart(symbol, btnEl) {
     currentTvSymbol = symbol;
     if (btnEl) {
         const parent = btnEl.parentElement;
-        parent.querySelectorAll('.chart-pill-btn').forEach(b => b.classList.remove('active'));
+        parent.querySelectorAll('.chart-pill-btn').forEach(b => {
+            b.style.background = '#21262d';
+            b.style.color = '#c9d1d9';
+            b.style.border = '1px solid #30363d';
+            b.classList.remove('active');
+        });
+        btnEl.style.background = '#238636';
+        btnEl.style.color = '#fff';
+        btnEl.style.border = 'none';
         btnEl.classList.add('active');
     }
     initOrUpdateTvWidget();
@@ -148,43 +156,27 @@ function switchTvInterval(interval, btnEl) {
     currentTvInterval = interval;
     if (btnEl) {
         const parent = btnEl.parentElement;
-        parent.querySelectorAll('.chart-tf-btn').forEach(b => b.classList.remove('active'));
+        parent.querySelectorAll('.chart-tf-btn').forEach(b => {
+            b.style.background = 'transparent';
+            b.style.color = '#8b949e';
+            b.classList.remove('active');
+        });
+        btnEl.style.background = 'rgba(41,98,255,0.2)';
+        btnEl.style.color = '#58a6ff';
         btnEl.classList.add('active');
     }
     initOrUpdateTvWidget();
 }
 
 function initOrUpdateTvWidget() {
-    const container = document.getElementById('tv-chart-container');
-    if (!container) return;
-
-    // Use TradingView Widget Constructor if available, or fallback to responsive embed
-    if (typeof TradingView !== 'undefined') {
-        container.innerHTML = '<div id="tradingview_widget_embed" style="width:100%; height:380px;"></div>';
-        try {
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": currentTvSymbol,
-                "interval": currentTvInterval,
-                "timezone": "Asia/Kolkata",
-                "theme": "dark",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#0b0f19",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview_widget_embed",
-                "hide_side_toolbar": false
-            });
-            return;
-        } catch (e) {
-            console.warn("TradingView widget init notice:", e);
-        }
+    const iframe = document.getElementById('tv-widget-iframe');
+    let tvEmbedSymbol = currentTvSymbol;
+    if (tvEmbedSymbol === 'NSE:NIFTY') tvEmbedSymbol = 'NSE:NIFTY50';
+    if (tvEmbedSymbol === 'NSE:BANKNIFTY') tvEmbedSymbol = 'NSE:BANKNIFTY';
+    
+    if (iframe) {
+        iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvEmbedSymbol)}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata`;
     }
-
-    // Fallback embed
-    const encodedSym = encodeURIComponent(currentTvSymbol);
-    container.innerHTML = `<iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=${encodedSym}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata&studies=%5B%5D" style="width:100%; height:380px; border:none; border-radius:6px;" allowtransparency="true" scrolling="no"></iframe>`;
 }
 
 function updateTechLevels(symbol) {

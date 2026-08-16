@@ -97,54 +97,61 @@
                         <span class="localization-tag" style="background:#2962ff; color:#fff; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">📁 Daily Chart Log</span>
                     </div>
 
-                    <!-- TradingView Chart Sandbox Container -->
-                    <div class="chart-container-card">
-                        <div class="chart-toolbar">
-                            <div class="chart-symbol-pills">
-                                <button class="chart-pill-btn active" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
-                                <button class="chart-pill-btn" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
-                                <button class="chart-pill-btn" onclick="switchTvChart('BSE:RELIANCE', this)">RELIANCE</button>
-                                <button class="chart-pill-btn" onclick="switchTvChart('BSE:HDFCBANK', this)">HDFC BANK</button>
-                                <button class="chart-pill-btn" onclick="switchTvChart('BSE:INFY', this)">INFOSYS</button>
+                    <!-- Chart Display Box -->
+                    <div class="chart-container-card" style="margin-bottom:0.75rem;">
+                        <div class="chart-toolbar" style="display:flex; justify-content:space-between; align-items:center; background:#161b22; padding:0.5rem 0.75rem; border-radius:6px 6px 0 0; border-bottom:1px solid #30363d;">
+                            <div class="chart-symbol-pills" style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                                <button class="chart-pill-btn active" style="background:#238636; color:#fff; border:none; padding:3px 8px; border-radius:4px; font-size:0.72rem; font-weight:600; cursor:pointer;" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
+                                <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:3px 8px; border-radius:4px; font-size:0.72rem; cursor:pointer;" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
+                                <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:3px 8px; border-radius:4px; font-size:0.72rem; cursor:pointer;" onclick="switchTvChart('BSE:RELIANCE', this)">RELIANCE</button>
+                                <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:3px 8px; border-radius:4px; font-size:0.72rem; cursor:pointer;" onclick="switchTvChart('BSE:HDFCBANK', this)">HDFC BANK</button>
+                                <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:3px 8px; border-radius:4px; font-size:0.72rem; cursor:pointer;" onclick="switchTvChart('BSE:INFY', this)">INFOSYS</button>
                             </div>
-                            <div class="chart-timeframe-pills">
-                                <button class="chart-tf-btn" onclick="switchTvInterval('15', this)">15m</button>
-                                <button class="chart-tf-btn" onclick="switchTvInterval('60', this)">1h</button>
-                                <button class="chart-tf-btn active" onclick="switchTvInterval('D', this)">1D</button>
+                            <div class="chart-timeframe-pills" style="display:flex; gap:0.25rem;">
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:2px 6px; font-size:0.7rem; cursor:pointer;" onclick="switchTvInterval('15', this)">15m</button>
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:2px 6px; font-size:0.7rem; cursor:pointer;" onclick="switchTvInterval('60', this)">1h</button>
+                                <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:2px 6px; font-size:0.7rem; font-weight:600; border-radius:3px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
                             </div>
                         </div>
 
-                        <!-- Live TradingView Embedded Widget Frame -->
-                        <div class="tv-chart-frame-box" id="tv-chart-container" style="min-height: 380px; width: 100%; position: relative;">
-                            <div id="tradingview_widget_embed" style="width:100%; height:380px;"></div>
+                        <!-- Live Chart Container: Tries Supabase uploaded Chart first, with fallback to Live TradingView Embed -->
+                        <div class="tv-chart-frame-box" id="tv-chart-container" style="background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d; border-top:none;">
+                            <img id="primary-daily-chart-img" 
+                                 src="https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16_nse.png" 
+                                 alt="Daily Technical Chart" 
+                                 onerror="this.style.display='none'; document.getElementById('tv-chart-iframe-wrap').style.display='block';" 
+                                 style="width:100%; display:block; max-height:420px; object-fit:contain; background:#0a0e14;" />
+                            <div id="tv-chart-iframe-wrap" style="display:none; width:100%; height:380px;">
+                                <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=BSE%3ARELIANCE&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Key Technical Levels Matrix -->
-                    <div class="tech-levels-grid">
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Pivot Point</div>
-                            <div class="lvl-val gold" id="lvl-pivot">24,350.00</div>
+                    <!-- Key Technical Levels Matrix: Single-line Grid with Formatted Metric Badges -->
+                    <div class="tech-levels-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:0.5rem; margin:0.75rem 0;">
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Pivot Point</div>
+                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">24,350.00</div>
                         </div>
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Resistance (R1)</div>
-                            <div class="lvl-val red" id="lvl-r1">24,480.00</div>
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R1)</div>
+                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,480.00</div>
                         </div>
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Resistance (R2)</div>
-                            <div class="lvl-val red" id="lvl-r2">24,620.00</div>
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R2)</div>
+                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,620.00</div>
                         </div>
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Support (S1)</div>
-                            <div class="lvl-val green" id="lvl-s1">24,240.00</div>
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S1)</div>
+                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,240.00</div>
                         </div>
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Support (S2)</div>
-                            <div class="lvl-val green" id="lvl-s2">24,110.00</div>
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S2)</div>
+                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,110.00</div>
                         </div>
-                        <div class="tech-level-box">
-                            <div class="lvl-title">Trend Bias</div>
-                            <div class="lvl-val green" id="lvl-trend">Bullish Continuation</div>
+                        <div class="tech-level-box" style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
+                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Trend Bias</div>
+                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">Bullish Continuation</div>
                         </div>
                     </div>
 
@@ -506,51 +513,51 @@
     </div> <!-- Close workspace-wrapper -->
 
     <!-- 🧮 SYSTEM FIXED FOOTER: Portfolio Position Risk Calculator -->
-    <div id="global-portal-fixed-footer">
-        <div class="calc-footer-inner">
-            <div class="calc-header-row">
-                <h3>🧮 Portfolio Position Risk Calculator</h3>
-                <span class="badge blue" style="font-size:0.62rem;">Risk Utility Tool</span>
+    <div id="global-portal-fixed-footer" style="position:fixed; bottom:0; left:0; width:100%; background:#0d1117; border-top:1px solid #30363d; padding:0.6rem 1rem; z-index:99999; box-shadow:0 -4px 16px rgba(0,0,0,0.6); box-sizing:border-box;">
+        <div class="calc-footer-inner" style="max-width:1440px; margin:0 auto; width:100%;">
+            <div class="calc-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                <h3 style="margin:0; font-size:0.8rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.35rem;">🧮 Portfolio Position Risk Calculator</h3>
+                <span class="badge blue" style="font-size:0.62rem; background:#2962ff; color:#fff; padding:2px 6px; border-radius:3px; font-weight:600;">Risk Utility Tool</span>
             </div>
 
-            <div class="calc-grid-controls">
-                <div class="calc-input-group">
-                    <label for="calc-capital">Trading Capital (₹)</label>
-                    <input type="number" id="calc-capital" value="100000" min="1000" step="5000" class="calc-input-field" oninput="calculateTradeMetrics()">
+            <div class="calc-grid-controls" style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:flex-end;">
+                <div class="calc-input-group" style="flex:1 1 120px; display:flex; flex-direction:column; gap:2px;">
+                    <label for="calc-capital" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Trading Capital (₹)</label>
+                    <input type="number" id="calc-capital" value="100000" min="1000" step="5000" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group">
-                    <label for="calc-risk-pct">Risk Tolerance (%)</label>
-                    <input type="number" id="calc-risk-pct" value="1" min="0.1" max="10" step="0.1" class="calc-input-field" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
+                    <label for="calc-risk-pct" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Risk Tolerance (%)</label>
+                    <input type="number" id="calc-risk-pct" value="1" min="0.1" max="10" step="0.1" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group">
-                    <label for="calc-entry">Entry Price (₹)</label>
-                    <input type="number" id="calc-entry" value="2500" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
+                    <label for="calc-entry" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Entry Price (₹)</label>
+                    <input type="number" id="calc-entry" value="2500" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group">
-                    <label for="calc-target">Target Price (₹)</label>
-                    <input type="number" id="calc-target" value="2600" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
+                    <label for="calc-target" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Target Price (₹)</label>
+                    <input type="number" id="calc-target" value="2600" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="calc-input-group">
-                    <label for="calc-stop">Stop Loss (₹)</label>
-                    <input type="number" id="calc-stop" value="2450" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
+                <div class="calc-input-group" style="flex:1 1 100px; display:flex; flex-direction:column; gap:2px;">
+                    <label for="calc-stop" style="font-size:0.65rem; color:#8b949e; font-weight:500;">Stop Loss (₹)</label>
+                    <input type="number" id="calc-stop" value="2450" min="0.05" step="0.5" style="background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; height:28px; padding:0 0.5rem; font-size:0.75rem; font-weight:600; outline:none;" oninput="calculateTradeMetrics()">
                 </div>
 
                 <!-- Calculated Metrics Display Summary Pills -->
-                <div class="calc-output-summary-pills">
-                    <div class="metric-pill">
-                        <span>Pos Size:</span> <b id="out-qty" class="blue">20 Qty</b>
+                <div class="calc-output-summary-pills" style="display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center; margin-left:auto;">
+                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <span>Pos Size:</span> <b id="out-qty" style="color:#58a6ff;">20 Qty</b>
                     </div>
-                    <div class="metric-pill">
-                        <span>Risk Amount:</span> <b id="out-risk-amt" class="red">₹1,000.00</b>
+                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <span>Risk Amount:</span> <b id="out-risk-amt" style="color:#f85149;">₹1,000.00</b>
                     </div>
-                    <div class="metric-pill">
-                        <span>Target Profit:</span> <b id="out-profit" class="green">₹2,000.00</b>
+                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <span>Target Profit:</span> <b id="out-profit" style="color:#39d353;">₹2,000.00</b>
                     </div>
-                    <div class="metric-pill">
-                        <span>R:R Ratio:</span> <b id="out-rr" class="green">1 : 2.00</b>
+                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <span>R:R Ratio:</span> <b id="out-rr" style="color:#39d353;">1 : 2.00</b>
                     </div>
-                    <div class="metric-pill">
-                        <span>Capital Utilized:</span> <b id="out-capital-used">₹50,000.00</b>
+                    <div class="metric-pill" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:3px 8px; font-size:0.7rem; color:#8b949e; display:inline-flex; align-items:center; gap:0.35rem;">
+                        <span>Capital Utilized:</span> <b id="out-capital-used" style="color:#fff;">₹50,000.00</b>
                     </div>
                 </div>
             </div>
