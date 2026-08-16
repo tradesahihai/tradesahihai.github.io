@@ -62,15 +62,21 @@ function getSupabaseImageCandidates(fileName) {
     const dayNum = dateMatch ? dateMatch[2] : '';
     const monthLetters = dateMatch ? dateMatch[1] : '';
     
-    // Exact requested URL priorities first (e.g. Aug15.png, Aug16_nse.png)
+    // Exact requested URL priorities first (e.g. Aug16_learning.png, Aug16_nse.png, Aug15.png)
     const exactPriorities = [];
+    if (rawBase) {
+        exactPriorities.push(rawBase);
+        exactPriorities.push(rawBase.toLowerCase());
+    }
     if (datePrefix.toLowerCase() === 'aug15') {
+        exactPriorities.push('Aug15_learning');
         exactPriorities.push('Aug15');
         exactPriorities.push('Aug15_pnb');
         exactPriorities.push('aug15');
         exactPriorities.push('Aug15_chart');
     }
     if (datePrefix.toLowerCase() === 'aug16') {
+        exactPriorities.push('Aug16_learning');
         exactPriorities.push('Aug16_nse');
         exactPriorities.push('Aug16');
         exactPriorities.push('Aug16_chart');
