@@ -1,8 +1,60 @@
-const DYNAMIC_BACKEND_PORTAL_URL = "https://tradesahihai-backend.onrender.com"; 
+const DYNAMIC_BACKEND_PORTAL_URL = "https://onrender.com";
+const todayLabelString = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+let combinedTimeline = {};
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchCloudAndFlatData();
+    fetchLiveMarketNews();
 });
+
+const initializeDateBucket = (dateKey) => {
+    if (!combinedTimeline[dateKey]) {
+        combinedTimeline[dateKey] = { daily: [], learning: [], strategy: [], reels: [] };
+    }
+};
+
+const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
+    let rawContentText = ""; let displayedHeader = title;
+    if (textBody && typeof textBody === 'object') {
+        rawContentText = textBody.fullContent || "";
+        displayedHeader = textBody.header || title;
+    } else { rawContentText = textBody || ""; }
+
+    let sanitizedMediaHtml = mediaHtml || "";
+    if (!mediaHtml || sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || sanitizedMediaHtml.trim() === "") {
+        sanitizedMediaHtml = "";
+    }
+
+    if (isToday) {
+        return `
+            <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box; clear: both; overflow: hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
+                    <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600;">\${title}</h3>
+                    <div><span class="localization-tag" style="background:\${tagBg}; color:\${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">\${tagText}</span></div>
+                </div>
+                \${sanitizedMediaHtml}
+                <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.75rem 0 0 0;">\${rawContentText}</p>
+            </div>
+        `;
+    } else {
+        const uniqueId = `drawer-\${pId || Math.random().toString(36).substr(2, 9)}`;
+        return `
+            <div class="historical-accordion-row" style="background:#161b22; border:1px solid #21262d; border-radius:6px; margin-bottom:0.5rem; width:100%; overflow:hidden;">
+                <div onclick="toggleHistoricalDrawer('\${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; cursor:pointer; background:#1f242c; user-select:none;">
+                    <span style="font-size:0.85rem; color:#f0f6fc; font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">📁 \${displayedHeader}</span>
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <span class="localization-tag" style="background:#30363d; color:#8b949e; padding:2px 6px; border-radius:4px; font-size:0.65rem;">\${tagText}</span>
+                        <span id="\${uniqueId}-trigger-text" style="font-size:0.7rem; font-weight:600; color:#2962ff;">[ 📖 Read More ]</span>
+                    </div>
+                </div>
+                <div id="\${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
+                    \${sanitizedMediaHtml}
+                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0;">\${rawContentText}</p>
+                </div>
+            </div>
+        `;
+    }
+};
 
 async function fetchCloudAndFlatData() {
     const dailyContainer = document.getElementById('stream-daily-container');
@@ -12,261 +64,92 @@ async function fetchCloudAndFlatData() {
 
     if (!dailyContainer || !learningContainer || !strategyContainer || !reelsContainer) return;
 
-    dailyContainer.innerHTML = ''; learningContainer.innerHTML = '';
-    strategyContainer.innerHTML = ''; reelsContainer.innerHTML = '';
-
-    let combinedTimeline = {};
-    const todayLabelString = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    const initializeDateBucket = (dateKey) => {
-        if (!combinedTimeline[dateKey]) {
-            combinedTimeline[dateKey] = { daily: [], learning: [], strategy: [], reels: [] };
-        }
-    };
-
-        const compileCardMarkup = (isToday, title, tagText, tagBg, mediaHtml, textBody, pId) => {
-        let rawContentText = "";
-        let displayedHeader = title;
-
-        if (textBody && typeof textBody === 'object') {
-            rawContentText = textBody.fullContent || "";
-            displayedHeader = textBody.header || title;
-        } else {
-            rawContentText = textBody || "";
-        }
-
-        // INLINE PURGE SYSTEM: Completely ignore if the file layout is missing or null
-        let sanitizedMediaHtml = mediaHtml || "";
-        if (!mediaHtml || sanitizedMediaHtml.includes('src="null"') || sanitizedMediaHtml.includes('src=""') || sanitizedMediaHtml.trim() === "") {
-            sanitizedMediaHtml = "";
-        }
-
-        if (isToday) {
-            return `
-                <div class="display-card-v2" style="background:#161b22; padding:1.25rem; border:1px solid #30363d; border-radius:8px; margin-bottom:1rem; width: 100%; box-sizing: border-box; clear: both; overflow: hidden;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                        <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${title}</h3>
-                        <div><span class="localization-tag" style="background:${tagBg}; color:${tagBg === '#00e676' || tagBg === '#ffea00' ? '#000' : '#fff'}; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">${tagText}</span></div>
-                    </div>
-                    
-                    <!-- IMAGE FIRST: Chart graphic right below title headers -->
-                    ${sanitizedMediaHtml}
-                    
-                    <!-- TEXT CONTENT SECOND: Summary context block aligned lower on the card layout frame -->
-                    <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.6; color:#c9d1d9; font-size:0.875rem; margin: 0.75rem 0 0 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">${rawContentText}</p>
-                </div>
-            `;
-        } else {
-            const uniqueId = `drawer-${pId || Math.random().toString(36).substr(2, 9)}`;
-            return `
-                <div class="historical-accordion-row" style="background:#161b22; border:1px solid #21262d; border-radius:6px; margin-bottom:0.5rem; width:100%; overflow:hidden;">
-                    <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; cursor:pointer; background:#1f242c; user-select:none;">
-                        <span style="font-size:0.85rem; color:#f0f6fc; font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">📁 ${displayedHeader}</span>
-                        <div style="display:flex; align-items:center; gap:0.75rem;">
-                            <span class="localization-tag" style="background:#30363d; color:#8b949e; padding:2px 6px; border-radius:4px; font-size:0.65rem;">${tagText}</span>
-                            <span id="${uniqueId}-trigger-text" style="font-size:0.7rem; font-weight:600; color:#2962ff;">[ 📖 Read More ]</span>
-                        </div>
-                    </div>
-                    <div id="${uniqueId}" style="display:none; padding:1rem; border-top:1px solid #21262d; background:#161b22;">
-                        <!-- ✅ IMAGE FIRST FOR OLDER DATA: Chart renders right when accordion opens -->
-                        ${sanitizedMediaHtml}
-
-                        <!-- TEXT CONTENT SECOND FOR OLDER DATA: Placed below the chart asset layout -->
-                        <p class="card-body-text" style="white-space: pre-wrap; line-height: 1.5; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0;">${rawContentText}</p>
-                    </div>
-                </div>
-            `;
-        }
-    };
-
-    // Global toggle event handler for older data rows
-    window.toggleHistoricalDrawer = function(drawerId) {
-        const targetDrawer = document.getElementById(drawerId);
-        const targetTrigger = document.getElementById(`${drawerId}-trigger-text`);
-        
-        if (!targetDrawer || !targetTrigger) return;
-        
-        if (targetDrawer.style.display === "none") {
-            targetDrawer.style.display = "block";
-            targetTrigger.innerText = "[ ✖️ Collapse ]";
-            targetTrigger.style.color = "#ff6b6b";
-        } else {
-            targetDrawer.style.display = "none";
-            targetTrigger.innerText = "[ 📖 Read More ]";
-            targetTrigger.style.color = "#2962ff";
-        }
-    };
-    // 1. Fetch Cloud Posts out of Supabase Tables
     try {
-        const res = await fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/posts`);
-        
-        // Safety guard against 404 HTML fallback responses crashing JSON string parses
-        if (!res.ok) {
-            throw new Error(`Server returned HTTP Status ${res.status}`);
-        }
-
-        const posts = await res.json();
-        if (posts && posts.length > 0) {
+        const res = await fetch(`\${DYNAMIC_BACKEND_PORTAL_URL}/api/posts`);
+        if (res.ok) {
+            const posts = await res.json();
             posts.forEach((p, index) => {
                 let parsedDate = new Date(p.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 initializeDateBucket(parsedDate);
                 const isToday = (parsedDate === todayLabelString);
-                
-                // ✅ UPDATED STRUCTURAL MEDIA DESIGN CONFIGURATION
-                let mediaHtml = p.image_url ? `
-                    <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
-                        <img src="${p.image_url}" class="chart-frame-img" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 4px;">
-                    </div>
-                ` : '';
+                let mediaHtml = p.image_url ? `<div class="chart-frame-wrapper" style="margin:0.5rem 0; width:100%;"><img src="\${p.image_url}" style="width:100%; max-width:100%; height:auto; display:block; border-radius:4px;"></div>` : '';
+                const contentPayload = isToday ? p.body : { header: p.title || "Older Cloud Record", hasMore: !!p.body, fullContent: p.body || "" };
 
-                // Build consistent structure payload for older entries pulled natively via table queries
-                const contentPayload = isToday ? p.body : {
-                    header: p.title || "Older Cloud Analysis Record",
-                    hasMore: (p.body && p.body.length > 0),
-                    fullContent: p.body || ""
-                };
-
-                if (p.category === 'daily') {
-                    combinedTimeline[parsedDate].daily.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-daily-${index}`));
-                }
-                if (p.category === 'learning') {
-                    combinedTimeline[parsedDate].learning.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-learn-${index}`));
-                }
-                if (p.category === 'strategy') {
-                    combinedTimeline[parsedDate].strategy.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-strat-${index}`));
-                }
+                if (p.category === 'daily') combinedTimeline[parsedDate].daily.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-daily-\${index}`));
+                if (p.category === 'learning') combinedTimeline[parsedDate].learning.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-learn-\${index}`));
+                if (p.category === 'strategy') combinedTimeline[parsedDate].strategy.push(compileCardMarkup(isToday, p.title, '🌐 Global Sync', '#30363d', mediaHtml, contentPayload, `cloud-strat-\${index}`));
             });
         }
-    } catch (err) { 
-        console.error("Cloud tracking stream offline:", err); 
-    }
-// 2. 🌍 DYNAMIC ROLLING TIMELINE MONTH BOUNDARY ENGINE (NON-BLOCKING PARALLEL IMPLEMENTATION)
+    } catch (err) { console.error("Cloud tracking offline:", err); }
+
     try {
-        const today = new Date();
-        const fetchPromises = [];
-
-        // 1. Queue all network request promises up in memory simultaneously (No sequential blocking)
+        const today = new Date(); const fetchPromises = [];
         for (let i = 0; i < 4; i++) {
-            const targetDate = new Date();
-            targetDate.setDate(today.getDate() - i);
-            
-            const year = targetDate.getFullYear().toString(); 
-            const month = targetDate.toLocaleString('en-US', { month: 'long' }); 
-            const dayNum = targetDate.getDate().toString(); 
-            const dateStr = targetDate.toLocaleString('en-US', { month: 'short' }) + dayNum; 
+            const targetDate = new Date(); targetDate.setDate(today.getDate() - i);
+            const year = targetDate.getFullYear().toString();
+            const month = targetDate.toLocaleString('en-US', { month: 'long' });
+            const dayNum = targetDate.getDate().toString();
+            const dateStr = targetDate.toLocaleString('en-US', { month: 'short' }) + dayNum;
 
-            const requestPromise = fetch(`${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/${year}/${month}/${dayNum}`)
-                .then(res => res.ok ? res.json() : null)
-                .then(data => {
-                    if (!data) return null;
-                    return { data, targetDate, dateStr, dayNum };
-                })
+            const promise = fetch(`\${DYNAMIC_BACKEND_PORTAL_URL}/api/analysis/\${year}/\${month}/\${dayNum}`)
+                .then(r => r.ok ? r.json() : null)
+                .then(d => d ? { d, targetDate, dateStr } : null)
                 .catch(() => null);
-
-            fetchPromises.push(requestPromise);
+            fetchPromises.push(promise);
         }
 
-        // 2. Wait for all requests to finish at once (Eliminates NS_BINDING_ABORTED socket wipes)
-        const resolvedSessions = await Promise.all(fetchPromises);
-
-        resolvedSessions.forEach(session => {
+        const resolved = await Promise.all(fetchPromises);
+        resolved.forEach(session => {
             if (!session) return;
-            const { data, targetDate, dateStr, dayNum } = session;
-
+            const { d, targetDate, dateStr } = session;
             const formattedBucketDateKey = targetDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             initializeDateBucket(formattedBucketDateKey);
             const isTodayActiveSession = (formattedBucketDateKey === todayLabelString);
 
-            // ✅ TYPE-SAFE REPAIR LOOP FOR DAILY ANALYSIS FEED CONTAINER
-            if (data.summary) {
-                const dailyArray = [{ title: `${dateStr}_chart.txt`, content: data.summary, image: data.imageUrl }];
+            if (d.summary) {
+                const dailyArray = [{ title: `\${dateStr}_chart.txt`, content: d.summary, image: d.imageUrl }];
                 dailyArray.forEach((item, idx) => {
-                    if (!item.content) return;
-                    
-                    // Added crossorigin attributes to bypass OpaqueResponseBlocking security barriers safely
-                    let imgHtml = item.image ? `
-                        <div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;">
-                            <img src="${item.image}" crossorigin="anonymous" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid #30363d;">
-                        </div>
-                    ` : '';
-                    let html = compileCardMarkup(isTodayActiveSession, item.title || "📈 Daily Chart Log", '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-${dateStr}-${idx}`);
-                    combinedTimeline[formattedBucketDateKey].daily.push(html);
+                    let imgHtml = item.image ? `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width:100%;"><img src="\${item.image}" crossorigin="anonymous" style="width:100%; max-width:100%; height:auto; display:block; border-radius:6px; border:1px solid #30363d;"></div>` : '';
+                    combinedTimeline[formattedBucketDateKey].daily.push(compileCardMarkup(isTodayActiveSession, item.title, '📁 Daily Chart Log', '#2962ff', imgHtml, item.content, `local-daily-\${dateStr}-\${idx}`));
                 });
             }
-
-            // ✅ TYPE-SAFE REPAIR LOOP FOR TODAY'S LEARNING SECTION
-            if (data.learning) {
-                const learningArray = [{ title: `${dateStr}_learning.txt`, content: data.learning, image: null }];
+            if (d.learning) {
+                const learningArray = [{ title: `\${dateStr}_learning.txt`, content: d.learning }];
                 learningArray.forEach((item, idx) => {
-                    if (!item.content) return;
-                    let html = compileCardMarkup(isTodayActiveSession, item.title || "💡 Learning Vector", '💡 Learning Vector', '#00e676', '', item.content, `local-learn-${dateStr}-${idx}`);
-                    combinedTimeline[formattedBucketDateKey].learning.push(html);
+                    combinedTimeline[formattedBucketDateKey].learning.push(compileCardMarkup(isTodayActiveSession, item.title, '💡 Learning Vector', '#00e676', '', item.content, `local-learn-\${dateStr}-\${idx}`));
                 });
             }
-
-            // ✅ TYPE-SAFE REPAIR LOOP FOR SYSTEMATIC STRATEGIES
-            if (data.strategy) {
-                const strategyArray = [{ title: `${dateStr}_strategy.txt`, content: data.strategy, image: null }];
+            if (d.strategy) {
+                const strategyArray = [{ title: `\${dateStr}_strategy.txt`, content: d.strategy }];
                 strategyArray.forEach((item, idx) => {
-                    if (!item.content) return;
-                    let html = compileCardMarkup(isTodayActiveSession, item.title || "🎯 System Playbook", '🎯 System Playbook', '#ffea00', '', item.content, `local-strat-${dateStr}-${idx}`);
-                    combinedTimeline[formattedBucketDateKey].strategy.push(html);
+                    combinedTimeline[formattedBucketDateKey].strategy.push(compileCardMarkup(isTodayActiveSession, item.title, '🎯 System Playbook', '#ffea00', '', item.content, `local-strat-\${dateStr}-\${idx}`));
                 });
             }
-            // ✅ TYPE-SAFE REPAIR LOOP FOR TRENDING REELS VIDEO PANELS
-if (data.reels || data.videoUrl) {
-    const reelsArray = [{ title: `${dateStr}_reels.mp4`, content: "Daily Walkthrough Reel", video: data.videoUrl }];
-    reelsArray.forEach((item, idx) => {
-        let videoUrlSrc = item.video || data.videoUrl;
-        if (!videoUrlSrc) return;
-        let videoHtml = `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><video src="${videoUrlSrc}" crossorigin="anonymous" controls preload="metadata" style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video></div>`;
-        
-        const contentPayload = isTodayActiveSession ? (item.content || "") : {
-            header: item.title || "Market Walkthrough Reel",
-            hasMore: false,
-            fullContent: item.content || "Daily Video Summary Documentation"
-        };
-        
-        // ✅ UPDATED BADGE: Changed from '🎬 Market Reel' to '🎬 Trending Reel'
-        let html = compileCardMarkup(isTodayActiveSession, item.title || "🎬 Trending Reel", '🎬 Trending Reel', '#a004ff', videoHtml, contentPayload, `local-reel-${dateStr}-${idx}`);
-        combinedTimeline[formattedBucketDateKey].reels.push(html);
-    });
-}
+            if (d.videoUrl) {
+                let videoHtml = `<div class="chart-frame-wrapper" style="margin: 0.5rem 0; width: 100%;"><video src="\${d.videoUrl}" crossorigin="anonymous" controls preload="metadata" style="width:100%; max-height:360px; border-radius:6px; background:#000; display:block;"></video></div>`;
+                combinedTimeline[formattedBucketDateKey].reels.push(compileCardMarkup(isTodayActiveSession, `\${dateStr}_reels.mp4`, '🎬 Trending Reel', '#a004ff', videoHtml, isTodayActiveSession ? "Daily Walkthrough" : { header: "Trending Reel", hasMore: false, fullContent: "Daily Video Summary Documentation" }, `local-reel-\${dateStr}`));
+            }
         });
-    } catch (flatErr) { 
-        console.warn("Flat file engine pipeline log bypass:", flatErr.message); 
-    }
+    } catch (flatErr) { console.warn("Flat pipeline logging bypassed."); }
 
-    // --- Post-Processing Timeline Reductions ---
     const sortedDates = Object.keys(combinedTimeline).sort((a, b) => new Date(b) - new Date(a));
     
     const verifyEmptyState = (el) => {
-        if (!el) return;
-        if (el.innerHTML.trim() === "") {
-            el.innerHTML = `
-                <div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem; width:100%; box-sizing:border-box;">
-                    No entries filed for active matrix tracking streams today.
-                </div>
-            `;
+        if (el && el.innerHTML.trim() === "") {
+            el.innerHTML = `<div class="display-card-v2" style="background:#161b22; padding:1rem; border:1px solid #30363d; border-radius:8px; color:#8b949e; font-size:0.8rem; width:100%; box-sizing:border-box;">No entries filed for active matrix tracking streams today.</div>`;
         }
     };
 
-    // 🔄 Render timeline headers and append historical tracks cleanly (RUNS EXACTLY ONCE AT THE END)
-    sortedDates.forEach(dateGroupKey => {
-        const bucket = combinedTimeline[dateGroupKey];
-        const isToday = (dateGroupKey === todayLabelString);
-        const labelBannerText = isToday ? `Today - ${dateGroupKey}` : dateGroupKey;
-
-        const generateDateDividerHeader = () => `
-            <div class="timeline-date-header" style="padding: 0.4rem 0.75rem; background: #21262d; border: 1px solid #30363d; border-radius: 4px; color: #c9d1d9; font-size: 0.75rem; font-weight: 600; margin: 1rem 0 0.5rem 0; width:100%; clear:both; font-family:monospace; box-sizing:border-box;">
-                📅 ${labelBannerText}
-            </div>
-        `;
-
-        if (bucket.daily && bucket.daily.length > 0) dailyContainer.innerHTML += generateDateDividerHeader() + bucket.daily.join('');
-        if (bucket.learning && bucket.learning.length > 0) learningContainer.innerHTML += generateDateDividerHeader() + bucket.learning.join('');
-        if (bucket.strategy && bucket.strategy.length > 0) strategyContainer.innerHTML += generateDateDividerHeader() + bucket.strategy.join('');
-        if (bucket.reels && bucket.reels.length > 0) reelsContainer.innerHTML += generateDateDividerHeader() + bucket.reels.join('');
+    sortedDates.forEach(dateKey => {
+        const bucket = combinedTimeline[dateKey];
+        const isToday = (dateKey === todayLabelString);
+        const labelText = isToday ? `Today - \${dateKey}` : dateKey;
+        const genHeader = () => `<div class="timeline-date-header" style="padding:0.4rem 0.75rem; background:#21262d; border:1px solid #30363d; border-radius:4px; color:#c9d1d9; font-size:0.75rem; font-weight:600; margin:1rem 0 0.5rem 0; width:100%; font-family:monospace; box-sizing:border-box;">📅 \${labelText}</div>`;
+        
+        if (bucket.daily.length > 0) dailyContainer.innerHTML += genHeader() + bucket.daily.join('');
+        if (bucket.learning.length > 0) learningContainer.innerHTML += genHeader() + bucket.learning.join('');
+        if (bucket.strategy.length > 0) strategyContainer.innerHTML += genHeader() + bucket.strategy.join('');
+        if (bucket.reels.length > 0) reelsContainer.innerHTML += genHeader() + bucket.reels.join('');
     });
 
     verifyEmptyState(dailyContainer); 
@@ -275,45 +158,65 @@ if (data.reels || data.videoUrl) {
     verifyEmptyState(reelsContainer);
 }
 
-/**
- * 🧮 FIXED BOTTOM MATRIX PINNING ENGINE
- * Extracts the layout element and anchors it to the baseline of the screen
- */
-document.addEventListener("DOMContentLoaded", () => {
-    const targetCalculatorElement = document.querySelector('.calculator-widget-card');
-    
-    if (targetCalculatorElement) {
-        const pinnedFooterContainer = document.createElement("div");
-        pinnedFooterContainer.id = "global-portal-fixed-footer";
-        
-        // Added high specificity positioning properties to guarantee it stays locked down
-        pinnedFooterContainer.style.cssText = `
-            position: fixed !important; 
-            bottom: 0 !important; 
-            left: 0 !important; 
-            width: 100% !important; 
-            background: #0d1117 !important; 
-            border-top: 1px solid #30363d !important; 
-            padding: 0.4rem 0 !important; 
-            z-index: 999999 !important; 
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.6) !important;
-            display: block !important;
-        `;
+async function fetchLiveMarketNews() {
+    const mc = document.getElementById("news-feed-moneycontrol");
+    const yf = document.getElementById("news-feed-yahoofinance");
+    if (!mc || !yf) return;
 
-        pinnedFooterContainer.innerHTML = `
-            <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; width: 100%; box-sizing: border-box;">
-                ${targetCalculatorElement.innerHTML}
-            </div>
-        `;
-
-        const parentCardContainer = targetCalculatorElement.closest('footer') || targetCalculatorElement.parentElement;
-        if (parentCardContainer && parentCardContainer.tagName === 'FOOTER') {
-            targetCalculatorElement.remove();
-        } else {
-            targetCalculatorElement.remove();
+    const renderFeed = async (url, el) => {
+        try {
+            const res = await fetch(`https://allorigins.win\${encodeURIComponent(url)}`);
+            const json = await res.json();
+            const doc = new DOMParser().parseFromString(json.contents, "text/xml");
+            const items = doc.getElementsByTagName("item");
+            let html = "";
+            
+            for (let i = 0; i < Math.min(items.length, 6); i++) {
+                const title = items[i].getElementsByTagName("title")?.textContent || "Market Alert";
+                const link = items[i].getElementsByTagName("link")?.textContent || "#";
+                html += `<a href="\${link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block; padding:0.5rem; background:#1f242c; border:1px solid #21262d; border-radius:4px; box-sizing:border-box; margin-bottom:6px;">
+                    <div style="color:#f0f6fc; font-size:0.72rem; font-weight:500; line-height:1.4;">\${title}</div>
+                </a>`;
+            }
+            el.innerHTML = html || 'No updates available.';
+        } catch { 
+            el.innerHTML = 'Stream unavailable.'; 
         }
+    };
 
-        document.body.appendChild(pinnedFooterContainer);
-        document.body.style.setProperty("padding-bottom", "95px", "important");
+    renderFeed("https://moneycontrol.com", mc);
+    renderFeed("https://yahoo.com", yf);
+}
+
+window.switchActiveTab = function(tabIndex, tabIdString) {
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach((b, idx) => idx === tabIndex ? b.classList.add('active') : b.classList.remove('active'));
+    
+    const sidePanel = document.getElementById("news-sidebar-panel");
+    const leftStream = document.querySelector(".matrix-left-stream");
+    
+    if (sidePanel && leftStream) {
+        if (tabIndex === 0) {
+            sidePanel.style.display = "flex";
+            leftStream.style.cssText = "flex:0 0 70%; width:70%; max-width:70%;";
+        } else {
+            sidePanel.style.display = "none";
+            leftStream.style.cssText = "flex:0 0 100% !important; width:100% !important; max-width:100% !important;";
+        }
     }
-});
+};
+
+window.toggleHistoricalDrawer = function(dId) {
+    const t = document.getElementById(dId); 
+    const tr = document.getElementById(`\${dId}-trigger-text`);
+    if (!t || !tr) return;
+    if (t.style.display === "none") { 
+        t.style.display = "block"; 
+        tr.innerText = "[ ❌ Close ]"; 
+        tr.style.color = "#f85149"; 
+    } else { 
+        t.style.display = "none"; 
+        tr.innerText = "[ 📖 View ]"; 
+        tr.style.color = "#2962ff"; 
+    }
+};

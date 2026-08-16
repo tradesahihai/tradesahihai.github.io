@@ -3,239 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Premium Hub</title>
-    <link rel="stylesheet" href="style.css">
-
-    <!-- ⚡️ ISOLATED SESSION PERSISTENCE INTERCEPTOR ENGINE -->
-    <script>
-        (function() {
-            // Isolates active panel data boundaries specifically to this individual browser window tab
-            var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
-            var styleNode = document.createElement('style');
-            styleNode.id = "instant-persistence-css";
-            styleNode.innerHTML = `
-                /* Lock hide visibility defaults across ALL panels to prevent layout stacking overrides */
-                .viewport-panel { display: none !important; }
-                
-                /* Reveal exclusively this browser tab's isolated active workspace */
-                #${activeTab}-panel { display: block !important; }
-
-                /* CONDITIONAL FOOTER: Display footer ONLY if the current tab is set to daily analysis */
-                #global-portal-footer { display: ${activeTab === 'daily' ? 'block' : 'none'} !important; }
-                
-                /* Highlight only the corresponding active button anchor */
-                .navigation-hub button[onclick*="'${activeTab}'"] { 
-                    background-color: var(--button-active-bg, #21262d) !important; 
-                    color: #ffffff !important; 
-                    border-color: #2962ff !important;
-                    font-weight: 600 !important;
-                }
-            `;
-            document.head.appendChild(styleNode);
-        })();
-    </script>
+    <title>Trade Sahi Hai - Intelligent Analytics Matrix</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body { background: #0b0e14; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; padding: 0; }
+        .tab-btn { background: #161b22; border: 1px solid #30363d; color: #8b949e; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; }
+        .tab-btn.active { background: #21262d; border-color: #8b949e; color: #fff; }
+        #news-feed-moneycontrol::-webkit-scrollbar, #news-feed-yahoofinance::-webkit-scrollbar { width: 4px; }
+        #news-feed-moneycontrol::-webkit-scrollbar-thumb, #news-feed-yahoofinance::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
+    </style>
 </head>
 <body>
 
-    <!-- Main Navigation Top Bar -->
-    <header>
-        <div class="logo-group">
-            <span class="trend-icon" aria-hidden="true">📈</span>
-            <h1>Trade Sahi Hai</h1>
-        </div>
-        <nav class="navigation-hub">
-            <button class="nav-link" onclick="navigateHub('daily', event)">Daily Analysis</button>
-            <button class="nav-link" onclick="navigateHub('learning', event)">Today's Learning</button>
-            <button class="nav-link" onclick="navigateHub('strategy', event)">Strategies</button>
-            <button class="nav-link" onclick="navigateHub('reels', event)">Trending Reels</button>
-        </nav>
-    </header>
-
-    <!-- Sleek, High-Speed Indian Market & Major Stocks Moving Ticker Banner Slider -->
-    <div class="market-ticker-banner">
-        <div class="ticker-scroll-track">
-            <!-- First loop iteration container group -->
-            <div class="ticker-cluster">
-                <span class="ticker-item index-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
-                <span class="ticker-item stock-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
-                <span class="ticker-item stock-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
-                <span class="ticker-item stock-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
-                <span class="ticker-item stock-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
-                <span class="ticker-item stock-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
-                <span class="ticker-item stock-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
-            </div>
-            <!-- Identical replica cluster group cloned cleanly to establish smooth seamless loop transitions -->
-            <div class="ticker-cluster" aria-hidden="true">
-                <span class="ticker-item index-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
-                <span class="ticker-item stock-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
-                <span class="ticker-item stock-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
-                <span class="ticker-item stock-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
-                <span class="ticker-item stock-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
-                <span class="ticker-item stock-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
-                <span class="ticker-item stock-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
+    <!-- 📊 TOP WORKSPACE CALCULATION UTILITY BAR -->
+    <div style="position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; background: #0d1117 !important; border-bottom: 1px solid #30363d !important; padding: 0.4rem 0 !important; z-index: 999999 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.6) !important;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; width: 100%; box-sizing: border-box;">
+            <div class="calculator-widget-card" style="width: 100%;">
+                <div style="margin-bottom: 0.35rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="font-size: 0.8rem; margin: 0; color: #fff; font-weight: 600;">🧮 Portfolio Position Risk Calculator</h2>
+                    <span style="background: #21262d; color: #8b949e; border: 1px solid #30363d; padding: 1px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 500;">Risk Utility Tool</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 0;">
+                    <div class="form-element"><label style="display: block; font-size: 0.6rem; color: #8b949e; margin-bottom: 2px;">Trading Capital (₹)</label><input type="number" id="calc-capital" value="100000" style="width:100%; padding:0.25rem 0.4rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.7rem; height: 24px; box-sizing: border-box; outline: none;"></div>
+                    <div class="form-element"><label style="display: block; font-size: 0.6rem; color: #8b949e; margin-bottom: 2px;">Risk Tolerance (%)</label><input type="number" id="calc-risk-pct" value="1" style="width:100%; padding:0.25rem 0.4rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.7rem; height: 24px; box-sizing: border-box; outline: none;"></div>
+                    <div class="form-element"><label style="display: block; font-size: 0.6rem; color: #8b949e; margin-bottom: 2px;">Entry Price (₹)</label><input type="number" id="calc-entry" value="2500" style="width:100%; padding:0.25rem 0.4rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.7rem; height: 24px; box-sizing: border-box; outline: none;"></div>
+                    <div class="form-element"><label style="display: block; font-size: 0.6rem; color: #8b949e; margin-bottom: 2px;">Target Price (₹)</label><input type="number" id="calc-target" value="2600" style="width:100%; padding:0.25rem 0.4rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.7rem; height: 24px; box-sizing: border-box; outline: none;"></div>
+                    <div class="form-element"><label style="display: block; font-size: 0.6rem; color: #8b949e; margin-bottom: 2px;">Stop Loss (₹)</label><input type="number" id="calc-stop" value="2450" style="width:100%; padding:0.25rem 0.4rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.7rem; height: 24px; box-sizing: border-box; outline: none;"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Global App Layout Wrapper Split Container -->
-    <div class="workspace-wrapper">
-        <!-- Main Layout Live Document Vault Feed Column Space -->
-        <main class="primary-feed">
-            
-            <!-- Isolated Sections: Separated into clean independent panels -->
-            <div id="daily-panel" class="viewport-panel">
-                <div class="stream-header">
-                    <h2>Daily Market Analysis Inferences</h2>
-                    <span class="badge blue">Live Charts</span>
-                </div>
-                <div id="stream-daily-container"></div>
-            </div>
+    <!-- Tab Bar Controller Headers Navigation -->
+    <div style="max-width: 1400px; margin: 5.5rem auto 0 auto; padding: 0 1rem; display: flex; gap: 0.5rem;" id="tab-navigation-bar">
+        <button class="tab-btn active" onclick="switchActiveTab(0, 'tab-daily-stream')">📊 Daily Inferences</button>
+        <button class="tab-btn" onclick="switchActiveTab(1, 'tab-concept-learning')">💡 Learning Log</button>
+    </div>
 
-            <div id="learning-panel" class="viewport-panel">
-                <div class="stream-header">
-                    <h2>Today's Market Concepts & Learning Logs</h2>
-                    <span class="badge gold">Educational</span>
-                </div>
-                <div id="stream-learning-container"></div>
-            </div>
-
-            <div id="strategy-panel" class="viewport-panel">
-                <div class="stream-header">
-                    <h2>Systematic Strategy Execution Rules</h2>
-                    <span class="badge green">Playbook</span>
-                </div>
-                <div id="stream-strategy-container"></div>
-            </div>
-
-            <div id="reels-panel" class="viewport-panel">
-                <div class="stream-header">
-                    <h2>Market Bytes & Short Reels</h2>
-                    <span class="badge purple">Video Stream</span>
-                </div>
-                <div id="stream-reels-container"></div>
-            </div>
-
-        </main>
-        <!-- Sidebar Management Panel Right Stack Column Space (Streamlined for Bio Focus Only) -->
-        <aside class="right-widget-stack">
-            <div class="profile-widget-card">
-                <h4>👨‍💻 Trade Sahi Hai Admin</h4>
-                <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
-            </div>
-        </aside>
-    </div> <!-- Close workspace-wrapper -->
-
-    <!-- 🧮 SYSTEM FOOTER LAYER: Hosts the compact calculator widget cleanly across the base baseline -->
-<footer id="global-portal-footer" style="width: 100%; background: #0d1117; border-top: 1px solid #30363d; padding: 0.75rem 0; margin-top: 1.5rem; display: none;">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; width: 100%;">
+    <!-- Main Application Dashboard Workspace Split -->
+    <div class="dashboard-split-wrapper" style="display: flex; gap: 1.25rem; max-width: 1400px; margin: 0 auto; padding: 1rem; box-sizing: border-box;">
         
-        <div class="calculator-widget-card" style="width: 100%;">
-            <div class="stream-header" style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="font-size: 0.85rem; margin: 0; color: #fff; font-weight: 600;">🧮 Portfolio Position Risk Calculator</h2>
-                <span class="badge" style="background: #21262d; color: #8b949e; border: 1px solid #30363d; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem;">Risk Utility Tool</span>
-            </div>
-            
-            <div class="calc-inputs-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 0;">
-                <div class="form-element">
-                    <label for="calc-capital" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Trading Capital (₹)</label>
-                    <input type="number" id="calc-capital" value="100000" min="1" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
-                </div>
-                <div class="form-element">
-                    <label for="calc-risk-pct" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Risk Tolerance (%)</label>
-                    <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
-                </div>
-                <div class="form-element">
-                    <label for="calc-entry" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Entry Price (₹)</label>
-                    <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
-                </div>
-                <div class="form-element">
-                    <label for="calc-target" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Target Price (₹)</label>
-                    <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
-                </div>
-                <div class="form-element">
-                    <label for="calc-stop" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Stop Loss (₹)</label>
-                    <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
-                </div>
-            </div>
+        <!-- LEFT SIDE: 70% Matrix Core Container Feeds -->
+        <div class="matrix-left-stream" style="flex: 0 0 70%; width: 70%; max-width: 70%; transition: all 0.25s ease;">
+            <div id="stream-daily-container"></div>
+            <div id="stream-learning-container"></div>
+            <div id="stream-strategy-container"></div>
+            <div id="stream-reels-container"></div>
         </div>
 
-        <!-- Footer Baseline Trademark Credits -->
-        <p style="margin: 0.5rem 0 0 0; text-align: center; color: #8b949e; font-size: 0.65rem; letter-spacing: 0.3px;">&copy; 2026 Trade Sahi Hai • Built for High-Frequency Systems Precision Analytics</p>
+        <!-- RIGHT SIDE: 30% Live News Workspace -->
+        <div id="news-sidebar-panel" style="flex: 0 0 30%; width: 30%; max-width: 30%; display: flex; flex-direction: column; gap: 1rem; transition: all 0.25s ease;">
+            
+            <div class="news-widget-box" style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid #21262d; padding-bottom: 0.5rem;">
+                    <h4 style="margin: 0; color: #fff; font-size: 0.85rem; font-weight: 600; font-family: monospace;">📰 MONEYCONTROL LIVE</h4>
+                    <span style="background: #e65100; color: #fff; font-size: 0.55rem; font-weight: 700; padding: 1px 5px; border-radius: 3px;">BSE/NSE</span>
+                </div>
+                <div id="news-feed-moneycontrol" style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 2px;">
+                    <div style="color: #8b949e; font-size: 0.75rem; font-family: monospace;">Connecting to stream...</div>
+                </div>
+            </div>
+
+            <div class="news-widget-box" style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid #21262d; padding-bottom: 0.5rem;">
+                    <h4 style="margin: 0; color: #fff; font-size: 0.85rem; font-weight: 600; font-family: monospace;">🚀 YAHOO FINANCE</h4>
+                    <span style="background: #2962ff; color: #fff; font-size: 0.55rem; font-weight: 700; padding: 1px 5px; border-radius: 3px;">GLOBAL</span>
+                </div>
+                <div id="news-feed-yahoofinance" style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 2px;">
+                    <div style="color: #8b949e; font-size: 0.75rem; font-family: monospace;">Connecting to stream...</div>
+                </div>
+            </div>
+
+        </div>
     </div>
-</footer>
 
-    <!-- ✅ THE SINGLE EXTERNAL PRODUCTION CORE SCRIPTS ROUTE SOURCE -->
-    <script src="app.js?v=9.5.0"></script>
-    <script>
-        // Calculates trading risk-to-reward ratios based on template parameters
-        function calculateTradeMetrics() {
-            const entry = parseFloat(document.getElementById('calc-entry').value);
-            const target = parseFloat(document.getElementById('calc-target').value);
-            const stop = parseFloat(document.getElementById('calc-stop').value);
-            const outBox = document.getElementById('calc-output-metrics');
-            
-            if (!entry || !target || !stop || !outBox) return;
-            
-            const reward = target - entry; 
-            const risk = entry - stop;
-            
-            if (risk <= 0 || reward <= 0) { 
-                outBox.innerHTML = "Invalid bounds."; 
-                return; 
-            }
-            outBox.innerHTML = `Ratio: <b style="color:#2962ff;">${(reward / risk).toFixed(2)} : 1</b>`;
-        }
-
-        // Tabbed Panel Viewport Switching Controller
-        function navigateHub(targetTab, event) {
-            sessionStorage.setItem('activeTradingTab', targetTab);
-            
-            // Cleanly remove the instant persistence inline block to avoid style locks on interaction
-            const overrideStyle = document.getElementById("instant-persistence-css");
-            if (overrideStyle) overrideStyle.remove();
-
-            initializeTabStateView(targetTab, event ? event.target : null);
-        }
-        function initializeTabStateView(targetTab, targetButton = null) {
-            document.querySelectorAll('.viewport-panel').forEach(p => {
-                p.style.setProperty('display', 'none', 'important');
-                p.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-
-            // ✅ DISPLAY ALWAYS: Anchor container visible, toggle ONLY inputs block under daily view tab
-            const calcWidgetNode = document.getElementById('risk-calc-container-block');
-            if (calcWidgetNode) {
-                calcWidgetNode.style.display = (targetTab === 'daily') ? 'block' : 'none';
-            }
-
-            const panel = document.getElementById(`${targetTab}-panel`);
-            if (panel) {
-                panel.style.setProperty('display', 'block', 'important');
-                panel.classList.add('active');
-            }
-
-            if (targetButton) {
-                targetButton.classList.add('active');
-            } else {
-                const navButtons = document.querySelectorAll('.nav-link');
-                navButtons.forEach(btn => {
-                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${targetTab}'`)) {
-                        btn.classList.add('active');
-                    }
-                });
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            calculateTradeMetrics();
-            const cachedActiveTab = sessionStorage.getItem('activeTradingTab') || 'daily';
-            initializeTabStateView(cachedActiveTab);
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
