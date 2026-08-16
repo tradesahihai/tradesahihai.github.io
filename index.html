@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Sahi Hai | Premium Hub</title>
+    <title>Trade Sahi Hai | Live Trading Analytics & Research</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- ⚡️ ISOLATED SESSION PERSISTENCE INTERCEPTOR ENGINE -->
+    <!-- ⚡️ TAB PERSISTENCE ENGINE -->
     <script>
         (function() {
-            // Isolates active panel data boundaries specifically to this individual browser window tab
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
             var styleNode = document.createElement('style');
             styleNode.id = "instant-persistence-css";
             styleNode.innerHTML = `
-                /* Lock hide visibility defaults across ALL panels to prevent layout stacking overrides */
                 .viewport-panel { display: none !important; }
-                
-                /* Reveal exclusively this browser tab's isolated active workspace */
                 #${activeTab}-panel { display: block !important; }
-
-                /* CONDITIONAL FOOTER: Display footer ONLY if the current tab is set to daily analysis */
-                #global-portal-footer { display: ${activeTab === 'daily' ? 'block' : 'none'} !important; }
-                
-                /* Highlight only the corresponding active button anchor */
-                .navigation-hub button[onclick*="'${activeTab}'"] { 
-                    background-color: var(--button-active-bg, #21262d) !important; 
+                .navigation-hub button[data-tab="${activeTab}"] { 
+                    background-color: #21262d !important; 
                     color: #ffffff !important; 
-                    border-color: #2962ff !important;
+                    border-color: rgba(41, 98, 255, 0.4) !important;
                     font-weight: 600 !important;
                 }
             `;
@@ -38,204 +29,535 @@
 <body>
 
     <!-- Main Navigation Top Bar -->
-    <header>
-        <div class="logo-group">
+    <header id="main-header">
+        <div class="logo-group" onclick="navigateHub('daily', event)">
             <span class="trend-icon" aria-hidden="true">📈</span>
             <h1>Trade Sahi Hai</h1>
         </div>
-        <nav class="navigation-hub">
-            <button class="nav-link" onclick="navigateHub('daily', event)">Daily Analysis</button>
-            <button class="nav-link" onclick="navigateHub('learning', event)">Today's Learning</button>
-            <button class="nav-link" onclick="navigateHub('strategy', event)">Strategies</button>
-            <button class="nav-link" onclick="navigateHub('reels', event)">Trending Reels</button>
+        <nav class="navigation-hub" role="tablist" aria-label="Main Navigation">
+            <button class="nav-link active" data-tab="daily" onclick="navigateHub('daily', event)">Daily Analysis</button>
+            <button class="nav-link" data-tab="learning" onclick="navigateHub('learning', event)">Today's Learning</button>
+            <button class="nav-link" data-tab="strategy" onclick="navigateHub('strategy', event)">Strategies</button>
+            <button class="nav-link" data-tab="reels" onclick="navigateHub('reels', event)">Trending Reels</button>
         </nav>
     </header>
 
-    <!-- Sleek, High-Speed Indian Market & Major Stocks Moving Ticker Banner Slider -->
-    <div class="market-ticker-banner">
+    <!-- Sleek Moving Ticker Banner Slider for Indian Indices & Bluechips -->
+    <div class="market-ticker-banner" id="market-ticker">
         <div class="ticker-scroll-track">
-            <!-- First loop iteration container group -->
             <div class="ticker-cluster">
-                <span class="ticker-item index-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
-                <span class="ticker-item stock-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
-                <span class="ticker-item stock-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
-                <span class="ticker-item stock-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
-                <span class="ticker-item stock-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
-                <span class="ticker-item stock-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
-                <span class="ticker-item stock-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
+                <span class="ticker-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
+                <span class="ticker-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
+                <span class="ticker-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
+                <span class="ticker-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
+                <span class="ticker-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
+                <span class="ticker-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
+                <span class="ticker-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
+                <span class="ticker-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
+                <span class="ticker-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
             </div>
-            <!-- Identical replica cluster group cloned cleanly to establish smooth seamless loop transitions -->
             <div class="ticker-cluster" aria-hidden="true">
-                <span class="ticker-item index-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
-                <span class="ticker-item index-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
-                <span class="ticker-item stock-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
-                <span class="ticker-item stock-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
-                <span class="ticker-item stock-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
-                <span class="ticker-item stock-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
-                <span class="ticker-item stock-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
-                <span class="ticker-item stock-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
+                <span class="ticker-item">🇮🇳 NIFTY 50 <b class="green">24,380.15 (+0.82%)</b></span>
+                <span class="ticker-item">🇮🇳 SENSEX <b class="green">79,720.40 (+0.75%)</b></span>
+                <span class="ticker-item">🇮🇳 BANK NIFTY <b class="red">50,420.10 (-0.31%)</b></span>
+                <span class="ticker-item">RELIANCE <b class="green">2,510.40 (+1.25%)</b></span>
+                <span class="ticker-item">TCS <b class="green">4,150.20 (+0.95%)</b></span>
+                <span class="ticker-item">HDFC BANK <b class="red">1,610.85 (-0.45%)</b></span>
+                <span class="ticker-item">INFY <b class="green">1,780.00 (+2.10%)</b></span>
+                <span class="ticker-item">ICICI BANK <b class="green">1,185.30 (+0.40%)</b></span>
+                <span class="ticker-item">BHARTIARTL <b class="red">1,430.15 (-0.12%)</b></span>
             </div>
         </div>
     </div>
 
-    <!-- Global App Layout Wrapper Split Container -->
+    <!-- Workspace Main Layout (Main Feeds + Right Sidebars) -->
     <div class="workspace-wrapper">
-        <!-- Main Layout Live Document Vault Feed Column Space -->
+        
+        <!-- Left / Primary Content Column -->
         <main class="primary-feed">
             
-            <!-- Isolated Sections: Separated into clean independent panels -->
-            <div id="daily-panel" class="viewport-panel">
+            <!-- 1. DAILY ANALYSIS PANEL -->
+            <div id="daily-panel" class="viewport-panel active">
                 <div class="stream-header">
                     <h2>Daily Market Analysis Inferences</h2>
                     <span class="badge blue">Live Charts</span>
                 </div>
+
+                <!-- Dynamic Today / Timeline Date Subhead Banner -->
+                <div class="timeline-date-header" id="daily-date-header">
+                    <span id="current-date-display">📅 Today — August 16, 2026</span>
+                    <span class="badge green">Market Active</span>
+                </div>
+
+                <!-- Interactive TradingView Chart & Technical Insights Card -->
+                <div class="display-card-v2" id="daily-interactive-chart-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                        <h3 style="margin:0; color:#fff; font-size:1.05rem; font-weight:600;" id="chart-card-filename">Aug16_chart.txt</h3>
+                        <span class="localization-tag" style="background:#2962ff; color:#fff; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight:600;">📁 Daily Chart Log</span>
+                    </div>
+
+                    <!-- TradingView Chart Sandbox Container -->
+                    <div class="chart-container-card">
+                        <div class="chart-toolbar">
+                            <div class="chart-symbol-pills">
+                                <button class="chart-pill-btn active" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
+                                <button class="chart-pill-btn" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
+                                <button class="chart-pill-btn" onclick="switchTvChart('NSE:RELIANCE', this)">RELIANCE</button>
+                                <button class="chart-pill-btn" onclick="switchTvChart('NSE:HDFCBANK', this)">HDFC BANK</button>
+                                <button class="chart-pill-btn" onclick="switchTvChart('NSE:INFY', this)">INFOSYS</button>
+                            </div>
+                            <div class="chart-timeframe-pills">
+                                <button class="chart-tf-btn" onclick="switchTvInterval('15', this)">15m</button>
+                                <button class="chart-tf-btn" onclick="switchTvInterval('60', this)">1h</button>
+                                <button class="chart-tf-btn active" onclick="switchTvInterval('D', this)">1D</button>
+                            </div>
+                        </div>
+
+                        <!-- Live TradingView Embedded Widget Frame -->
+                        <div class="tv-chart-frame-box" id="tv-chart-container">
+                            <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata&studies=%5B%5D" allowtransparency="true" scrolling="no"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- Key Technical Levels Matrix -->
+                    <div class="tech-levels-grid">
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Pivot Point</div>
+                            <div class="lvl-val gold" id="lvl-pivot">24,350.00</div>
+                        </div>
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Resistance (R1)</div>
+                            <div class="lvl-val red" id="lvl-r1">24,480.00</div>
+                        </div>
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Resistance (R2)</div>
+                            <div class="lvl-val red" id="lvl-r2">24,620.00</div>
+                        </div>
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Support (S1)</div>
+                            <div class="lvl-val green" id="lvl-s1">24,240.00</div>
+                        </div>
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Support (S2)</div>
+                            <div class="lvl-val green" id="lvl-s2">24,110.00</div>
+                        </div>
+                        <div class="tech-level-box">
+                            <div class="lvl-title">Trend Bias</div>
+                            <div class="lvl-val green" id="lvl-trend">Bullish Continuation</div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Inferences Body -->
+                    <div id="daily-inferences-text">
+                        <h4 style="color:#ffffff; font-size:0.9rem; margin-top:0.75rem; margin-bottom:0.35rem;">NIFTY 50 INDEX – TECHNICAL CHART REPORT</h4>
+                        <p class="card-body-text" style="color:#c9d1d9; font-size:0.85rem; line-height:1.6; margin:0;">
+• <b>Price Structure:</b> NIFTY 50 bounced firmly off the 24,240 support cluster, forming a bullish piercing candle pattern with expanding volume.
+• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive 15-minute close above 24,480 opens the path towards 24,620 new ATH test.
+• <b>Derivative Data & OI:</b> Heavy Put writing witnessed at 24,300 and 24,200 strikes indicating aggressive bull defense. Call unwinding noticed at 24,400 CE.
+• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with a strict stop loss below 24,240 for upside targets of 24,480 and 24,560.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Historical Daily Stream Records Loaded from Cloud/Backend -->
                 <div id="stream-daily-container"></div>
             </div>
 
+            <!-- 2. TODAY'S LEARNING PANEL -->
             <div id="learning-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Today's Market Concepts & Learning Logs</h2>
-                    <span class="badge gold">Educational</span>
+                    <span class="badge gold">Educational Hub</span>
                 </div>
+
+                <!-- Learning Concept Modules -->
+                <div class="concept-cards-grid">
+                    <div class="concept-card">
+                        <h4>🎯 1. Central Pivot Range (CPR) Secrets</h4>
+                        <p>The Central Pivot Range (TC, Pivot, BC) measures market equilibrium. A <b>Virgin CPR</b> acts as a powerful magnet. When CPR is narrow, anticipate a high-velocity trending day. When wide, expect sideways range-bound swings.</p>
+                        <div class="concept-takeaways">
+                            <b>Rule:</b> Buy when price opens above CPR and retests TC with bullish wick rejection. Stop loss below BC.
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>📊 2. Volume Weighted Average Price (VWAP) & Traps</h4>
+                        <p>Institutions use VWAP as their benchmark execution price. Buying far above VWAP is statistically unfavorable (overbought). Look for mean reversion or VWAP bounces with 20 EMA confluence.</p>
+                        <div class="concept-takeaways">
+                            <b>Rule:</b> Best intraday entries occur within 0.2% - 0.4% band distance from the anchored Session VWAP.
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🛡️ 3. The 1% Risk of Ruin Mathematics</h4>
+                        <p>Never risk more than 1% to 1.5% of total account capital per trade. If your stop loss is ₹30 on a ₹2,500 stock, your maximum position size with a ₹1,00,000 account risking ₹1,000 is 33 shares (₹1,000 / ₹30).</p>
+                        <div class="concept-takeaways">
+                            <b>Rule:</b> Position Size = (Capital × Risk %) ÷ (Entry Price - Stop Loss). Never exceed this formula!
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🕯️ 4. Multi-Timeframe Top-Down Confluence</h4>
+                        <p>Always align your intraday setup with the Daily and 1-Hour trend direction. Trading in the direction of the higher timeframe trend boosts setup win-rate from ~45% to over 65%.</p>
+                        <div class="concept-takeaways">
+                            <b>Rule:</b> Daily: Trend Bias | 1-Hour: Key S/R Levels | 5-Minute: Precision Trigger & Stop Loss.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candlestick Visualizer Mini-Matrix -->
+                <div class="display-card-v2">
+                    <h3 style="font-size:0.95rem; color:#fff; margin-bottom:0.75rem;">🕯️ High-Probability Candlestick Patterns</h3>
+                    <div class="candlestick-visual-grid">
+                        <div class="candlestick-card">
+                            <div style="font-size:0.8rem; font-weight:700; color:#39d353;">Bullish Hammer</div>
+                            <div class="candle-diagram">
+                                <svg width="40" height="70" viewBox="0 0 40 70">
+                                    <line x1="20" y1="10" x2="20" y2="60" stroke="#39d353" stroke-width="2"/>
+                                    <rect x="10" y="10" width="20" height="15" fill="#39d353" rx="2"/>
+                                </svg>
+                            </div>
+                            <div style="font-size:0.7rem; color:#8b949e;">Strong rejection of lower prices at support</div>
+                        </div>
+
+                        <div class="candlestick-card">
+                            <div style="font-size:0.8rem; font-weight:700; color:#39d353;">Bullish Engulfing</div>
+                            <div class="candle-diagram">
+                                <svg width="60" height="70" viewBox="0 0 60 70">
+                                    <line x1="15" y1="20" x2="15" y2="50" stroke="#f85149" stroke-width="2"/>
+                                    <rect x="8" y="25" width="14" height="20" fill="#f85149" rx="2"/>
+                                    <line x1="42" y1="10" x2="42" y2="60" stroke="#39d353" stroke-width="2"/>
+                                    <rect x="32" y="15" width="20" height="40" fill="#39d353" rx="2"/>
+                                </svg>
+                            </div>
+                            <div style="font-size:0.7rem; color:#8b949e;">Complete momentum shift favoring buyers</div>
+                        </div>
+
+                        <div class="candlestick-card">
+                            <div style="font-size:0.8rem; font-weight:700; color:#f85149;">Shooting Star</div>
+                            <div class="candle-diagram">
+                                <svg width="40" height="70" viewBox="0 0 40 70">
+                                    <line x1="20" y1="10" x2="20" y2="60" stroke="#f85149" stroke-width="2"/>
+                                    <rect x="10" y="45" width="20" height="15" fill="#f85149" rx="2"/>
+                                </svg>
+                            </div>
+                            <div style="font-size:0.7rem; color:#8b949e;">Rejection of higher prices near resistance</div>
+                        </div>
+
+                        <div class="candlestick-card">
+                            <div style="font-size:0.8rem; font-weight:700; color:#58a6ff;">Morning Star</div>
+                            <div class="candle-diagram">
+                                <svg width="70" height="70" viewBox="0 0 70 70">
+                                    <rect x="5" y="15" width="14" height="30" fill="#f85149" rx="2"/>
+                                    <rect x="28" y="48" width="14" height="10" fill="#ffb300" rx="2"/>
+                                    <rect x="51" y="18" width="14" height="28" fill="#39d353" rx="2"/>
+                                </svg>
+                            </div>
+                            <div style="font-size:0.7rem; color:#8b949e;">3-candle reversal pattern at major swing lows</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="stream-learning-container"></div>
             </div>
 
+            <!-- 3. STRATEGIES PLAYBOOK PANEL -->
             <div id="strategy-panel" class="viewport-panel">
                 <div class="stream-header">
                     <h2>Systematic Strategy Execution Rules</h2>
-                    <span class="badge green">Playbook</span>
+                    <span class="badge green">Trading Playbook</span>
                 </div>
+
+                <div class="strategy-playbook-grid">
+                    
+                    <!-- Strategy 1 -->
+                    <div class="strategy-box">
+                        <div class="strategy-top">
+                            <div class="strategy-title">⚡ 1. 15-Minute Opening Range Breakout (ORB)</div>
+                            <div class="strategy-meta-chips">
+                                <span class="strategy-chip">Win Rate: ~68%</span>
+                                <span class="strategy-chip">Risk:Reward: 1:2.5</span>
+                                <span class="strategy-chip">Asset: Nifty / Bank Nifty / Bluechips</span>
+                            </div>
+                        </div>
+                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
+                            Captures institutional momentum in the first hour of cash session. Mark High and Low of the first 15-minute candle (9:15 - 9:30 AM IST).
+                        </p>
+                        <div class="strategy-params-grid">
+                            <div class="strategy-param-item">
+                                <div class="param-label">Entry Trigger</div>
+                                <div class="param-val green">5-min close above 15m High</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Stop Loss</div>
+                                <div class="param-val red">Midpoint of 15m candle</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Target 1 & 2</div>
+                                <div class="param-val blue">1.5x & 2.0x Range Size</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Execution Time</div>
+                                <div class="param-val gold">9:30 AM – 11:00 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 2 -->
+                    <div class="strategy-box">
+                        <div class="strategy-top">
+                            <div class="strategy-title">🌊 2. VWAP + 20 EMA Pullback Trend Rider</div>
+                            <div class="strategy-meta-chips">
+                                <span class="strategy-chip">Win Rate: ~64%</span>
+                                <span class="strategy-chip">Risk:Reward: 1:3</span>
+                                <span class="strategy-chip">Asset: Trend Day Stocks</span>
+                            </div>
+                        </div>
+                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
+                            Wait for price to establish a clear trend above VWAP & 20 EMA. Never chase the breakout. Enter exclusively when price pulls back to test the confluence zone.
+                        </p>
+                        <div class="strategy-params-grid">
+                            <div class="strategy-param-item">
+                                <div class="param-label">Entry Trigger</div>
+                                <div class="param-val green">Bullish pin bar on 20 EMA + VWAP</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Stop Loss</div>
+                                <div class="param-val red">2 ATR below VWAP</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Target</div>
+                                <div class="param-val blue">Previous Day High / 2R Trailing</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Trailing Rule</div>
+                                <div class="param-val gold">Trail with 20 EMA on 5m chart</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy 3 -->
+                    <div class="strategy-box">
+                        <div class="strategy-top">
+                            <div class="strategy-title">🎯 3. CPR Narrow Range Breakout</div>
+                            <div class="strategy-meta-chips">
+                                <span class="strategy-chip">Win Rate: ~71%</span>
+                                <span class="strategy-chip">Risk:Reward: 1:2</span>
+                                <span class="strategy-chip">Asset: Index Futures & Options</span>
+                            </div>
+                        </div>
+                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
+                            When daily Central Pivot Range width is less than 0.15% of spot price, a massive trending breakout occurs 8 out of 10 times.
+                        </p>
+                        <div class="strategy-params-grid">
+                            <div class="strategy-param-item">
+                                <div class="param-label">Condition</div>
+                                <div class="param-val green">Narrow CPR + Above Prior Day High</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Stop Loss</div>
+                                <div class="param-val red">Central Pivot Line</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Target</div>
+                                <div class="param-val blue">R2 & R3 Camarilla Levels</div>
+                            </div>
+                            <div class="strategy-param-item">
+                                <div class="param-label">Filter</div>
+                                <div class="param-val gold">RSI > 60 on 15m time frame</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
                 <div id="stream-strategy-container"></div>
             </div>
 
+            <!-- 4. TRENDING REELS STREAM PANEL -->
             <div id="reels-panel" class="viewport-panel">
                 <div class="stream-header">
-                    <h2>Market Bytes & Short Reels</h2>
-                    <span class="badge purple">Video Stream</span>
+                    <h2>Market Bytes & Trending Reels</h2>
+                    <span class="badge purple">Video Insights</span>
                 </div>
-                <div id="stream-reels-container"></div>
+
+                <!-- Video Showcase Grid -->
+                <div class="reels-grid-layout">
+                    <div class="reel-item-card">
+                        <div class="reel-video-container">
+                            <video poster="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="reel-meta-content">
+                            <h4>🔥 Nifty 50 Liquidity Sweep & Fakeout Trap Breakdown</h4>
+                            <p>How smart money hunted retail stop-losses at the 24,400 resistance before reversing into a sharp 120-point drop.</p>
+                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                                <span class="badge blue">Price Action</span>
+                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:45 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reel-item-card">
+                        <div class="reel-video-container">
+                            <video poster="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="reel-meta-content">
+                            <h4>🧠 Stop Revenge Trading: The 2-Trade Maximum Rule</h4>
+                            <p>Protecting your psychology on losing days by locking the terminal after 2 consecutive stop-loss hits.</p>
+                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                                <span class="badge gold">Mindset</span>
+                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:52 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reel-item-card">
+                        <div class="reel-video-container">
+                            <video poster="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="reel-meta-content">
+                            <h4>📈 Identifying High Probability CPR Breakouts in 30 Seconds</h4>
+                            <p>Quick scanner settings and checklist to filter the best trending candidates before 9:15 AM market opening.</p>
+                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                                <span class="badge green">Playbook</span>
+                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:58 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stream-reels-container" style="margin-top: 1rem;"></div>
             </div>
 
         </main>
-        <!-- Sidebar Management Panel Right Stack Column Space (Streamlined for Bio Focus Only) -->
+
+        <!-- Right Column / News Feeds Sidebar (Moneycontrol & Yahoo Finance) -->
         <aside class="right-widget-stack">
-            <div class="profile-widget-card">
-                <h4>👨‍💻 Trade Sahi Hai Admin</h4>
-                <p>Technical chartist specializing in price action trading, macro indicators, and core fundamental stocks breakdowns.</p>
+            
+            <!-- 📰 CARD 1: NEWS FEED FROM MONEYCONTROL -->
+            <div class="news-feed-card" id="moneycontrol-news-card">
+                <div class="news-card-header">
+                    <div class="news-brand-title">
+                        <span class="brand-dot mc"></span>
+                        <span>Moneycontrol News Feed</span>
+                    </div>
+                    <div class="news-actions">
+                        <button class="refresh-news-btn" onclick="fetchMoneycontrolNews(true)" title="Refresh Moneycontrol Feed">
+                            <span id="mc-refresh-icon">🔄</span> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Category Tabs -->
+                <div class="news-filter-tabs" id="mc-category-tabs">
+                    <button class="news-tab-chip active" onclick="filterNews('mc', 'all', this)">All</button>
+                    <button class="news-tab-chip" onclick="filterNews('mc', 'Markets', this)">Markets</button>
+                    <button class="news-tab-chip" onclick="filterNews('mc', 'Stocks', this)">Stocks</button>
+                    <button class="news-tab-chip" onclick="filterNews('mc', 'Economy', this)">Economy</button>
+                </div>
+
+                <!-- Scrollable News List Container -->
+                <div class="news-items-scrollable" id="moneycontrol-news-list">
+                    <div style="padding:1.5rem; text-align:center; color:#8b949e; font-size:0.75rem;" class="skeleton-pulse">
+                        Connecting to Moneycontrol live wire...
+                    </div>
+                </div>
             </div>
+
+            <!-- 🌐 CARD 2: NEWS FEED FROM YAHOO FINANCE -->
+            <div class="news-feed-card" id="yahoofinance-news-card">
+                <div class="news-card-header">
+                    <div class="news-brand-title">
+                        <span class="brand-dot yf"></span>
+                        <span>Yahoo Finance Feed</span>
+                    </div>
+                    <div class="news-actions">
+                        <button class="refresh-news-btn" onclick="fetchYahooFinanceNews(true)" title="Refresh Yahoo Finance Feed">
+                            <span id="yf-refresh-icon">🔄</span> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Category Tabs -->
+                <div class="news-filter-tabs" id="yf-category-tabs">
+                    <button class="news-tab-chip active" onclick="filterNews('yf', 'all', this)">All</button>
+                    <button class="news-tab-chip" onclick="filterNews('yf', 'Global Markets', this)">Global</button>
+                    <button class="news-tab-chip" onclick="filterNews('yf', 'Commodities', this)">Commodities</button>
+                    <button class="news-tab-chip" onclick="filterNews('yf', 'Macro', this)">Macro/Bonds</button>
+                </div>
+
+                <!-- Scrollable News List Container -->
+                <div class="news-items-scrollable" id="yahoofinance-news-list">
+                    <div style="padding:1.5rem; text-align:center; color:#8b949e; font-size:0.75rem;" class="skeleton-pulse">
+                        Connecting to Yahoo Finance global wire...
+                    </div>
+                </div>
+            </div>
+
         </aside>
+
     </div> <!-- Close workspace-wrapper -->
 
-    <!-- 🧮 SYSTEM FOOTER LAYER: Hosts the compact calculator widget cleanly across the base baseline -->
-<footer id="global-portal-footer" style="width: 100%; background: #0d1117; border-top: 1px solid #30363d; padding: 0.75rem 0; margin-top: 1.5rem; display: none;">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; width: 100%;">
-        
-        <div class="calculator-widget-card" style="width: 100%;">
-            <div class="stream-header" style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-                <h2 style="font-size: 0.85rem; margin: 0; color: #fff; font-weight: 600;">🧮 Portfolio Position Risk Calculator</h2>
-                <span class="badge" style="background: #21262d; color: #8b949e; border: 1px solid #30363d; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem;">Risk Utility Tool</span>
+    <!-- 🧮 SYSTEM FIXED FOOTER: Portfolio Position Risk Calculator -->
+    <div id="global-portal-fixed-footer">
+        <div class="calc-footer-inner">
+            <div class="calc-header-row">
+                <h3>🧮 Portfolio Position Risk Calculator</h3>
+                <span class="badge blue" style="font-size:0.62rem;">Risk Utility Tool</span>
             </div>
-            
-            <div class="calc-inputs-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 0;">
-                <div class="form-element">
-                    <label for="calc-capital" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Trading Capital (₹)</label>
-                    <input type="number" id="calc-capital" value="100000" min="1" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
+
+            <div class="calc-grid-controls">
+                <div class="calc-input-group">
+                    <label for="calc-capital">Trading Capital (₹)</label>
+                    <input type="number" id="calc-capital" value="100000" min="1000" step="5000" class="calc-input-field" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="form-element">
-                    <label for="calc-risk-pct" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Risk Tolerance (%)</label>
-                    <input type="number" id="calc-risk-pct" value="1" min="0.01" step="0.1" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
+                <div class="calc-input-group">
+                    <label for="calc-risk-pct">Risk Tolerance (%)</label>
+                    <input type="number" id="calc-risk-pct" value="1" min="0.1" max="10" step="0.1" class="calc-input-field" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="form-element">
-                    <label for="calc-entry" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Entry Price (₹)</label>
-                    <input type="number" id="calc-entry" value="2500" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
+                <div class="calc-input-group">
+                    <label for="calc-entry">Entry Price (₹)</label>
+                    <input type="number" id="calc-entry" value="2500" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="form-element">
-                    <label for="calc-target" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Target Price (₹)</label>
-                    <input type="number" id="calc-target" value="2600" min="0.05" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
+                <div class="calc-input-group">
+                    <label for="calc-target">Target Price (₹)</label>
+                    <input type="number" id="calc-target" value="2600" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
                 </div>
-                <div class="form-element">
-                    <label for="calc-stop" style="display: block; font-size: 0.65rem; color: #8b949e; margin-bottom: 2px;">Stop Loss (₹)</label>
-                    <input type="number" id="calc-stop" value="2450" min="0" oninput="calculateTradeMetrics()" style="width:100%; padding:0.35rem 0.5rem; background:#161b22; color:#fff; border:1px solid #30363d; border-radius:4px; font-size: 0.75rem; font-weight: 500; height: 28px; box-sizing: border-box;">
+                <div class="calc-input-group">
+                    <label for="calc-stop">Stop Loss (₹)</label>
+                    <input type="number" id="calc-stop" value="2450" min="0.05" step="0.5" class="calc-input-field" oninput="calculateTradeMetrics()">
+                </div>
+
+                <!-- Calculated Metrics Display Summary Pills -->
+                <div class="calc-output-summary-pills">
+                    <div class="metric-pill">
+                        <span>Pos Size:</span> <b id="out-qty" class="blue">20 Qty</b>
+                    </div>
+                    <div class="metric-pill">
+                        <span>Risk Amount:</span> <b id="out-risk-amt" class="red">₹1,000.00</b>
+                    </div>
+                    <div class="metric-pill">
+                        <span>Target Profit:</span> <b id="out-profit" class="green">₹2,000.00</b>
+                    </div>
+                    <div class="metric-pill">
+                        <span>R:R Ratio:</span> <b id="out-rr" class="green">1 : 2.00</b>
+                    </div>
+                    <div class="metric-pill">
+                        <span>Capital Utilized:</span> <b id="out-capital-used">₹50,000.00</b>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Footer Baseline Trademark Credits -->
-        <p style="margin: 0.5rem 0 0 0; text-align: center; color: #8b949e; font-size: 0.65rem; letter-spacing: 0.3px;">&copy; 2026 Trade Sahi Hai • Built for High-Frequency Systems Precision Analytics</p>
     </div>
-</footer>
 
-    <!-- ✅ THE SINGLE EXTERNAL PRODUCTION CORE SCRIPTS ROUTE SOURCE -->
-    <script src="app.js?v=9.5.0"></script>
-    <script>
-        // Calculates trading risk-to-reward ratios based on template parameters
-        function calculateTradeMetrics() {
-            const entry = parseFloat(document.getElementById('calc-entry').value);
-            const target = parseFloat(document.getElementById('calc-target').value);
-            const stop = parseFloat(document.getElementById('calc-stop').value);
-            const outBox = document.getElementById('calc-output-metrics');
-            
-            if (!entry || !target || !stop || !outBox) return;
-            
-            const reward = target - entry; 
-            const risk = entry - stop;
-            
-            if (risk <= 0 || reward <= 0) { 
-                outBox.innerHTML = "Invalid bounds."; 
-                return; 
-            }
-            outBox.innerHTML = `Ratio: <b style="color:#2962ff;">${(reward / risk).toFixed(2)} : 1</b>`;
-        }
-
-        // Tabbed Panel Viewport Switching Controller
-        function navigateHub(targetTab, event) {
-            sessionStorage.setItem('activeTradingTab', targetTab);
-            
-            // Cleanly remove the instant persistence inline block to avoid style locks on interaction
-            const overrideStyle = document.getElementById("instant-persistence-css");
-            if (overrideStyle) overrideStyle.remove();
-
-            initializeTabStateView(targetTab, event ? event.target : null);
-        }
-        function initializeTabStateView(targetTab, targetButton = null) {
-            document.querySelectorAll('.viewport-panel').forEach(p => {
-                p.style.setProperty('display', 'none', 'important');
-                p.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-
-            // ✅ DISPLAY ALWAYS: Anchor container visible, toggle ONLY inputs block under daily view tab
-            const calcWidgetNode = document.getElementById('risk-calc-container-block');
-            if (calcWidgetNode) {
-                calcWidgetNode.style.display = (targetTab === 'daily') ? 'block' : 'none';
-            }
-
-            const panel = document.getElementById(`${targetTab}-panel`);
-            if (panel) {
-                panel.style.setProperty('display', 'block', 'important');
-                panel.classList.add('active');
-            }
-
-            if (targetButton) {
-                targetButton.classList.add('active');
-            } else {
-                const navButtons = document.querySelectorAll('.nav-link');
-                navButtons.forEach(btn => {
-                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${targetTab}'`)) {
-                        btn.classList.add('active');
-                    }
-                });
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            calculateTradeMetrics();
-            const cachedActiveTab = sessionStorage.getItem('activeTradingTab') || 'daily';
-            initializeTabStateView(cachedActiveTab);
-        });
-    </script>
+    <!-- Production App Scripts -->
+    <script src="app.js?v=9.6.0"></script>
 </body>
 </html>
+
