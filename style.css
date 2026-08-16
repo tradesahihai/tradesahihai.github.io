@@ -349,12 +349,25 @@ header {
     border: none;
 }
 
-/* Technical levels table grid */
+/* Technical levels table grid - Guaranteed Single Line on Desktop */
 .tech-levels-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.5rem;
     margin: 0.85rem 0;
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .tech-levels-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .tech-levels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .tech-level-box {
