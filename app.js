@@ -140,7 +140,7 @@ function switchTvChart(symbol, btnEl) {
         parent.querySelectorAll('.chart-pill-btn').forEach(b => b.classList.remove('active'));
         btnEl.classList.add('active');
     }
-    updateTvIframe();
+    initOrUpdateTvWidget();
     updateTechLevels(symbol);
 }
 
@@ -151,14 +151,40 @@ function switchTvInterval(interval, btnEl) {
         parent.querySelectorAll('.chart-tf-btn').forEach(b => b.classList.remove('active'));
         btnEl.classList.add('active');
     }
-    updateTvIframe();
+    initOrUpdateTvWidget();
 }
 
-function updateTvIframe() {
-    const iframe = document.getElementById('tv-widget-iframe');
-    if (!iframe) return;
+function initOrUpdateTvWidget() {
+    const container = document.getElementById('tv-chart-container');
+    if (!container) return;
+
+    // Use TradingView Widget Constructor if available, or fallback to responsive embed
+    if (typeof TradingView !== 'undefined') {
+        container.innerHTML = '<div id="tradingview_widget_embed" style="width:100%; height:380px;"></div>';
+        try {
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": currentTvSymbol,
+                "interval": currentTvInterval,
+                "timezone": "Asia/Kolkata",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#0b0f19",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_widget_embed",
+                "hide_side_toolbar": false
+            });
+            return;
+        } catch (e) {
+            console.warn("TradingView widget init notice:", e);
+        }
+    }
+
+    // Fallback embed
     const encodedSym = encodeURIComponent(currentTvSymbol);
-    iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodedSym}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata&studies=%5B%5D`;
+    container.innerHTML = `<iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=${encodedSym}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata&studies=%5B%5D" style="width:100%; height:380px; border:none; border-radius:6px;" allowtransparency="true" scrolling="no"></iframe>`;
 }
 
 function updateTechLevels(symbol) {
@@ -396,14 +422,14 @@ function renderNewsList(source, articles) {
         const sourceName = (typeof item.source === 'object' ? item.source['#text'] : item.source) || (source === 'mc' ? 'Moneycontrol' : 'Yahoo Finance');
 
         return `
-            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-article-item">
-                <div class="news-meta-row">
-                    <span class="news-tag ${tagClass}">${categoryLabel}</span>
-                    <span class="news-time">⏱️ ${timeAgo}</span>
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-article-item" style="display:block; background:#121824; border:1px solid #1e273a; border-radius:6px; padding:0.75rem; text-decoration:none; color:inherit; margin-bottom:0.45rem; transition:all 0.2s ease;">
+                <div class="news-meta-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                    <span class="news-tag ${tagClass}" style="font-size:0.62rem; font-weight:600; padding:2px 6px; border-radius:3px; text-transform:uppercase;">${categoryLabel}</span>
+                    <span class="news-time" style="font-size:0.65rem; color:#657185;">⏱️ ${timeAgo}</span>
                 </div>
-                <div class="news-headline">${item.title}</div>
-                <div class="news-snippet">${item.description}</div>
-                <div class="news-source-footer">
+                <div class="news-headline" style="font-size:0.8rem; font-weight:600; color:#e6edf3; line-height:1.35; margin-bottom:0.25rem;">${item.title}</div>
+                <div class="news-snippet" style="font-size:0.72rem; color:#8b949e; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.description}</div>
+                <div class="news-source-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.4rem; font-size:0.64rem; color:#657185;">
                     <span>${sourceName}</span>
                     <span style="color:#2962ff; font-weight:600;">Read Story ↗</span>
                 </div>
@@ -515,8 +541,12 @@ async function fetchCloudAndFlatData() {
             .replace(/======================================================================/g, '<hr style="border:0; border-top:1px dashed #30363d; margin:0.75rem 0;">')
             .replace(/--------------------------------------------------------------------------------/g, '<hr style="border:0; border-top:1px dashed #21262d; margin:0.5rem 0;">')
             .replace(/-------------------------/g, '<hr style="border:0; border-top:1px dashed #21262d; margin:0.5rem 0;">')
-            .replace(/•\s*(.*?)(?=(\n|$))/g, '<div style="margin:0.25rem 0; padding-left:0.5rem; border-left:2px solid #2962ff;"><b style="color:#58a6ff;">•</b> $1</div>')
-            .replace(/\*\s*(.*?)(?=(\n|$))/g, '<div style="margin:0.25rem 0; padding-left:0.5rem; border-left:2px solid #3fb950;"><b style="color:#3fb950;">*</b> $1</div>');
+            .replace(/Pivot Point\s*\n\s*([\d,.]+)/gi, '<div style="background:#141b28; border:1px solid #233149; border-radius:6px; padding:0.4rem 0.6rem; display:inline-block; margin:0.25rem 0.25rem 0.25rem 0;"><span style="font-size:0.65rem; color:#8b949e; display:block;">PIVOT POINT</span><b style="color:#ffb300; font-size:0.9rem;">$1</b></div>')
+            .replace(/Resistance \((R\d)\)\s*\n\s*([\d,.]+)/gi, '<div style="background:#141b28; border:1px solid #233149; border-radius:6px; padding:0.4rem 0.6rem; display:inline-block; margin:0.25rem 0.25rem 0.25rem 0;"><span style="font-size:0.65rem; color:#8b949e; display:block;">RESISTANCE ($1)</span><b style="color:#f85149; font-size:0.9rem;">$2</b></div>')
+            .replace(/Support \((S\d)\)\s*\n\s*([\d,.]+)/gi, '<div style="background:#141b28; border:1px solid #233149; border-radius:6px; padding:0.4rem 0.6rem; display:inline-block; margin:0.25rem 0.25rem 0.25rem 0;"><span style="font-size:0.65rem; color:#8b949e; display:block;">SUPPORT ($1)</span><b style="color:#39d353; font-size:0.9rem;">$2</b></div>')
+            .replace(/Trend Bias\s*\n\s*(.*?)(?=(\n|$))/gi, '<div style="background:#141b28; border:1px solid #233149; border-radius:6px; padding:0.4rem 0.6rem; display:inline-block; margin:0.25rem 0.25rem 0.25rem 0;"><span style="font-size:0.65rem; color:#8b949e; display:block;">TREND BIAS</span><b style="color:#58a6ff; font-size:0.9rem;">$1</b></div>')
+            .replace(/•\s*(.*?)(?=(\n|$))/g, '<div style="margin:0.35rem 0; padding-left:0.6rem; border-left:2px solid #2962ff;"><b style="color:#58a6ff;">•</b> $1</div>')
+            .replace(/\*\s*(.*?)(?=(\n|$))/g, '<div style="margin:0.35rem 0; padding-left:0.6rem; border-left:2px solid #3fb950;"><b style="color:#3fb950;">*</b> $1</div>');
         
         return formatted.replace(/\n/g, '<br>');
     };
