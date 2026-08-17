@@ -114,10 +114,11 @@ let currentTvSymbol = "NSE:NIFTY";
 let currentTvInterval = "D";
 let currentChartPlatform = "pro-canvas"; // "pro-canvas" | "nse-official" | "tradingview" | "tech-gauge" | "screener" | "yahoo" | "google" | "zerodha"
 
-// Active indicator overlays on Pro Canvas
-let showEma20 = true;
-let showSma50 = true;
+// Active indicator overlays on Pro Canvas (EMA 9, EMA 21, Volume, Hammer)
+let showEma9 = true;
+let showEma21 = true;
 let showVolume = true;
+let showHammer = true;
 
 // Comprehensive Catalog of Major Indian Stocks & Benchmark Indices
 const SYMBOL_CATALOG = [
@@ -786,6 +787,45 @@ let proChartState = {
     resizeObserver: null
 };
 
+function detectCandlePattern(open, high, low, close) {
+    const body = Math.abs(close - open);
+    const range = high - low;
+    if (range <= 0) return null;
+    
+    const upperShadow = high - Math.max(open, close);
+    const lowerShadow = Math.min(open, close) - low;
+
+    // Bullish Hammer:
+    // 1. Lower shadow is long (at least 1.8x body height or >= 50% of total candle range)
+    // 2. Upper shadow is very small (<= 15% of range or <= 35% of body)
+    // 3. Candle body is situated in the upper half of the range
+    const isHammer = (
+        lowerShadow >= Math.max(body * 1.8, range * 0.50) &&
+        upperShadow <= Math.max(range * 0.15, body * 0.35) &&
+        (Math.min(open, close) - low) >= range * 0.48
+    );
+
+    if (isHammer) {
+        return { type: 'HAMMER', label: 'HAMMER', isBullish: true, name: 'Bullish Hammer' };
+    }
+
+    // Inverted Hammer:
+    // 1. Upper shadow is long (at least 1.8x body height or >= 50% of total candle range)
+    // 2. Lower shadow is very small (<= 15% of range or <= 35% of body)
+    // 3. Candle body is situated in the lower half of the range
+    const isInvertedHammer = (
+        upperShadow >= Math.max(body * 1.8, range * 0.50) &&
+        lowerShadow <= Math.max(range * 0.15, body * 0.35) &&
+        (high - Math.max(open, close)) >= range * 0.48
+    );
+
+    if (isInvertedHammer) {
+        return { type: 'INV_HAMMER', label: 'INV HAMMER', isBullish: close >= open, name: 'Inverted Hammer' };
+    }
+
+    return null;
+}
+
 function generateRealisticCandles(symbol, interval) {
     const catalogItem = SYMBOL_CATALOG.find(c => c.symbol === symbol || c.code === symbol);
     const prof = catalogItem ? {
@@ -809,14 +849,31 @@ function generateRealisticCandles(symbol, interval) {
             continue; // Skip weekends for daily
         }
 
-        const open = currentPrice;
+        let open = currentPrice;
         // Natural market wave oscillation + random walk
         const wave = Math.sin(i * 0.2) * prof.drift * 0.8;
         const change = (Math.random() - 0.48) * prof.vol + wave * 0.15;
-        const close = Math.max(prof.base * 0.5, open + change);
-        const high = Math.max(open, close) + Math.random() * (prof.vol * 0.55);
-        const low = Math.min(open, close) - Math.random() * (prof.vol * 0.55);
+        let close = Math.max(prof.base * 0.5, open + change);
+        let high = Math.max(open, close) + Math.random() * (prof.vol * 0.55);
+        let low = Math.min(open, close) - Math.random() * (prof.vol * 0.55);
+
+        // Periodically inject authentic textbook Hammer / Inverted Hammer patterns at key swing points
+        if (i % 16 === 4) {
+            // Textbook Bullish Hammer: long lower shadow, tiny body at high
+            const bodySize = prof.vol * 0.18;
+            close = open + bodySize * 0.7;
+            high = close + prof.vol * 0.04;
+            low = open - prof.vol * 0.95;
+        } else if (i % 16 === 11) {
+            // Textbook Inverted Hammer: long upper shadow, tiny body at low
+            const bodySize = prof.vol * 0.18;
+            close = open + bodySize * 0.5;
+            high = close + prof.vol * 0.95;
+            low = open - prof.vol * 0.04;
+        }
+
         const volume = Math.round(prof.volumeBase * (0.65 + Math.random() * 0.7 + (Math.abs(change) / prof.vol) * 0.5));
+        const pattern = detectCandlePattern(open, high, low, close);
 
         candles.push({
             time,
@@ -824,33 +881,33 @@ function generateRealisticCandles(symbol, interval) {
             high,
             low,
             close,
-            volume
+            volume,
+            pattern
         });
         currentPrice = close;
     }
 
-    // Calculate EMA 20
-    const k20 = 2 / (20 + 1);
-    let ema20 = candles[0].close;
+    // Calculate EMA 9 (Multiplier = 2 / (9 + 1) = 0.20)
+    const k9 = 2 / (9 + 1);
+    let ema9 = candles[0].close;
     candles.forEach((c, idx) => {
         if (idx === 0) {
-            c.ema20 = ema20;
+            c.ema9 = ema9;
         } else {
-            ema20 = c.close * k20 + ema20 * (1 - k20);
-            c.ema20 = ema20;
+            ema9 = c.close * k9 + ema9 * (1 - k9);
+            c.ema9 = ema9;
         }
     });
 
-    // Calculate SMA 50
+    // Calculate EMA 21 (Multiplier = 2 / (21 + 1) = 2/22)
+    const k21 = 2 / (21 + 1);
+    let ema21 = candles[0].close;
     candles.forEach((c, idx) => {
-        if (idx < 49) {
-            c.sma50 = null;
+        if (idx === 0) {
+            c.ema21 = ema21;
         } else {
-            let sum = 0;
-            for (let j = idx - 49; j <= idx; j++) {
-                sum += candles[j].close;
-            }
-            c.sma50 = sum / 50;
+            ema21 = c.close * k21 + ema21 * (1 - k21);
+            c.ema21 = ema21;
         }
     });
 
@@ -884,11 +941,13 @@ function renderProCandlestickChart(container, symbol, interval) {
                         <span>C: <b style="color:#c9d1d9;">${latest.close.toFixed(2)}</b></span>
                     </div>
                 </div>
-                <!-- Indicators & Zoom Controls -->
-                <div style="display:flex; align-items:center; gap:0.35rem;">
-                    <button class="pro-ind-btn ${showEma20 ? 'active' : ''}" onclick="toggleProIndicator('ema20')" style="background:${showEma20 ? 'rgba(255,179,0,0.2)' : 'transparent'}; color:${showEma20 ? '#ffb300' : '#8b949e'}; border:1px solid ${showEma20 ? '#ffb300' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.68rem; cursor:pointer;">EMA 20</button>
-                    <button class="pro-ind-btn ${showSma50 ? 'active' : ''}" onclick="toggleProIndicator('sma50')" style="background:${showSma50 ? 'rgba(88,166,255,0.2)' : 'transparent'}; color:${showSma50 ? '#58a6ff' : '#8b949e'}; border:1px solid ${showSma50 ? '#58a6ff' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.68rem; cursor:pointer;">SMA 50</button>
-                    <button class="pro-ind-btn ${showVolume ? 'active' : ''}" onclick="toggleProIndicator('volume')" style="background:${showVolume ? 'rgba(57,211,83,0.2)' : 'transparent'}; color:${showVolume ? '#39d353' : '#8b949e'}; border:1px solid ${showVolume ? '#39d353' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.68rem; cursor:pointer;">VOL</button>
+                <!-- Indicators & Zoom Controls (9 EMA, 21 EMA, Volume, Hammer) -->
+                <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+                    <button class="pro-ind-btn ${showEma9 ? 'active' : ''}" onclick="toggleProIndicator('ema9')" style="background:${showEma9 ? 'rgba(0,210,255,0.18)' : 'transparent'}; color:${showEma9 ? '#00d2ff' : '#8b949e'}; border:1px solid ${showEma9 ? '#00d2ff' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 9</button>
+                    <button class="pro-ind-btn ${showEma21 ? 'active' : ''}" onclick="toggleProIndicator('ema21')" style="background:${showEma21 ? 'rgba(245,158,11,0.18)' : 'transparent'}; color:${showEma21 ? '#f59e0b' : '#8b949e'}; border:1px solid ${showEma21 ? '#f59e0b' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 21</button>
+                    <button class="pro-ind-btn ${showVolume ? 'active' : ''}" onclick="toggleProIndicator('volume')" style="background:${showVolume ? 'rgba(57,211,83,0.18)' : 'transparent'}; color:${showVolume ? '#39d353' : '#8b949e'}; border:1px solid ${showVolume ? '#39d353' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">VOL</button>
+                    <button class="pro-ind-btn ${showHammer ? 'active' : ''}" onclick="toggleProIndicator('hammer')" title="Toggle Hammer Candlestick Pattern Indicator" style="background:${showHammer ? 'rgba(16,185,129,0.22)' : 'transparent'}; color:${showHammer ? '#10b981' : '#8b949e'}; border:1px solid ${showHammer ? '#10b981' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:2px;">🔨 HAMMER</button>
+                    <span style="display:inline-block; width:1px; height:14px; background:#30363d; margin:0 2px;"></span>
                     <button onclick="zoomProChart(1.2)" title="Zoom In" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">+</button>
                     <button onclick="zoomProChart(0.8)" title="Zoom Out" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">−</button>
                     <button onclick="resetProChartZoom()" title="Reset View" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.72rem; cursor:pointer;">↺</button>
@@ -908,9 +967,10 @@ function renderProCandlestickChart(container, symbol, interval) {
 }
 
 function toggleProIndicator(type) {
-    if (type === 'ema20') showEma20 = !showEma20;
-    if (type === 'sma50') showSma50 = !showSma50;
+    if (type === 'ema9') showEma9 = !showEma9;
+    if (type === 'ema21') showEma21 = !showEma21;
     if (type === 'volume') showVolume = !showVolume;
+    if (type === 'hammer') showHammer = !showHammer;
     initOrUpdateTvWidget();
 }
 
@@ -1050,13 +1110,13 @@ function drawProCanvasChart(hoverX, hoverY) {
     visibleCandles.forEach(c => {
         if (c.low < minPrice) minPrice = c.low;
         if (c.high > maxPrice) maxPrice = c.high;
-        if (showEma20 && c.ema20) {
-            if (c.ema20 < minPrice) minPrice = c.ema20;
-            if (c.ema20 > maxPrice) maxPrice = c.ema20;
+        if (showEma9 && c.ema9) {
+            if (c.ema9 < minPrice) minPrice = c.ema9;
+            if (c.ema9 > maxPrice) maxPrice = c.ema9;
         }
-        if (showSma50 && c.sma50) {
-            if (c.sma50 < minPrice) minPrice = c.sma50;
-            if (c.sma50 > maxPrice) maxPrice = c.sma50;
+        if (showEma21 && c.ema21) {
+            if (c.ema21 < minPrice) minPrice = c.ema21;
+            if (c.ema21 > maxPrice) maxPrice = c.ema21;
         }
         if (c.volume > maxVolume) maxVolume = c.volume;
     });
@@ -1128,35 +1188,28 @@ function drawProCanvasChart(hoverX, hoverY) {
         });
     }
 
-    // Draw SMA 50 line
-    if (showSma50) {
-        ctx.strokeStyle = '#58a6ff';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        let started = false;
-        visibleCandles.forEach((c, idx) => {
-            if (c.sma50 !== null) {
-                const x = getX(idx);
-                const y = getY(c.sma50);
-                if (!started) {
-                    ctx.moveTo(x, y);
-                    started = true;
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            }
-        });
-        ctx.stroke();
-    }
-
-    // Draw EMA 20 line
-    if (showEma20) {
-        ctx.strokeStyle = '#ffb300';
+    // Draw EMA 9 line (Cyan)
+    if (showEma9) {
+        ctx.strokeStyle = '#00d2ff';
         ctx.lineWidth = 1.75;
         ctx.beginPath();
         visibleCandles.forEach((c, idx) => {
             const x = getX(idx);
-            const y = getY(c.ema20);
+            const y = getY(c.ema9);
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+    }
+
+    // Draw EMA 21 line (Amber/Gold)
+    if (showEma21) {
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.75;
+        ctx.beginPath();
+        visibleCandles.forEach((c, idx) => {
+            const x = getX(idx);
+            const y = getY(c.ema21);
             if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         });
@@ -1189,6 +1242,111 @@ function drawProCanvasChart(hoverX, hoverY) {
         const bodyH = Math.max(1.5, Math.abs(openY - closeY));
         ctx.fillRect(x - candleW / 2, bodyTop, candleW, bodyH);
     });
+
+    // Draw Hammer Candlestick Pattern Indicators
+    if (showHammer) {
+        visibleCandles.forEach((c, idx) => {
+            if (!c.pattern) return;
+            const x = getX(idx);
+            ctx.save();
+
+            if (c.pattern.type === 'HAMMER') {
+                // Bullish Hammer below candle low
+                const lowY = getY(c.low);
+                const badgeY = Math.min(height - padding.bottom - 13, lowY + 14);
+
+                // Vertical connector line
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.75)';
+                ctx.lineWidth = 1.25;
+                ctx.beginPath();
+                ctx.moveTo(x, lowY + 2);
+                ctx.lineTo(x, badgeY - 6);
+                ctx.stroke();
+
+                // Direction pointer arrow ▲
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.moveTo(x, lowY + 2);
+                ctx.lineTo(x - 3.5, lowY + 7);
+                ctx.lineTo(x + 3.5, lowY + 7);
+                ctx.closePath();
+                ctx.fill();
+
+                // Hammer badge pill
+                const text = "🔨 HAMMER";
+                ctx.font = 'bold 8.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                const textWidth = ctx.measureText(text).width;
+                const badgeW = textWidth + 8;
+                const badgeH = 14;
+                const badgeX = x - badgeW / 2;
+
+                ctx.fillStyle = 'rgba(6, 78, 59, 0.95)';
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(badgeX, badgeY - 6, badgeW, badgeH, 3);
+                } else {
+                    ctx.rect(badgeX, badgeY - 6, badgeW, badgeH);
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#34d399';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, x, badgeY + 1);
+
+            } else if (c.pattern.type === 'INV_HAMMER') {
+                // Inverted Hammer above candle high
+                const highY = getY(c.high);
+                const badgeY = Math.max(padding.top + 10, highY - 14);
+
+                // Vertical connector line
+                ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
+                ctx.lineWidth = 1.25;
+                ctx.beginPath();
+                ctx.moveTo(x, highY - 2);
+                ctx.lineTo(x, badgeY + 8);
+                ctx.stroke();
+
+                // Direction pointer arrow ▼
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.moveTo(x, highY - 2);
+                ctx.lineTo(x - 3.5, highY - 7);
+                ctx.lineTo(x + 3.5, highY - 7);
+                ctx.closePath();
+                ctx.fill();
+
+                // Inverted Hammer badge pill
+                const text = "🔨 INV HAMMER";
+                ctx.font = 'bold 8px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                const textWidth = ctx.measureText(text).width;
+                const badgeW = textWidth + 8;
+                const badgeH = 14;
+                const badgeX = x - badgeW / 2;
+
+                ctx.fillStyle = 'rgba(69, 26, 3, 0.95)';
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(badgeX, badgeY - 7, badgeW, badgeH, 3);
+                } else {
+                    ctx.rect(badgeX, badgeY - 7, badgeW, badgeH);
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, x, badgeY);
+            }
+            ctx.restore();
+        });
+    }
 
     // Draw Current Price Line & Badge
     const latestVisible = visibleCandles[visibleCandles.length - 1];
@@ -1258,17 +1416,23 @@ function drawProCanvasChart(hoverX, hoverY) {
                     : `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
             }
 
-            // Update Top HUD OHLC values
+            // Update Top HUD OHLC values & Active Indicator Readouts
             const ohlcEl = document.getElementById('pro-candle-ohlc-info');
             if (ohlcEl) {
                 const isCandleGreen = hoveredCandle.close >= hoveredCandle.open;
+                const patternTag = hoveredCandle.pattern ? `
+                    <span style="background:${hoveredCandle.pattern.type === 'HAMMER' ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; color:${hoveredCandle.pattern.type === 'HAMMER' ? '#34d399' : '#fbbf24'}; border:1px solid ${hoveredCandle.pattern.type === 'HAMMER' ? '#10b981' : '#f59e0b'}; padding:1px 5px; border-radius:3px; font-weight:700;">🔨 ${hoveredCandle.pattern.name}</span>
+                ` : '';
+
                 ohlcEl.innerHTML = `
                     <span>O: <b style="color:#c9d1d9;">${hoveredCandle.open.toFixed(2)}</b></span>
                     <span>H: <b style="color:#c9d1d9;">${hoveredCandle.high.toFixed(2)}</b></span>
                     <span>L: <b style="color:#c9d1d9;">${hoveredCandle.low.toFixed(2)}</b></span>
                     <span>C: <b style="color:${isCandleGreen ? '#39d353' : '#f85149'};">${hoveredCandle.close.toFixed(2)}</b></span>
                     <span>V: <b style="color:#8b949e;">${(hoveredCandle.volume / 1000).toFixed(1)}k</b></span>
-                    ${hoveredCandle.ema20 ? `<span>EMA20: <b style="color:#ffb300;">${hoveredCandle.ema20.toFixed(2)}</b></span>` : ''}
+                    ${showEma9 && hoveredCandle.ema9 ? `<span>EMA9: <b style="color:#00d2ff;">${hoveredCandle.ema9.toFixed(2)}</b></span>` : ''}
+                    ${showEma21 && hoveredCandle.ema21 ? `<span>EMA21: <b style="color:#f59e0b;">${hoveredCandle.ema21.toFixed(2)}</b></span>` : ''}
+                    ${patternTag}
                 `;
             }
         }
