@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css?v=9.8.0">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-    <!-- ⚡️ CRITICAL MODAL & TAB PERSISTENCE ENGINE -->
+    <!-- ⚡️ CRITICAL MODAL, THEME & TAB PERSISTENCE ENGINE -->
     <style>
         /* Failsafe to guarantee modals never leak unstyled text */
         .site-modal-overlay { display: none !important; }
@@ -15,6 +15,10 @@
     </style>
     <script>
         (function() {
+            // Theme persistence initialization
+            var savedTheme = localStorage.getItem('tradeSahiHai_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
             var styleNode = document.createElement('style');
             styleNode.id = "instant-persistence-css";
@@ -22,8 +26,8 @@
                 .viewport-panel { display: none !important; }
                 #${activeTab}-panel { display: block !important; }
                 .navigation-hub button[data-tab="${activeTab}"] { 
-                    background-color: #21262d !important; 
-                    color: #ffffff !important; 
+                    background-color: var(--nav-active-bg, #21262d) !important; 
+                    color: var(--nav-active-color, #ffffff) !important; 
                     border-color: rgba(41, 98, 255, 0.4) !important;
                     font-weight: 600 !important;
                 }
@@ -97,6 +101,10 @@
             <button class="nav-link" data-tab="learning" onclick="navigateHub('learning', event)">Today's Learning</button>
             <button class="nav-link" data-tab="strategy" onclick="navigateHub('strategy', event)">Strategies</button>
             <button class="nav-link" data-tab="reels" onclick="navigateHub('reels', event)">Trending Reels</button>
+            <button class="nav-link theme-toggle-tab" id="theme-toggle-btn" onclick="toggleThemeMode()" aria-label="Switch Light and Dark Theme" title="Toggle Light / Dark Theme">
+                <span class="theme-toggle-icon" id="theme-toggle-icon">☀️</span>
+                <span class="theme-toggle-label" id="theme-toggle-label">Light Mode</span>
+            </button>
         </nav>
     </header>
 

@@ -410,6 +410,9 @@ const symbolLevels = {
 
 // Application Initialization
 document.addEventListener("DOMContentLoaded", () => {
+    // 0. Initialize Light / Dark Theme State
+    initThemeEngine();
+
     // 1. Initialize Date Labels
     setTodayDateLabels();
 
@@ -430,6 +433,50 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6. Fetch Cloud and Flat File analysis streams
     fetchCloudAndFlatData();
 });
+
+/**
+ * Global Theme Engine: Light / Dark Mode Management
+ */
+function initThemeEngine() {
+    const currentTheme = localStorage.getItem('tradeSahiHai_theme') || 'dark';
+    applyThemeMode(currentTheme);
+}
+
+function toggleThemeMode() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyThemeMode(newTheme);
+}
+
+function applyThemeMode(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('tradeSahiHai_theme', theme);
+
+    // Update Theme Toggle Button in Navigation Hub
+    const toggleIcon = document.getElementById('theme-toggle-icon');
+    const toggleLabel = document.getElementById('theme-toggle-label');
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+
+    if (toggleIcon && toggleLabel) {
+        if (theme === 'light') {
+            toggleIcon.innerText = '🌙';
+            toggleLabel.innerText = 'Dark Mode';
+            if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Dark Theme');
+        } else {
+            toggleIcon.innerText = '☀️';
+            toggleLabel.innerText = 'Light Mode';
+            if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Light Theme');
+        }
+    }
+
+    // Refresh active chart engine if on pro-canvas or TradingView
+    if (typeof drawProCanvasChart === 'function') {
+        drawProCanvasChart();
+    }
+    if (currentChartPlatform && currentChartPlatform !== 'pro-canvas') {
+        initOrUpdateTvWidget();
+    }
+}
 
 /**
  * Updates dynamic date headings across the app
@@ -719,6 +766,8 @@ function initOrUpdateTvWidget() {
     const displayName = resolved.name || resolved.code;
     const interval = currentTvInterval || "D";
 
+    const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+
     // PLATFORM 1: PRO INTERACTIVE CANDLESTICK ENGINE (EMA 9, EMA 21, Volume, Hammer Detection)
     if (currentChartPlatform === 'pro-canvas') {
         renderProCandlestickChart(container, resolved.symbol, interval);
@@ -739,7 +788,7 @@ function initOrUpdateTvWidget() {
             "symbol": mappedSymbol,
             "interval": interval,
             "timezone": "Asia/Kolkata",
-            "theme": "dark",
+            "theme": activeTheme,
             "style": "1",
             "locale": "in",
             "enable_publishing": false,
@@ -772,7 +821,7 @@ function initOrUpdateTvWidget() {
             "showIntervalTabs": true,
             "displayMode": "multiple",
             "locale": "in",
-            "colorTheme": "dark"
+            "colorTheme": activeTheme
         };
         const hash = encodeURIComponent(JSON.stringify(gaugeConfig));
         container.innerHTML = `
@@ -794,7 +843,7 @@ function initOrUpdateTvWidget() {
             "defaultScreen": "general",
             "market": "india",
             "showToolbar": true,
-            "colorTheme": "dark",
+            "colorTheme": activeTheme,
             "locale": "in",
             "isTransparent": false
         };
@@ -1186,6 +1235,8 @@ function renderProCandlestickChart(container, symbol, interval) {
     proChartState.candles = candles;
     proChartState.hoverIndex = -1;
 
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
     const latest = candles[candles.length - 1];
     const prev = candles[candles.length - 2] || latest;
     const diff = latest.close - prev.close;
@@ -1193,37 +1244,37 @@ function renderProCandlestickChart(container, symbol, interval) {
     const isUp = diff >= 0;
 
     container.innerHTML = `
-        <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box; user-select:none; position:relative; overflow:hidden;">
+        <div style="width:100%; height:100%; display:flex; flex-direction:column; background:${isLight ? '#ffffff' : '#0d1117'}; color:${isLight ? '#0f172a' : '#f0f6fc'}; box-sizing:border-box; user-select:none; position:relative; overflow:hidden;">
             <!-- Top Pro HUD Bar -->
-            <div id="pro-chart-hud" style="display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.75rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.75rem; flex-wrap:wrap; gap:0.4rem;">
+            <div id="pro-chart-hud" style="display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.75rem; background:${isLight ? '#f8fafc' : '#161b22'}; border-bottom:1px solid ${isLight ? '#e2e8f0' : '#30363d'}; font-size:0.75rem; flex-wrap:wrap; gap:0.4rem;">
                 <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
-                    <span style="font-weight:700; color:#f0f6fc; background:#21262d; border:1px solid #30363d; padding:2px 6px; border-radius:4px;">${displayName}</span>
+                    <span style="font-weight:700; color:${isLight ? '#0f172a' : '#f0f6fc'}; background:${isLight ? '#e2e8f0' : '#21262d'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:4px;">${displayName}</span>
                     <span style="font-size:0.95rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">₹${latest.close.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     <span style="color:${isUp ? '#39d353' : '#f85149'}; font-weight:600;">${isUp ? '+' : ''}${diff.toFixed(2)} (${isUp ? '+' : ''}${pct}%)</span>
-                    <div id="pro-candle-ohlc-info" style="color:#8b949e; display:inline-flex; gap:0.45rem; font-family:monospace; font-size:0.72rem;">
-                        <span>O: <b style="color:#c9d1d9;">${latest.open.toFixed(2)}</b></span>
-                        <span>H: <b style="color:#c9d1d9;">${latest.high.toFixed(2)}</b></span>
-                        <span>L: <b style="color:#c9d1d9;">${latest.low.toFixed(2)}</b></span>
-                        <span>C: <b style="color:#c9d1d9;">${latest.close.toFixed(2)}</b></span>
+                    <div id="pro-candle-ohlc-info" style="color:${isLight ? '#475569' : '#8b949e'}; display:inline-flex; gap:0.45rem; font-family:monospace; font-size:0.72rem;">
+                        <span>O: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.open.toFixed(2)}</b></span>
+                        <span>H: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.high.toFixed(2)}</b></span>
+                        <span>L: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.low.toFixed(2)}</b></span>
+                        <span>C: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.close.toFixed(2)}</b></span>
                     </div>
                 </div>
                 <!-- Indicators & Zoom Controls (9 EMA, 21 EMA, Volume, Hammer) -->
                 <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
-                    <button class="pro-ind-btn ${showEma9 ? 'active' : ''}" onclick="toggleProIndicator('ema9')" style="background:${showEma9 ? 'rgba(0,210,255,0.18)' : 'transparent'}; color:${showEma9 ? '#00d2ff' : '#8b949e'}; border:1px solid ${showEma9 ? '#00d2ff' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 9</button>
-                    <button class="pro-ind-btn ${showEma21 ? 'active' : ''}" onclick="toggleProIndicator('ema21')" style="background:${showEma21 ? 'rgba(245,158,11,0.18)' : 'transparent'}; color:${showEma21 ? '#f59e0b' : '#8b949e'}; border:1px solid ${showEma21 ? '#f59e0b' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 21</button>
-                    <button class="pro-ind-btn ${showVolume ? 'active' : ''}" onclick="toggleProIndicator('volume')" style="background:${showVolume ? 'rgba(57,211,83,0.18)' : 'transparent'}; color:${showVolume ? '#39d353' : '#8b949e'}; border:1px solid ${showVolume ? '#39d353' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">VOL</button>
-                    <button class="pro-ind-btn ${showHammer ? 'active' : ''}" onclick="toggleProIndicator('hammer')" title="Toggle Hammer Candlestick Pattern Indicator" style="background:${showHammer ? 'rgba(16,185,129,0.22)' : 'transparent'}; color:${showHammer ? '#10b981' : '#8b949e'}; border:1px solid ${showHammer ? '#10b981' : '#30363d'}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:2px;">🔨 HAMMER</button>
-                    <span style="display:inline-block; width:1px; height:14px; background:#30363d; margin:0 2px;"></span>
-                    <button onclick="zoomProChart(1.2)" title="Zoom In" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">+</button>
-                    <button onclick="zoomProChart(0.8)" title="Zoom Out" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">−</button>
-                    <button onclick="resetProChartZoom()" title="Reset View" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:2px 6px; border-radius:3px; font-size:0.72rem; cursor:pointer;">↺</button>
+                    <button class="pro-ind-btn ${showEma9 ? 'active' : ''}" onclick="toggleProIndicator('ema9')" style="background:${showEma9 ? 'rgba(0,210,255,0.18)' : 'transparent'}; color:${showEma9 ? '#00d2ff' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showEma9 ? '#00d2ff' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 9</button>
+                    <button class="pro-ind-btn ${showEma21 ? 'active' : ''}" onclick="toggleProIndicator('ema21')" style="background:${showEma21 ? 'rgba(245,158,11,0.18)' : 'transparent'}; color:${showEma21 ? '#f59e0b' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showEma21 ? '#f59e0b' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 21</button>
+                    <button class="pro-ind-btn ${showVolume ? 'active' : ''}" onclick="toggleProIndicator('volume')" style="background:${showVolume ? 'rgba(57,211,83,0.18)' : 'transparent'}; color:${showVolume ? '#39d353' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showVolume ? '#39d353' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">VOL</button>
+                    <button class="pro-ind-btn ${showHammer ? 'active' : ''}" onclick="toggleProIndicator('hammer')" title="Toggle Hammer Candlestick Pattern Indicator" style="background:${showHammer ? 'rgba(16,185,129,0.22)' : 'transparent'}; color:${showHammer ? '#10b981' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showHammer ? '#10b981' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:2px;">🔨 HAMMER</button>
+                    <span style="display:inline-block; width:1px; height:14px; background:${isLight ? '#cbd5e1' : '#30363d'}; margin:0 2px;"></span>
+                    <button onclick="zoomProChart(1.2)" title="Zoom In" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">+</button>
+                    <button onclick="zoomProChart(0.8)" title="Zoom Out" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">−</button>
+                    <button onclick="resetProChartZoom()" title="Reset View" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.72rem; cursor:pointer;">↺</button>
                 </div>
             </div>
             <!-- Canvas Container -->
             <div id="pro-canvas-wrap" style="flex:1; width:100%; height:100%; position:relative; overflow:hidden;">
                 <canvas id="pro-candlestick-canvas" style="width:100%; height:100%; display:block;"></canvas>
                 <div id="pro-chart-crosshair-badge-price" style="display:none; position:absolute; right:0; background:#2962ff; color:#fff; font-size:0.68rem; font-family:monospace; padding:1px 4px; border-radius:2px; pointer-events:none; z-index:10;"></div>
-                <div id="pro-chart-crosshair-badge-time" style="display:none; position:absolute; bottom:0; background:#21262d; color:#f0f6fc; font-size:0.68rem; font-family:monospace; padding:1px 4px; border-radius:2px; pointer-events:none; z-index:10; border:1px solid #30363d;"></div>
+                <div id="pro-chart-crosshair-badge-time" style="display:none; position:absolute; bottom:0; background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#f0f6fc'}; font-size:0.68rem; font-family:monospace; padding:1px 4px; border-radius:2px; pointer-events:none; z-index:10; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'};"></div>
             </div>
         </div>
     `;
@@ -1348,8 +1399,9 @@ function drawProCanvasChart(hoverX, hoverY) {
     const chartW = width - padding.left - padding.right;
     const chartH = height - padding.top - padding.bottom;
 
-    // Clear background
-    ctx.fillStyle = '#0d1117';
+    // Clear background (theme adaptive)
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    ctx.fillStyle = isLight ? '#ffffff' : '#0d1117';
     ctx.fillRect(0, 0, width, height);
 
     const allCandles = proChartState.candles || [];
@@ -1398,13 +1450,13 @@ function drawProCanvasChart(hoverX, hoverY) {
     const getPriceFromY = (y) => maxPrice - ((y - padding.top) / chartH) * priceRange;
 
     // Draw Subtle Grid Lines
-    ctx.strokeStyle = '#161b22';
+    ctx.strokeStyle = isLight ? '#e2e8f0' : '#161b22';
     ctx.lineWidth = 1;
 
     // Horizontal grid & price scale
     const gridSteps = 5;
     ctx.font = '10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = isLight ? '#64748b' : '#8b949e';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
 
