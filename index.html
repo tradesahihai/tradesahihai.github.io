@@ -193,10 +193,10 @@
 
                             <!-- Live Search Input for all Stocks & Indices -->
                             <div style="position:relative; display:flex; align-items:center;">
-                                <input type="text" id="chart-symbol-search-input" placeholder="🔍 Search stock/index..." oninput="onSymbolSearchInput(this.value)" autocomplete="off" style="background:#161b22; color:#f0f6fc; border:1px solid #30363d; border-radius:6px; padding:5px 24px 5px 8px; font-size:0.75rem; outline:none; width:155px; transition:all 0.15s ease;" onfocus="this.style.borderColor='#58a6ff'; this.style.width='180px';" onblur="setTimeout(() => { if (!this.value) this.style.width='155px'; }, 200)">
+                                <input type="text" id="chart-symbol-search-input" placeholder="🔍 Search ANY stock/index..." oninput="onSymbolSearchInput(this.value)" onkeydown="onSymbolSearchKeyDown(event)" autocomplete="off" style="background:#161b22; color:#f0f6fc; border:1px solid #30363d; border-radius:6px; padding:5px 24px 5px 8px; font-size:0.75rem; outline:none; width:165px; transition:all 0.15s ease;" onfocus="this.style.borderColor='#58a6ff'; this.style.width='200px';" onblur="setTimeout(() => { if (!this.value) this.style.width='165px'; }, 250)">
                                 <button id="clear-symbol-search-btn" onclick="clearSymbolSearch()" style="position:absolute; right:6px; background:transparent; border:none; color:#8b949e; cursor:pointer; font-size:0.75rem; display:none;" title="Clear search">✕</button>
                                 <!-- Search Autocomplete Dropdown Menu -->
-                                <div id="chart-search-results-dropdown" style="display:none; position:absolute; top:calc(100% + 4px); left:0; width:260px; max-height:240px; overflow-y:auto; background:#161b22; border:1px solid #30363d; border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.6); z-index:150;"></div>
+                                <div id="chart-search-results-dropdown" style="display:none; position:absolute; top:calc(100% + 4px); left:0; width:290px; max-height:280px; overflow-y:auto; background:#161b22; border:1px solid #30363d; border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.6); z-index:150;"></div>
                             </div>
                         </div>
 
