@@ -903,8 +903,253 @@ header {
 .metric-pill b.blue { color: #58a6ff; }
 
 /* ==========================================================================
+   🌐 Footer Action Hub, Social Buttons & Info Modals
+   ========================================================================== */
+.footer-interactive-hub {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #21262d;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.footer-nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.footer-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.footer-btn {
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.footer-btn:hover {
+    background: #21262d;
+    color: #ffffff;
+    border-color: #58a6ff;
+    transform: translateY(-1px);
+}
+
+.footer-btn.highlight {
+    background: rgba(248, 81, 73, 0.1);
+    border-color: rgba(248, 81, 73, 0.35);
+    color: #ff7b72;
+}
+
+.footer-btn.highlight:hover {
+    background: rgba(248, 81, 73, 0.25);
+    border-color: #f85149;
+    color: #ffffff;
+}
+
+.footer-social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.social-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.social-icon-btn:hover {
+    color: #ffffff;
+    border-color: #58a6ff;
+    transform: translateY(-2px);
+}
+
+.social-icon-btn.tg:hover { background: #229ED9; color: #fff; border-color: #229ED9; }
+.social-icon-btn.tw:hover { background: #000000; color: #fff; border-color: #fff; }
+.social-icon-btn.yt:hover { background: #FF0000; color: #fff; border-color: #FF0000; }
+.social-icon-btn.gh:hover { background: #24292e; color: #fff; border-color: #58a6ff; }
+.social-icon-btn.in:hover { background: #0A66C2; color: #fff; border-color: #0A66C2; }
+
+.footer-risk-banner {
+    background: rgba(248, 81, 73, 0.05);
+    border: 1px solid rgba(248, 81, 73, 0.22);
+    border-radius: 6px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.74rem;
+    color: #8b949e;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+/* Modal Popup Framework */
+.site-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    animation: fadeInModal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-modal-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.site-modal-header {
+    padding: 1rem 1.25rem;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-modal-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #f0f6fc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.site-modal-close {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    font-size: 1.35rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.15s;
+    line-height: 1;
+}
+
+.site-modal-close:hover {
+    background: #21262d;
+    color: #ffffff;
+}
+
+.site-modal-body {
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    color: #c9d1d9;
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+.site-modal-body h4 {
+    color: #f0f6fc;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 1.1rem 0 0.4rem 0;
+}
+
+.site-modal-body h4:first-child {
+    margin-top: 0;
+}
+
+.site-modal-body p {
+    margin-bottom: 0.75rem;
+    color: #8b949e;
+}
+
+.site-modal-body p b {
+    color: #f0f6fc;
+}
+
+.site-modal-body ul {
+    margin-left: 1.25rem;
+    margin-bottom: 0.85rem;
+    color: #8b949e;
+}
+
+.site-modal-body li {
+    margin-bottom: 0.4rem;
+}
+
+.site-modal-body li b {
+    color: #f0f6fc;
+}
+
+.site-modal-footer {
+    padding: 0.85rem 1.25rem;
+    background: #0d1117;
+    border-top: 1px solid #30363d;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
    📱 Mobile Responsive Polish & Media Queries
    ========================================================================== */
+@media (max-width: 768px) {
+    .footer-nav-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .footer-action-buttons {
+        justify-content: center;
+    }
+    .footer-social-links {
+        justify-content: center;
+    }
+}
 @media (max-width: 768px) {
     header {
         padding: 0.65rem 0.85rem;

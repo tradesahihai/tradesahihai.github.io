@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Live Trading Analytics & Research</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=9.8.0">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-    <!-- ⚡️ TAB PERSISTENCE ENGINE & GLOBAL MEDIA FALLBACKS -->
+    <!-- ⚡️ CRITICAL MODAL & TAB PERSISTENCE ENGINE -->
+    <style>
+        /* Failsafe to guarantee modals never leak unstyled text */
+        .site-modal-overlay { display: none !important; }
+        .site-modal-overlay.active { display: flex !important; }
+    </style>
     <script>
         (function() {
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
@@ -474,10 +479,10 @@
     <!-- ==========================================================================
          MODAL 1: COMPREHENSIVE STOCK MARKET RISK DISCLAIMER
          ========================================================================== -->
-    <div id="modal-disclaimer" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-disclaimer')">
+    <div id="modal-disclaimer" class="site-modal-overlay" style="display:none !important;" onclick="handleModalBackdropClick(event, 'modal-disclaimer')">
         <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
             <div class="site-modal-header">
-                <h3 id="disclaimer-title"><span>⚠️</span> Stock Market Risk & Legal Disclaimer</h3>
+                <h3 id="disclaimer-title"><span style="color:#ff7b72;">⚠️</span> Stock Market Risk & Legal Disclaimer</h3>
                 <button class="site-modal-close" onclick="closeSiteModal('modal-disclaimer')" aria-label="Close modal">&times;</button>
             </div>
             <div class="site-modal-body">
@@ -519,10 +524,10 @@
     <!-- ==========================================================================
          MODAL 2: ABOUT US
          ========================================================================== -->
-    <div id="modal-about" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-about')">
+    <div id="modal-about" class="site-modal-overlay" style="display:none !important;" onclick="handleModalBackdropClick(event, 'modal-about')">
         <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="about-title">
             <div class="site-modal-header">
-                <h3 id="about-title"><span>ℹ️</span> About Trade Sahi Hai</h3>
+                <h3 id="about-title"><span style="color:#58a6ff;">ℹ️</span> About Trade Sahi Hai</h3>
                 <button class="site-modal-close" onclick="closeSiteModal('modal-about')" aria-label="Close modal">&times;</button>
             </div>
             <div class="site-modal-body">
@@ -553,10 +558,10 @@
     <!-- ==========================================================================
          MODAL 3: CONTACT US
          ========================================================================== -->
-    <div id="modal-contact" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-contact')">
+    <div id="modal-contact" class="site-modal-overlay" style="display:none !important;" onclick="handleModalBackdropClick(event, 'modal-contact')">
         <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="contact-title">
             <div class="site-modal-header">
-                <h3 id="contact-title"><span>✉️</span> Contact & Community Support</h3>
+                <h3 id="contact-title"><span style="color:#39d353;">✉️</span> Contact & Community Support</h3>
                 <button class="site-modal-close" onclick="closeSiteModal('modal-contact')" aria-label="Close modal">&times;</button>
             </div>
             <div class="site-modal-body">
@@ -589,10 +594,10 @@
     <!-- ==========================================================================
          MODAL 4: TERMS OF USE
          ========================================================================== -->
-    <div id="modal-terms" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-terms')">
+    <div id="modal-terms" class="site-modal-overlay" style="display:none !important;" onclick="handleModalBackdropClick(event, 'modal-terms')">
         <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="terms-title">
             <div class="site-modal-header">
-                <h3 id="terms-title"><span>📜</span> Terms of Use & Privacy Policy</h3>
+                <h3 id="terms-title"><span style="color:#e3b341;">📜</span> Terms of Use & Privacy Policy</h3>
                 <button class="site-modal-close" onclick="closeSiteModal('modal-terms')" aria-label="Close modal">&times;</button>
             </div>
             <div class="site-modal-body">
@@ -627,7 +632,7 @@
         function openSiteModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                modal.style.display = 'flex';
+                modal.style.setProperty('display', 'flex', 'important');
                 document.body.style.overflow = 'hidden';
             }
         }
@@ -635,7 +640,7 @@
         function closeSiteModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                modal.style.display = 'none';
+                modal.style.setProperty('display', 'none', 'important');
                 document.body.style.overflow = '';
             }
         }
@@ -651,7 +656,7 @@
             if (e.key === 'Escape') {
                 const openModals = document.querySelectorAll('.site-modal-overlay');
                 openModals.forEach(function(m) {
-                    m.style.display = 'none';
+                    m.style.setProperty('display', 'none', 'important');
                 });
                 document.body.style.overflow = '';
             }
