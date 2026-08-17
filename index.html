@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-    <!-- ⚡️ TAB PERSISTENCE ENGINE -->
+    <!-- ⚡️ TAB PERSISTENCE ENGINE & GLOBAL MEDIA FALLBACKS -->
     <script>
         (function() {
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
@@ -25,6 +25,58 @@
             `;
             document.head.appendChild(styleNode);
         })();
+
+        window.handlePrimaryChartFallback = function(img) {
+            try {
+                var raw = img.getAttribute('data-candidates');
+                if (raw) {
+                    var candidates = JSON.parse(raw);
+                    if (candidates && candidates.length > 0) {
+                        var nextSrc = candidates.shift();
+                        img.setAttribute('data-candidates', JSON.stringify(candidates));
+                        img.src = nextSrc;
+                        return;
+                    }
+                }
+            } catch (e) {}
+            img.style.display = 'none';
+        };
+
+        window.handleImageFallback = function(img) {
+            try {
+                var raw = img.getAttribute('data-candidates');
+                if (!raw) {
+                    if (img.parentElement) img.parentElement.style.display = 'none';
+                    return;
+                }
+                var candidates = JSON.parse(raw);
+                if (candidates && candidates.length > 0) {
+                    var nextSrc = candidates.shift();
+                    img.setAttribute('data-candidates', JSON.stringify(candidates));
+                    img.src = nextSrc;
+                } else {
+                    if (img.parentElement) img.parentElement.style.display = 'none';
+                }
+            } catch (e) {
+                if (img.parentElement) img.parentElement.style.display = 'none';
+            }
+        };
+
+        window.handleVideoLoadError = function(videoElem, expectedPath) {
+            if (!videoElem) return;
+            var parentContainer = videoElem.parentElement;
+            if (!parentContainer) return;
+            parentContainer.innerHTML = `
+                <div style="padding:1.25rem 1rem; text-align:center; background:#0d1117; border-radius:6px; border:1px dashed #30363d;">
+                    <div style="font-size:1.4rem; margin-bottom:0.35rem;">🎬</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:#f0f6fc;">Reel Media Not Uploaded Yet</div>
+                    <div style="font-size:0.75rem; color:#8b949e; margin-top:0.35rem;">
+                        Target Supabase Storage Path:<br>
+                        <code style="color:#58a6ff; background:#161b22; padding:3px 8px; border-radius:4px; font-size:0.72rem; display:inline-block; margin-top:4px; word-break:break-all;">${expectedPath || ''}</code>
+                    </div>
+                </div>
+            `;
+        };
     </script>
 </head>
 <body>
@@ -122,59 +174,58 @@
                 <!-- Today's Featured Full Content Daily Analysis Card -->
                 <div class="display-card-v2" id="daily-interactive-chart-card" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.25rem; margin-bottom:1.25rem;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                        <h3 style="margin:0; color:#f0f6fc; font-size:1.05rem; font-weight:700;" id="chart-card-filename">Aug16_chart.txt</h3>
+                        <h3 style="margin:0; color:#f0f6fc; font-size:1.05rem; font-weight:700;" id="chart-card-filename">Awaiting Today's Analysis</h3>
                     </div>
 
                     <!-- Daily Technical Chart Image (Supabase) -->
                     <div class="chart-container-card" style="margin-bottom:0.85rem;">
                         <div class="tv-chart-frame-box" id="tv-chart-container" style="background:#0d1117; border-radius:6px; overflow:hidden; border:1px solid #30363d;">
                             <img id="primary-daily-chart-img" 
-                                 src="https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/Aug16_nse.png" 
-                                 data-candidates='["https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/Aug16.png", "https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16_nse.png", "https://tieaswmnzytdeuatkmmq.supabase.co/storage/v1/object/public/tracking/2026/August/aug16.png"]'
+                                 data-candidates='[]'
                                  alt="Daily Technical Chart" 
                                  onerror="handlePrimaryChartFallback(this)" 
-                                 style="width:100%; display:block; max-height:480px; object-fit:contain; background:#0a0e14; cursor:pointer;"
+                                 style="width:100%; display:none; max-height:480px; object-fit:contain; background:#0a0e14; cursor:pointer;"
                                  onclick="window.open(this.src, '_blank')"
                                  title="Click to view chart in full resolution" />
                         </div>
                     </div>
 
-                    <!-- Key Technical Levels Matrix (Guaranteed Single Line on Desktop) -->
+                    <!-- Key Technical Levels Matrix -->
                     <div class="tech-levels-grid" id="featured-tech-levels">
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Pivot Point</div>
-                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">24,350.00</div>
+                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R1)</div>
-                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,480.00</div>
+                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R2)</div>
-                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,620.00</div>
+                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S1)</div>
-                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,240.00</div>
+                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S2)</div>
-                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,110.00</div>
+                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Trend Bias</div>
-                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">Bullish Continuation</div>
+                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">--</div>
                         </div>
                     </div>
 
                     <!-- Technical Inferences Full Body Content -->
                     <div id="daily-inferences-text" style="margin-top:0.75rem; background:#0d1117; padding:1rem; border-radius:6px; border:1px solid #21262d;">
-                        <h4 style="color:#ffffff; font-size:0.92rem; margin-top:0; margin-bottom:0.5rem;">NIFTY 50 INDEX – TECHNICAL CHART REPORT</h4>
-                        <div class="card-body-text" style="color:#c9d1d9; font-size:0.85rem; line-height:1.6;">
-                            • <b>Price Structure:</b> NIFTY 50 bounced firmly off the 24,240 support cluster, forming a bullish piercing candle pattern with expanding volume.<br>
-                            • <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive 15-minute close above 24,480 opens the path towards 24,620 new ATH test.<br>
-                            • <b>Derivative Data & OI:</b> Heavy Put writing witnessed at 24,300 and 24,200 strikes indicating aggressive bull defense. Call unwinding noticed at 24,400 CE.<br>
-                            • <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with a strict stop loss below 24,240 for upside targets of 24,480 and 24,560.
+                        <div style="text-align:center; padding:1rem 0.5rem; color:#8b949e; font-size:0.85rem;">
+                            <div style="font-size:1.5rem; margin-bottom:0.4rem;">📊</div>
+                            <div style="font-weight:600; color:#f0f6fc;">No Analysis Post Uploaded Yet</div>
+                            <div style="font-size:0.75rem; color:#6e7681; margin-top:0.35rem;">
+                                Add your analysis <code>.txt</code> file to your repository data folder or post through your backend portal.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -421,62 +472,14 @@
                     <span class="badge purple">Video Insights</span>
                 </div>
 
-                <!-- Video Showcase Grid -->
-                <div class="reels-grid-layout">
-                    <div class="reel-item-card">
-                        <div class="reel-video-container">
-                            <video poster="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="reel-meta-content">
-                            <h4>🔥 Nifty 50 Liquidity Sweep & Fakeout Trap Breakdown</h4>
-                            <p>How smart money hunted retail stop-losses at the 24,400 resistance before reversing into a sharp 120-point drop.</p>
-                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
-                                <span class="badge blue">Price Action</span>
-                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:45 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reel-item-card">
-                        <div class="reel-video-container">
-                            <video poster="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="reel-meta-content">
-                            <h4>🧠 Stop Revenge Trading: The 2-Trade Maximum Rule</h4>
-                            <p>Protecting your psychology on losing days by locking the terminal after 2 consecutive stop-loss hits.</p>
-                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
-                                <span class="badge gold">Mindset</span>
-                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:52 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reel-item-card">
-                        <div class="reel-video-container">
-                            <video poster="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=500&auto=format&fit=crop&q=60" controls preload="metadata">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="reel-meta-content">
-                            <h4>📈 Identifying High Probability CPR Breakouts in 30 Seconds</h4>
-                            <p>Quick scanner settings and checklist to filter the best trending candidates before 9:15 AM market opening.</p>
-                            <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center;">
-                                <span class="badge green">Playbook</span>
-                                <span style="font-size:0.65rem; color:#8b949e;">⏱️ 0:58 min</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Live Dynamic Synced Video Feed from GitHub/Supabase -->
+                <div id="stream-reels-today-container" style="margin-bottom: 1.5rem;"></div>
 
                 <!-- Historical Reels Logs Section -->
-                <div id="reels-archive-wrapper" style="margin-top:2rem;">
+                <div id="reels-archive-wrapper" style="margin-top:1rem;">
                     <div class="timeline-date-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:0.5rem; margin-bottom:0.75rem;">
-                        <span style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">🎬 Historical Market Bytes & Reel Logs</span>
-                        <span style="font-size:0.7rem; color:#8b949e;">Click Read More to expand previous reels</span>
+                        <span style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">🎬 Market Bytes & Reel Logs</span>
+                        <span style="font-size:0.7rem; color:#8b949e;">Click Read More to expand reel logs</span>
                     </div>
                     <div id="stream-reels-container"></div>
                 </div>

@@ -55,75 +55,56 @@ window.handlePrimaryChartFallback = function(img) {
     img.style.display = 'none';
 };
 
+window.handleVideoLoadError = function(videoElem, expectedPath) {
+    if (!videoElem) return;
+    const parentContainer = videoElem.parentElement;
+    if (!parentContainer) return;
+
+    // Gracefully swap failed/pending video with a non-intrusive status notification
+    parentContainer.innerHTML = `
+        <div style="padding:1.25rem 1rem; text-align:center; background:#0d1117; border-radius:6px; border:1px dashed #30363d;">
+            <div style="font-size:1.4rem; margin-bottom:0.35rem;">🎬</div>
+            <div style="font-size:0.85rem; font-weight:600; color:#f0f6fc;">Reel Media Not Uploaded Yet</div>
+            <div style="font-size:0.75rem; color:#8b949e; margin-top:0.35rem;">
+                Target Supabase Storage Path:<br>
+                <code style="color:#58a6ff; background:#161b22; padding:3px 8px; border-radius:4px; font-size:0.72rem; display:inline-block; margin-top:4px; word-break:break-all;">${expectedPath}</code>
+            </div>
+            <div style="font-size:0.7rem; color:#6e7681; margin-top:0.5rem;">
+                Once <span style="color:#39d353; font-weight:600;">${expectedPath.split('/').pop()}</span> is uploaded to your Supabase public bucket, the HTML5 player will stream it here.
+            </div>
+        </div>
+    `;
+};
+
 function getSupabaseImageCandidates(fileName) {
-    const rawBase = fileName.replace(/\.txt$/i, '');
+    const rawBase = (fileName || '').replace(/\.txt$/i, '').trim();
     const dateMatch = fileName.match(/^([A-Za-z]+)(\d+)/);
     const datePrefix = dateMatch ? dateMatch[0] : '';
-    const dayNum = dateMatch ? dateMatch[2] : '';
-    const monthLetters = dateMatch ? dateMatch[1] : '';
-    
-    // Exact requested URL priorities first (e.g. Aug16_learning.png, Aug16_nse.png, Aug15.png)
-    const exactPriorities = [];
-    if (rawBase) {
-        exactPriorities.push(rawBase);
-        exactPriorities.push(rawBase.toLowerCase());
-    }
-    if (datePrefix.toLowerCase() === 'aug15') {
-        exactPriorities.push('Aug15_reel');
-        exactPriorities.push('Aug15_reels');
-        exactPriorities.push('Aug15_learning');
-        exactPriorities.push('Aug15');
-        exactPriorities.push('Aug15_pnb');
-        exactPriorities.push('aug15');
-        exactPriorities.push('Aug15_chart');
-    }
-    if (datePrefix.toLowerCase() === 'aug16') {
-        exactPriorities.push('Aug16_reel');
-        exactPriorities.push('Aug16_reels');
-        exactPriorities.push('Aug16_strategy');
-        exactPriorities.push('Aug16_learning');
-        exactPriorities.push('Aug16_nse');
-        exactPriorities.push('Aug16');
-        exactPriorities.push('Aug16_chart');
-        exactPriorities.push('aug16_nse');
-        exactPriorities.push('aug16');
-    }
-
-    const prefixes = [
-        ...exactPriorities,
-        rawBase,
-        rawBase.toLowerCase(),
-        datePrefix,
-        `${datePrefix}_nse`,
-        `${datePrefix}_pnb`,
-        `${datePrefix}_chart`,
-        `${datePrefix.toLowerCase()}_nse`,
-        `${datePrefix.toLowerCase()}_pnb`,
-        `${rawBase}_chart`,
-        `${monthLetters}${dayNum}`
-    ];
-
-    const candidates = [];
     const isReelOrVideo = (fileName || '').toLowerCase().includes('reel') || (fileName || '').toLowerCase().includes('video');
     
-    prefixes.forEach(p => {
-        if (!p) return;
-        if (isReelOrVideo) {
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mp4`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webm`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mov`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
-        } else {
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.png`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpg`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.jpeg`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webp`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mp4`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.webm`);
-            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${p}.mov`);
+    const candidates = [];
+    if (isReelOrVideo) {
+        // Video specific candidates
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase}.mp4`);
+        if (rawBase !== rawBase.toLowerCase()) {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase.toLowerCase()}.mp4`);
         }
-    });
+        if (datePrefix && datePrefix !== rawBase) {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${datePrefix}_reel.mp4`);
+        }
+    } else {
+        // Image specific candidates (never include .mp4 in image candidates)
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase}.png`);
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase}.jpg`);
+        candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase}.webp`);
+        if (rawBase !== rawBase.toLowerCase()) {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${rawBase.toLowerCase()}.png`);
+        }
+        if (datePrefix && datePrefix !== rawBase) {
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${datePrefix}.png`);
+            candidates.push(`${SUPABASE_STORAGE_URL}/${currentYear}/${currentMonthName}/${datePrefix}_nse.png`);
+        }
+    }
 
     return [...new Set(candidates)];
 }
@@ -915,7 +896,7 @@ async function fetchCloudAndFlatData() {
             category = 'strategy';
             tagText = '⚡ Strategy Playbook';
             tagBg = '#238636';
-        } else if (lowerName.includes('reels') || lowerName.includes('video')) {
+        } else if (lowerName.includes('reel') || lowerName.includes('video')) {
             category = 'reels';
             tagText = '🎬 Reel Analysis';
             tagBg = '#a371f7';
@@ -933,14 +914,14 @@ async function fetchCloudAndFlatData() {
         const firstImageSrc = imageCandidates[0];
         const remainingCandidatesJson = JSON.stringify(imageCandidates.slice(1)).replace(/"/g, '&quot;');
 
-        const isVideoCandidate = firstImageSrc.endsWith('.mp4') || firstImageSrc.endsWith('.webm') || firstImageSrc.endsWith('.mov') || category === 'reels';
+        const isVideoCandidate = (category === 'reels') || (firstImageSrc && (firstImageSrc.endsWith('.mp4') || firstImageSrc.endsWith('.webm') || firstImageSrc.endsWith('.mov')));
+        const expectedSupabasePath = `tracking/${currentYear}/${currentMonthName}/${fileName.replace(/\.txt$/i, '')}.mp4`;
 
         let mediaHtml = `
             <div style="margin:0.75rem 0; border-radius:6px; overflow:hidden; border:1px solid #30363d; background:#0d1117;">
                 ${isVideoCandidate ? `
-                    <video controls playsinline preload="metadata" style="width:100%; max-height:540px; background:#000; border-radius:6px; display:block;" onerror="this.style.display='none'">
-                        <source src="${firstImageSrc}" type="video/mp4">
-                        <source src="${firstImageSrc.replace(/\.[^/.]+$/, '.webm')}" type="video/webm">
+                    <video controls playsinline preload="none" style="width:100%; max-height:540px; background:#000; border-radius:6px; display:block;" onerror="handleVideoLoadError(this, '${expectedSupabasePath}')">
+                        <source src="${firstImageSrc}" type="video/mp4" onerror="this.parentElement && handleVideoLoadError(this.parentElement, '${expectedSupabasePath}')">
                         Your browser does not support HTML5 video.
                     </video>
                 ` : `
@@ -1004,79 +985,8 @@ async function fetchCloudAndFlatData() {
         console.warn("Direct GitHub API fetch info:", ghErr);
     }
 
-    // 2. Fallback Seed Data: Ensure Aug 16 & Aug 15 records are always available even if GitHub API is rate-limited
-    const defaultSeedFiles = [
-        {
-            name: "Aug16_chart.txt",
-            text: `======================================================================
-NIFTY 50 INDEX – TECHNICAL ANALYSIS & KEY LEVELS
-======================================================================
-Pivot Point
-24,350.00
-Resistance (R1)
-24,480.00
-Resistance (R2)
-24,620.00
-Support (S1)
-24,240.00
-Support (S2)
-24,110.00
-Trend Bias
-Bullish Continuation
-
-• Price Structure: NIFTY 50 bounced firmly off the 24,240 support cluster, forming a bullish piercing candle pattern with expanding volume.
-• Key Pivot Zone: Immediate hurdle stands at 24,480 (R1). A decisive 15-minute close above 24,480 opens the path towards 24,620 new ATH test.
-• Derivative Data & OI: Heavy Put writing witnessed at 24,300 and 24,200 strikes indicating aggressive bull defense. Call unwinding noticed at 24,400 CE.
-• Actionable Plan: Look for pullback entries near 24,310 - 24,340 with a strict stop loss below 24,240 for upside targets of 24,480 and 24,560.`
-        },
-        {
-            name: "Aug15_pnb.txt",
-            text: `======================================================================
-PUNJAB NATIONAL BANK (PNB) – INTRADAY / SWING TECHNICAL REPORT
-======================================================================
-Pivot Point
-118.50
-Resistance (R1)
-122.40
-Resistance (R2)
-125.80
-Support (S1)
-115.20
-Support (S2)
-112.00
-Trend Bias
-Bullish Breakout Continuation
-
-• Price Structure: PNB stock surged above 118 with solid institutional buying volume, breaking out of a 3-week accumulation zone.
-• Derivative & Order Flow: Heavy call short-covering witnessed between 115 and 118 strikes, open interest buildup firmly on the long side.
-• Actionable Strategy: Accumulate on intraday dips near 118.00–118.50 with a strict stop loss below 115.00 for upside targets of 122.40 (R1) and 125.80 (R2).`
-        },
-        {
-            name: "learning_orderflow_imbalance.txt",
-            text: `======================================================================
-ORDER FLOW & FOOTPRINT IMBALANCE TRADING STRATEGY
-======================================================================
-• What is an Imbalance?: When aggressive market buyers or sellers exhaust passive liquidity by a ratio of 3:1 or 4:1 at consecutive price ticks.
-• Key Confirmation: Stacked buying imbalances during a breakout above a daily pivot point provide high-probability continuation setups with defined risk.`
-        },
-        {
-            name: "Aug16_reel.txt",
-            text: `======================================================================
-NIFTY 50 LIVE INTRADAY BREAKOUT REEL & ORDER FLOW REACTION
-======================================================================
-• Video Breakdown: Quick 60-second recap of today's key pivot breakout above 24,350.
-• Watch the video above for tape reading, buyer imbalance spikes, and volume surge cues.`
-        },
-        {
-            name: "strategy_gap_and_go_setup.txt",
-            text: `======================================================================
-GAP & GO INTRADAY MOMENTUM PLAYBOOK
-======================================================================
-• Condition 1: Index or stock gaps up > 0.5% outside previous day's Value Area High (VAH).
-• Condition 2: First 5-minute candle closes in the upper 20% of its range with volume > 2x 20-period average.
-• Execution: Enter long on the break of the first 5-min candle high with stop loss at the 5-min candle low.`
-        }
-    ];
+    // 2. Remove all system-generated posts / default seed files
+    const defaultSeedFiles = [];
 
     defaultSeedFiles.forEach((f, idx) => {
         processFilePayload(f.name, f.text, 100 + idx);
@@ -1156,6 +1066,33 @@ GAP & GO INTRADAY MOMENTUM PLAYBOOK
                     combinedTimeline[f.postDateStr].daily.push(archiveMarkup);
                 }
             });
+        }
+    } else {
+        // Reset featured daily card when no files exist
+        const filenameEl = document.getElementById('chart-card-filename');
+        const primaryImg = document.getElementById('primary-daily-chart-img');
+        const infTextEl = document.getElementById('daily-inferences-text');
+
+        if (filenameEl) filenameEl.innerText = "Awaiting Today's Analysis";
+        if (primaryImg) primaryImg.style.display = 'none';
+
+        if (document.getElementById('lvl-pivot')) document.getElementById('lvl-pivot').innerText = "--";
+        if (document.getElementById('lvl-r1')) document.getElementById('lvl-r1').innerText = "--";
+        if (document.getElementById('lvl-r2')) document.getElementById('lvl-r2').innerText = "--";
+        if (document.getElementById('lvl-s1')) document.getElementById('lvl-s1').innerText = "--";
+        if (document.getElementById('lvl-s2')) document.getElementById('lvl-s2').innerText = "--";
+        if (document.getElementById('lvl-trend')) document.getElementById('lvl-trend').innerText = "--";
+
+        if (infTextEl) {
+            infTextEl.innerHTML = `
+                <div style="text-align:center; padding:1.25rem 0.5rem; color:#8b949e; font-size:0.85rem;">
+                    <div style="font-size:1.5rem; margin-bottom:0.4rem;">📊</div>
+                    <div style="font-weight:600; color:#f0f6fc;">No Analysis Post Found for This Period</div>
+                    <div style="font-size:0.75rem; color:#6e7681; margin-top:0.35rem;">
+                        Add your analysis text file to <code>data/${currentYear}/${currentMonthName}/</code> in your GitHub repository or post via backend to display here.
+                    </div>
+                </div>
+            `;
         }
     }
 
