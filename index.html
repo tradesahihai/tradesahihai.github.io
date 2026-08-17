@@ -157,7 +157,7 @@
                         </div>
                     </div>
                     <div style="width:100%; height:420px; background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d;">
-                        <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY50&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>
+                        <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>
                     </div>
                 </div>
 
@@ -243,104 +243,12 @@
             <!-- 2. TODAY'S LEARNING PANEL -->
             <div id="learning-panel" class="viewport-panel">
                 <div class="stream-header">
-                    <h2>Today's Market Concepts & Learning Logs</h2>
-                    <span class="badge gold">Educational Hub</span>
+                    <h2>Market Concepts & Learning Logs</h2>
+                    <span class="badge gold">Educational Stream</span>
                 </div>
 
-                <!-- Learning Concept Modules -->
-                <div class="concept-cards-grid">
-                    <div class="concept-card">
-                        <h4>🎯 1. Central Pivot Range (CPR) Secrets</h4>
-                        <p>The Central Pivot Range (TC, Pivot, BC) measures market equilibrium. A <b>Virgin CPR</b> acts as a powerful magnet. When CPR is narrow, anticipate a high-velocity trending day. When wide, expect sideways range-bound swings.</p>
-                        <div class="concept-takeaways">
-                            <b>Rule:</b> Buy when price opens above CPR and retests TC with bullish wick rejection. Stop loss below BC.
-                        </div>
-                    </div>
-
-                    <div class="concept-card">
-                        <h4>📊 2. Volume Weighted Average Price (VWAP) & Traps</h4>
-                        <p>Institutions use VWAP as their benchmark execution price. Buying far above VWAP is statistically unfavorable (overbought). Look for mean reversion or VWAP bounces with 20 EMA confluence.</p>
-                        <div class="concept-takeaways">
-                            <b>Rule:</b> Best intraday entries occur within 0.2% - 0.4% band distance from the anchored Session VWAP.
-                        </div>
-                    </div>
-
-                    <div class="concept-card">
-                        <h4>🛡️ 3. The 1% Risk of Ruin Mathematics</h4>
-                        <p>Never risk more than 1% to 1.5% of total account capital per trade. If your stop loss is ₹30 on a ₹2,500 stock, your maximum position size with a ₹1,00,000 account risking ₹1,000 is 33 shares (₹1,000 / ₹30).</p>
-                        <div class="concept-takeaways">
-                            <b>Rule:</b> Position Size = (Capital × Risk %) ÷ (Entry Price - Stop Loss). Never exceed this formula!
-                        </div>
-                    </div>
-
-                    <div class="concept-card">
-                        <h4>🕯️ 4. Multi-Timeframe Top-Down Confluence</h4>
-                        <p>Always align your intraday setup with the Daily and 1-Hour trend direction. Trading in the direction of the higher timeframe trend boosts setup win-rate from ~45% to over 65%.</p>
-                        <div class="concept-takeaways">
-                            <b>Rule:</b> Daily: Trend Bias | 1-Hour: Key S/R Levels | 5-Minute: Precision Trigger & Stop Loss.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Candlestick Visualizer Mini-Matrix -->
-                <div class="display-card-v2">
-                    <h3 style="font-size:0.95rem; color:#fff; margin-bottom:0.75rem;">🕯️ High-Probability Candlestick Patterns</h3>
-                    <div class="candlestick-visual-grid">
-                        <div class="candlestick-card">
-                            <div style="font-size:0.8rem; font-weight:700; color:#39d353;">Bullish Hammer</div>
-                            <div class="candle-diagram">
-                                <svg width="40" height="70" viewBox="0 0 40 70">
-                                    <line x1="20" y1="10" x2="20" y2="60" stroke="#39d353" stroke-width="2"/>
-                                    <rect x="10" y="10" width="20" height="15" fill="#39d353" rx="2"/>
-                                </svg>
-                            </div>
-                            <div style="font-size:0.7rem; color:#8b949e;">Strong rejection of lower prices at support</div>
-                        </div>
-
-                        <div class="candlestick-card">
-                            <div style="font-size:0.8rem; font-weight:700; color:#39d353;">Bullish Engulfing</div>
-                            <div class="candle-diagram">
-                                <svg width="60" height="70" viewBox="0 0 60 70">
-                                    <line x1="15" y1="20" x2="15" y2="50" stroke="#f85149" stroke-width="2"/>
-                                    <rect x="8" y="25" width="14" height="20" fill="#f85149" rx="2"/>
-                                    <line x1="42" y1="10" x2="42" y2="60" stroke="#39d353" stroke-width="2"/>
-                                    <rect x="32" y="15" width="20" height="40" fill="#39d353" rx="2"/>
-                                </svg>
-                            </div>
-                            <div style="font-size:0.7rem; color:#8b949e;">Complete momentum shift favoring buyers</div>
-                        </div>
-
-                        <div class="candlestick-card">
-                            <div style="font-size:0.8rem; font-weight:700; color:#f85149;">Shooting Star</div>
-                            <div class="candle-diagram">
-                                <svg width="40" height="70" viewBox="0 0 40 70">
-                                    <line x1="20" y1="10" x2="20" y2="60" stroke="#f85149" stroke-width="2"/>
-                                    <rect x="10" y="45" width="20" height="15" fill="#f85149" rx="2"/>
-                                </svg>
-                            </div>
-                            <div style="font-size:0.7rem; color:#8b949e;">Rejection of higher prices near resistance</div>
-                        </div>
-
-                        <div class="candlestick-card">
-                            <div style="font-size:0.8rem; font-weight:700; color:#58a6ff;">Morning Star</div>
-                            <div class="candle-diagram">
-                                <svg width="70" height="70" viewBox="0 0 70 70">
-                                    <rect x="5" y="15" width="14" height="30" fill="#f85149" rx="2"/>
-                                    <rect x="28" y="48" width="14" height="10" fill="#ffb300" rx="2"/>
-                                    <rect x="51" y="18" width="14" height="28" fill="#39d353" rx="2"/>
-                                </svg>
-                            </div>
-                            <div style="font-size:0.7rem; color:#8b949e;">3-candle reversal pattern at major swing lows</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Historical Learning Logs Section -->
-                <div id="learning-archive-wrapper" style="margin-top:2rem;">
-                    <div class="timeline-date-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:0.5rem; margin-bottom:0.75rem;">
-                        <span style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">📚 Historical Learning Logs</span>
-                        <span style="font-size:0.7rem; color:#8b949e;">Click Read More to expand previous logs</span>
-                    </div>
+                <!-- Synced Learning Logs Stream Container -->
+                <div id="learning-archive-wrapper" style="margin-top:0.5rem;">
                     <div id="stream-learning-container"></div>
                 </div>
             </div>
@@ -348,119 +256,12 @@
             <!-- 3. STRATEGIES PLAYBOOK PANEL -->
             <div id="strategy-panel" class="viewport-panel">
                 <div class="stream-header">
-                    <h2>Systematic Strategy Execution Rules</h2>
+                    <h2>Strategy Execution Playbooks</h2>
                     <span class="badge green">Trading Playbook</span>
                 </div>
 
-                <div class="strategy-playbook-grid">
-                    
-                    <!-- Strategy 1 -->
-                    <div class="strategy-box">
-                        <div class="strategy-top">
-                            <div class="strategy-title">⚡ 1. 15-Minute Opening Range Breakout (ORB)</div>
-                            <div class="strategy-meta-chips">
-                                <span class="strategy-chip">Win Rate: ~68%</span>
-                                <span class="strategy-chip">Risk:Reward: 1:2.5</span>
-                                <span class="strategy-chip">Asset: Nifty / Bank Nifty / Bluechips</span>
-                            </div>
-                        </div>
-                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
-                            Captures institutional momentum in the first hour of cash session. Mark High and Low of the first 15-minute candle (9:15 - 9:30 AM IST).
-                        </p>
-                        <div class="strategy-params-grid">
-                            <div class="strategy-param-item">
-                                <div class="param-label">Entry Trigger</div>
-                                <div class="param-val green">5-min close above 15m High</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Stop Loss</div>
-                                <div class="param-val red">Midpoint of 15m candle</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Target 1 & 2</div>
-                                <div class="param-val blue">1.5x & 2.0x Range Size</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Execution Time</div>
-                                <div class="param-val gold">9:30 AM – 11:00 AM</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Strategy 2 -->
-                    <div class="strategy-box">
-                        <div class="strategy-top">
-                            <div class="strategy-title">🌊 2. VWAP + 20 EMA Pullback Trend Rider</div>
-                            <div class="strategy-meta-chips">
-                                <span class="strategy-chip">Win Rate: ~64%</span>
-                                <span class="strategy-chip">Risk:Reward: 1:3</span>
-                                <span class="strategy-chip">Asset: Trend Day Stocks</span>
-                            </div>
-                        </div>
-                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
-                            Wait for price to establish a clear trend above VWAP & 20 EMA. Never chase the breakout. Enter exclusively when price pulls back to test the confluence zone.
-                        </p>
-                        <div class="strategy-params-grid">
-                            <div class="strategy-param-item">
-                                <div class="param-label">Entry Trigger</div>
-                                <div class="param-val green">Bullish pin bar on 20 EMA + VWAP</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Stop Loss</div>
-                                <div class="param-val red">2 ATR below VWAP</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Target</div>
-                                <div class="param-val blue">Previous Day High / 2R Trailing</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Trailing Rule</div>
-                                <div class="param-val gold">Trail with 20 EMA on 5m chart</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Strategy 3 -->
-                    <div class="strategy-box">
-                        <div class="strategy-top">
-                            <div class="strategy-title">🎯 3. CPR Narrow Range Breakout</div>
-                            <div class="strategy-meta-chips">
-                                <span class="strategy-chip">Win Rate: ~71%</span>
-                                <span class="strategy-chip">Risk:Reward: 1:2</span>
-                                <span class="strategy-chip">Asset: Index Futures & Options</span>
-                            </div>
-                        </div>
-                        <p style="font-size:0.8rem; line-height:1.5; color:#c9d1d9; margin-bottom:0.5rem;">
-                            When daily Central Pivot Range width is less than 0.15% of spot price, a massive trending breakout occurs 8 out of 10 times.
-                        </p>
-                        <div class="strategy-params-grid">
-                            <div class="strategy-param-item">
-                                <div class="param-label">Condition</div>
-                                <div class="param-val green">Narrow CPR + Above Prior Day High</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Stop Loss</div>
-                                <div class="param-val red">Central Pivot Line</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Target</div>
-                                <div class="param-val blue">R2 & R3 Camarilla Levels</div>
-                            </div>
-                            <div class="strategy-param-item">
-                                <div class="param-label">Filter</div>
-                                <div class="param-val gold">RSI > 60 on 15m time frame</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Historical Strategy Playbooks Section -->
-                <div id="strategy-archive-wrapper" style="margin-top:2rem;">
-                    <div class="timeline-date-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:0.5rem; margin-bottom:0.75rem;">
-                        <span style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">⚡ Historical Strategy Playbooks</span>
-                        <span style="font-size:0.7rem; color:#8b949e;">Click Read More to expand previous playbooks</span>
-                    </div>
+                <!-- Synced Strategy Playbooks Stream Container -->
+                <div id="strategy-archive-wrapper" style="margin-top:0.5rem;">
                     <div id="stream-strategy-container"></div>
                 </div>
             </div>

@@ -265,8 +265,7 @@ function switchTvInterval(interval, btnEl) {
 function initOrUpdateTvWidget() {
     const iframe = document.getElementById('tv-widget-iframe');
     let tvEmbedSymbol = currentTvSymbol;
-    if (tvEmbedSymbol === 'NSE:NIFTY') tvEmbedSymbol = 'NSE:NIFTY50';
-    if (tvEmbedSymbol === 'NSE:BANKNIFTY') tvEmbedSymbol = 'NSE:BANKNIFTY';
+    if (tvEmbedSymbol === 'NSE:NIFTY50') tvEmbedSymbol = 'NSE:NIFTY';
     
     if (iframe) {
         iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvEmbedSymbol)}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata`;
@@ -1120,24 +1119,46 @@ async function fetchCloudAndFlatData() {
     });
 
     if (totalDailyArchiveCount === 0 && dailyContainer) {
-        dailyContainer.innerHTML = `<div style="padding:1rem; text-align:center; color:#8b949e; font-size:0.8rem; background:#0d1117; border:1px dashed #21262d; border-radius:6px;">
-            No older archive records for this period.
-        </div>`;
+        dailyContainer.innerHTML = `
+            <div style="padding:1.5rem 1rem; text-align:center; color:#8b949e; font-size:0.82rem; background:#0d1117; border:1px dashed #30363d; border-radius:6px;">
+                <div style="font-size:1.4rem; margin-bottom:0.35rem;">📚</div>
+                <div style="font-weight:600; color:#f0f6fc;">No Historical Daily Analysis Records</div>
+                <div style="font-size:0.75rem; color:#6e7681; margin-top:0.25rem;">Older daily market reports from previous sessions will be listed here.</div>
+            </div>
+        `;
     }
     if (totalLearningCount === 0 && learningContainer) {
-        learningContainer.innerHTML = `<div style="padding:1rem; text-align:center; color:#8b949e; font-size:0.8rem; background:#0d1117; border:1px dashed #21262d; border-radius:6px;">
-            No older learning logs for this period.
-        </div>`;
+        learningContainer.innerHTML = `
+            <div style="padding:1.5rem 1rem; text-align:center; color:#8b949e; font-size:0.82rem; background:#0d1117; border:1px dashed #30363d; border-radius:6px;">
+                <div style="font-size:1.4rem; margin-bottom:0.35rem;">🧠</div>
+                <div style="font-weight:600; color:#f0f6fc;">No Learning Posts Uploaded Yet</div>
+                <div style="font-size:0.75rem; color:#6e7681; margin-top:0.25rem;">
+                    Add <code>learning_*.txt</code> files to <code>data/${currentYear}/${currentMonthName}/</code> in your GitHub repository or publish through your backend.
+                </div>
+            </div>
+        `;
     }
     if (totalStrategyCount === 0 && strategyContainer) {
-        strategyContainer.innerHTML = `<div style="padding:1rem; text-align:center; color:#8b949e; font-size:0.8rem; background:#0d1117; border:1px dashed #21262d; border-radius:6px;">
-            No older strategy playbooks for this period.
-        </div>`;
+        strategyContainer.innerHTML = `
+            <div style="padding:1.5rem 1rem; text-align:center; color:#8b949e; font-size:0.82rem; background:#0d1117; border:1px dashed #30363d; border-radius:6px;">
+                <div style="font-size:1.4rem; margin-bottom:0.35rem;">⚡</div>
+                <div style="font-weight:600; color:#f0f6fc;">No Strategy Playbooks Uploaded Yet</div>
+                <div style="font-size:0.75rem; color:#6e7681; margin-top:0.25rem;">
+                    Add <code>strategy_*.txt</code> files to <code>data/${currentYear}/${currentMonthName}/</code> in your GitHub repository or publish through your backend.
+                </div>
+            </div>
+        `;
     }
     if (totalReelsCount === 0 && reelsContainer) {
-        reelsContainer.innerHTML = `<div style="padding:1rem; text-align:center; color:#8b949e; font-size:0.8rem; background:#0d1117; border:1px dashed #21262d; border-radius:6px;">
-            No older video bytes for this period.
-        </div>`;
+        reelsContainer.innerHTML = `
+            <div style="padding:1.5rem 1rem; text-align:center; color:#8b949e; font-size:0.82rem; background:#0d1117; border:1px dashed #30363d; border-radius:6px;">
+                <div style="font-size:1.4rem; margin-bottom:0.35rem;">🎬</div>
+                <div style="font-weight:600; color:#f0f6fc;">No Reels or Video Bytes Uploaded Yet</div>
+                <div style="font-size:0.75rem; color:#6e7681; margin-top:0.25rem;">
+                    Add <code>*_reel.txt</code> files or upload video clips (<code>.mp4</code>/<code>.webm</code>) to display market byte reels here.
+                </div>
+            </div>
+        `;
     }
 
     sortedDates.forEach(dateGroupKey => {
