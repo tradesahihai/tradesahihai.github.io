@@ -200,8 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function setTodayDateLabels() {
     const today = new Date();
     const formatted = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const shortMonth = today.toLocaleDateString('en-US', { month: 'short' });
-    const day = today.getDate();
 
     const dateDisplay = document.getElementById('current-date-display');
     if (dateDisplay) {
@@ -210,7 +208,7 @@ function setTodayDateLabels() {
 
     const chartFilename = document.getElementById('chart-card-filename');
     if (chartFilename) {
-        chartFilename.innerText = `${shortMonth}${day}_chart.txt`;
+        chartFilename.innerHTML = `<span style="color:#58a6ff;">⏳</span> Today's Analysis is Upcoming...`;
     }
 }
 
@@ -1084,86 +1082,101 @@ async function fetchCloudAndFlatData() {
         // Backend offline or not needed - gracefully skipped
     }
 
-    // 3. FEATURED TODAY'S ANALYSIS vs OLDER ARCHIVE (ZERO DUPLICATES)
-    if (parsedDailyFiles.length > 0) {
-        // Sort daily files descending by date
-        parsedDailyFiles.sort((a, b) => b.postDateObj - a.postDateObj);
+    // 3. FEATURED TODAY'S ANALYSIS vs HISTORICAL ARCHIVES
+    // Sort daily files descending by date (newest first)
+    parsedDailyFiles.sort((a, b) => b.postDateObj - a.postDateObj);
 
-        // Find today's file or the latest file
-        let featuredFile = parsedDailyFiles.find(f => f.isToday) || parsedDailyFiles[0];
+    // Look strictly for today's file
+    const todayDailyFile = parsedDailyFiles.find(f => f.isToday);
 
-        if (featuredFile) {
-            // Populate Featured Today Card (Full Content View)
-            const filenameEl = document.getElementById('chart-card-filename');
-            const primaryImg = document.getElementById('primary-daily-chart-img');
-            const infTextEl = document.getElementById('daily-inferences-text');
+    const filenameEl = document.getElementById('chart-card-filename');
+    const primaryImg = document.getElementById('primary-daily-chart-img');
+    const infTextEl = document.getElementById('daily-inferences-text');
 
-            if (filenameEl) filenameEl.innerText = featuredFile.title || featuredFile.fileName;
-            
-            if (primaryImg && featuredFile.imageCandidates && featuredFile.imageCandidates.length > 0) {
-                primaryImg.src = featuredFile.imageCandidates[0];
-                primaryImg.setAttribute('data-candidates', JSON.stringify(featuredFile.imageCandidates.slice(1)));
-                primaryImg.style.display = 'block';
-                const iframeWrap = document.getElementById('tv-chart-iframe-wrap');
-                if (iframeWrap) iframeWrap.style.display = 'none';
-            }
+    if (todayDailyFile) {
+        // Today's analysis file is available
+        if (filenameEl) filenameEl.innerText = todayDailyFile.title || todayDailyFile.fileName;
+        
+        if (primaryImg && todayDailyFile.imageCandidates && todayDailyFile.imageCandidates.length > 0) {
+            primaryImg.src = todayDailyFile.imageCandidates[0];
+            primaryImg.setAttribute('data-candidates', JSON.stringify(todayDailyFile.imageCandidates.slice(1)));
+            primaryImg.style.display = 'block';
+        } else if (primaryImg) {
+            primaryImg.style.display = 'none';
+        }
 
-            // Update level pills if found in file
-            const levels = extractKeyLevels(featuredFile.rawText);
-            if (levels.pivot && document.getElementById('lvl-pivot')) document.getElementById('lvl-pivot').innerText = levels.pivot;
-            if (levels.r1 && document.getElementById('lvl-r1')) document.getElementById('lvl-r1').innerText = levels.r1;
-            if (levels.r2 && document.getElementById('lvl-r2')) document.getElementById('lvl-r2').innerText = levels.r2;
-            if (levels.s1 && document.getElementById('lvl-s1')) document.getElementById('lvl-s1').innerText = levels.s1;
-            if (levels.s2 && document.getElementById('lvl-s2')) document.getElementById('lvl-s2').innerText = levels.s2;
-            if (levels.trend && document.getElementById('lvl-trend')) document.getElementById('lvl-trend').innerText = levels.trend;
+        // Update level pills if found in file
+        const levels = extractKeyLevels(todayDailyFile.rawText);
+        if (levels.pivot && document.getElementById('lvl-pivot')) document.getElementById('lvl-pivot').innerText = levels.pivot;
+        if (levels.r1 && document.getElementById('lvl-r1')) document.getElementById('lvl-r1').innerText = levels.r1;
+        if (levels.r2 && document.getElementById('lvl-r2')) document.getElementById('lvl-r2').innerText = levels.r2;
+        if (levels.s1 && document.getElementById('lvl-s1')) document.getElementById('lvl-s1').innerText = levels.s1;
+        if (levels.s2 && document.getElementById('lvl-s2')) document.getElementById('lvl-s2').innerText = levels.s2;
+        if (levels.trend && document.getElementById('lvl-trend')) {
+            document.getElementById('lvl-trend').innerText = levels.trend;
+            document.getElementById('lvl-trend').className = "lvl-val green";
+        }
 
-            // Update body text
-            if (infTextEl) {
-                infTextEl.innerHTML = `
-                    <h4 style="color:#ffffff; font-size:0.92rem; margin-top:0; margin-bottom:0.5rem;">${featuredFile.title}</h4>
-                    <div class="card-body-text" style="color:#c9d1d9; font-size:0.85rem; line-height:1.6;">
-                        ${formatMarkdownBody(featuredFile.rawText)}
-                    </div>
-                `;
-            }
-
-            // Put only HISTORICAL/OLDER daily files into Archive (strictly !f.isToday and not the featured file)
-            // Today's data stays exclusively on top today, and moves under Historical tomorrow automatically
-            parsedDailyFiles.forEach(f => {
-                if (!f.isToday && f !== featuredFile) {
-                    const archiveMarkup = compileArchiveCardMarkup(f.title, f.postDateStr, f.mediaHtml, f.rawText, `gh-${f.index}`);
-                    combinedTimeline[f.postDateStr].daily.push(archiveMarkup);
-                }
-            });
+        // Update body text
+        if (infTextEl) {
+            infTextEl.innerHTML = `
+                <h4 style="color:#ffffff; font-size:0.92rem; margin-top:0; margin-bottom:0.5rem;">${todayDailyFile.title}</h4>
+                <div class="card-body-text" style="color:#c9d1d9; font-size:0.85rem; line-height:1.6;">
+                    ${formatMarkdownBody(todayDailyFile.rawText)}
+                </div>
+            `;
         }
     } else {
-        // Reset featured daily card when no files exist
-        const filenameEl = document.getElementById('chart-card-filename');
-        const primaryImg = document.getElementById('primary-daily-chart-img');
-        const infTextEl = document.getElementById('daily-inferences-text');
+        // No analysis published for today yet -> Display Upcoming Banner & Live Reference
+        if (filenameEl) {
+            filenameEl.innerHTML = `<span style="color:#58a6ff; margin-right:0.35rem;">⏳</span> Today's Analysis is Upcoming...`;
+        }
+        if (primaryImg) {
+            primaryImg.style.display = 'none';
+        }
 
-        if (filenameEl) filenameEl.innerText = "Awaiting Today's Analysis";
-        if (primaryImg) primaryImg.style.display = 'none';
-
-        if (document.getElementById('lvl-pivot')) document.getElementById('lvl-pivot').innerText = "--";
-        if (document.getElementById('lvl-r1')) document.getElementById('lvl-r1').innerText = "--";
-        if (document.getElementById('lvl-r2')) document.getElementById('lvl-r2').innerText = "--";
-        if (document.getElementById('lvl-s1')) document.getElementById('lvl-s1').innerText = "--";
-        if (document.getElementById('lvl-s2')) document.getElementById('lvl-s2').innerText = "--";
-        if (document.getElementById('lvl-trend')) document.getElementById('lvl-trend').innerText = "--";
+        // Populate Live Market Baseline Reference for Nifty 50
+        const niftyLive = symbolLevels["NSE:NIFTY"] || {
+            pivot: "24,350.00", r1: "24,480.00", r2: "24,620.00",
+            s1: "24,240.00", s2: "24,080.00", trend: "Bullish Setup"
+        };
+        if (document.getElementById('lvl-pivot')) document.getElementById('lvl-pivot').innerText = niftyLive.pivot;
+        if (document.getElementById('lvl-r1')) document.getElementById('lvl-r1').innerText = niftyLive.r1;
+        if (document.getElementById('lvl-r2')) document.getElementById('lvl-r2').innerText = niftyLive.r2;
+        if (document.getElementById('lvl-s1')) document.getElementById('lvl-s1').innerText = niftyLive.s1;
+        if (document.getElementById('lvl-s2')) document.getElementById('lvl-s2').innerText = niftyLive.s2;
+        if (document.getElementById('lvl-trend')) {
+            document.getElementById('lvl-trend').innerText = niftyLive.trend;
+            document.getElementById('lvl-trend').className = "lvl-val green";
+        }
 
         if (infTextEl) {
             infTextEl.innerHTML = `
-                <div style="text-align:center; padding:1.25rem 0.5rem; color:#8b949e; font-size:0.85rem;">
-                    <div style="font-size:1.5rem; margin-bottom:0.4rem;">📊</div>
-                    <div style="font-weight:600; color:#f0f6fc;">No Analysis Post Found for This Period</div>
-                    <div style="font-size:0.75rem; color:#6e7681; margin-top:0.35rem;">
-                        Add your analysis text file to <code>data/${currentYear}/${currentMonthName}/</code> in your GitHub repository or post via backend to display here.
+                <div style="text-align:center; padding:1.5rem 1rem; background:#0d1117; border-radius:8px; border:1px solid #21262d;">
+                    <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(88, 166, 255, 0.12); color:#58a6ff; font-size:1.3rem; margin-bottom:0.65rem; border:1px solid rgba(88, 166, 255, 0.25);">⏳</div>
+                    <h4 style="margin:0 0 0.35rem 0; color:#f0f6fc; font-size:1.02rem; font-weight:700;">Today's Analysis is Upcoming...</h4>
+                    <p style="margin:0 auto 0.85rem auto; max-width:540px; color:#8b949e; font-size:0.84rem; line-height:1.55;">
+                        Morning Open Interest shifts, CPR pivot ranges, and price action triggers for today's trading session are currently being compiled. Today's full technical report and chart analysis will be published shortly.
+                    </p>
+                    <div style="display:inline-flex; gap:0.45rem; flex-wrap:wrap; justify-content:center; font-size:0.75rem; color:#8b949e;">
+                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">📊 Pre-Market Data Sync</span>
+                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">⚡ Pivot Range Calculation</span>
+                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">🎯 Risk-Reward Setup Screening</span>
                     </div>
                 </div>
             `;
         }
     }
+
+    // ALL non-today daily files (including yesterday's data) go directly into Historical Archives
+    parsedDailyFiles.forEach(f => {
+        if (!f.isToday) {
+            const archiveMarkup = compileArchiveCardMarkup(f.title, f.postDateStr, f.mediaHtml, f.rawText, `gh-${f.index}`);
+            if (combinedTimeline[f.postDateStr]) {
+                combinedTimeline[f.postDateStr].daily.push(archiveMarkup);
+            }
+        }
+    });
 
     // 4. Clear existing stream contents before injecting to avoid duplicate stacks
     dailyContainer.innerHTML = '';

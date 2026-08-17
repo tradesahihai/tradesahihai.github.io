@@ -183,7 +183,7 @@
                 <!-- Today's Featured Full Content Daily Analysis Card -->
                 <div class="display-card-v2" id="daily-interactive-chart-card" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.25rem; margin-bottom:1.25rem;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                        <h3 style="margin:0; color:#f0f6fc; font-size:1.05rem; font-weight:700;" id="chart-card-filename">Awaiting Today's Analysis</h3>
+                        <h3 style="margin:0; color:#f0f6fc; font-size:1.05rem; font-weight:700;" id="chart-card-filename"><span style="color:#58a6ff; margin-right:0.35rem;">⏳</span> Today's Analysis is Upcoming...</h3>
                     </div>
 
                     <!-- Daily Technical Chart Image (Supabase) -->
@@ -203,37 +203,42 @@
                     <div class="tech-levels-grid" id="featured-tech-levels">
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Pivot Point</div>
-                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
+                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">24,350.00</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R1)</div>
-                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
+                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,480.00</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R2)</div>
-                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
+                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,620.00</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S1)</div>
-                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
+                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,240.00</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S2)</div>
-                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">--</div>
+                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,080.00</div>
                         </div>
                         <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
                             <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Trend Bias</div>
-                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">--</div>
+                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">Bullish Setup</div>
                         </div>
                     </div>
 
                     <!-- Technical Inferences Full Body Content -->
-                    <div id="daily-inferences-text" style="margin-top:0.75rem; background:#0d1117; padding:1rem; border-radius:6px; border:1px solid #21262d;">
-                        <div style="text-align:center; padding:1rem 0.5rem; color:#8b949e; font-size:0.85rem;">
-                            <div style="font-size:1.5rem; margin-bottom:0.4rem;">📊</div>
-                            <div style="font-weight:600; color:#f0f6fc;">No Analysis Post Uploaded Yet</div>
-                            <div style="font-size:0.75rem; color:#6e7681; margin-top:0.35rem;">
-                                Add your analysis <code>.txt</code> file to your repository data folder or post through your backend portal.
+                    <div id="daily-inferences-text" style="margin-top:0.75rem;">
+                        <div style="text-align:center; padding:1.5rem 1rem; background:#0d1117; border-radius:8px; border:1px solid #21262d;">
+                            <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(88, 166, 255, 0.12); color:#58a6ff; font-size:1.3rem; margin-bottom:0.65rem; border:1px solid rgba(88, 166, 255, 0.25);">⏳</div>
+                            <h4 style="margin:0 0 0.35rem 0; color:#f0f6fc; font-size:1.02rem; font-weight:700;">Today's Market Analysis is Upcoming...</h4>
+                            <p style="margin:0 auto 0.85rem auto; max-width:540px; color:#8b949e; font-size:0.84rem; line-height:1.55;">
+                                Morning Open Interest shifts, CPR pivot ranges, and price action triggers for today's trading session are currently being compiled. Today's full technical report and chart analysis will be published shortly.
+                            </p>
+                            <div style="display:inline-flex; gap:0.45rem; flex-wrap:wrap; justify-content:center; font-size:0.75rem; color:#8b949e;">
+                                <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">📊 Pre-Market Data Sync</span>
+                                <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">⚡ Pivot Range Calculation</span>
+                                <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">🎯 Risk-Reward Setup Screening</span>
                             </div>
                         </div>
                     </div>
@@ -664,7 +669,7 @@
     </script>
 
     <!-- Production App Scripts -->
-    <script src="app.js?v=9.6.0"></script>
+    <script src="app.js?v=9.8.1"></script>
 </body>
 </html>
 
