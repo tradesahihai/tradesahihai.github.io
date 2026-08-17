@@ -145,28 +145,38 @@
                     <span class="badge blue">Live Charts</span>
                 </div>
 
-                <!-- Interactive TradingView Live Chart Box -->
+                <!-- Interactive Live Multi-Platform Indian Market Chart -->
                 <div class="display-card-v2" id="live-market-indices-card" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:0.85rem; margin-bottom:1.5rem;">
                     <div class="chart-toolbar" style="display:flex; justify-content:space-between; align-items:center; background:#0d1117; padding:0.5rem 0.75rem; border-radius:6px 6px 0 0; border:1px solid #30363d; border-bottom:none; flex-wrap:wrap; gap:0.5rem;">
                         <div class="chart-symbol-pills" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-                            <button class="chart-pill-btn active" style="background:#238636; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
+                            <button class="chart-pill-btn active" style="background:#238636; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="switchTvChart('BSE:SENSEX', this)">SENSEX</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('BSE:SENSEX', this)">SENSEX</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:FINNIFTY', this)">FIN NIFTY</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:RELIANCE', this)">RELIANCE</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:HDFCBANK', this)">HDFC BANK</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:INFY', this)">INFOSYS</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:ICICIBANK', this)">ICICI BANK</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:TCS', this)">TCS</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:FINNIFTY', this)">FIN NIFTY</button>
                         </div>
-                        <div class="chart-timeframe-pills" style="display:flex; gap:0.25rem;">
-                            <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('15', this)">15m</button>
-                            <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('60', this)">1h</button>
-                            <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:3px 8px; font-size:0.72rem; font-weight:700; border-radius:3px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
+                        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                            <!-- Platform Engine Switcher -->
+                            <div class="chart-platform-pills" style="display:flex; gap:0.25rem;">
+                                <button class="chart-platform-btn active" id="engine-tv-btn" onclick="switchChartPlatform('tradingview', this)" title="TradingView Live Unrestricted Candlestick Engine">TradingView Pro</button>
+                                <button class="chart-platform-btn" id="engine-gauge-btn" onclick="switchChartPlatform('tech-gauge', this)" title="Technical Analysis Gauges & Moving Averages">Technical Gauge</button>
+                                <button class="chart-platform-btn" id="engine-screener-btn" onclick="switchChartPlatform('screener', this)" title="Indian Market Live Screener & Heatmap">Market Screener</button>
+                                <button class="chart-platform-btn" id="engine-yahoo-btn" onclick="switchChartPlatform('yahoo', this)" title="Yahoo Finance Live Indian Market Feed">Yahoo Live</button>
+                            </div>
+                            <!-- Timeframe Pills -->
+                            <div class="chart-timeframe-pills" style="display:flex; gap:0.25rem;">
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('15', this)">15m</button>
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('60', this)">1h</button>
+                                <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:3px 8px; font-size:0.72rem; font-weight:700; border-radius:3px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
+                            </div>
                         </div>
                     </div>
-                    <div id="tv-widget-container-box" style="width:100%; height:460px; background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d;">
-                        <!-- Dynamically populated with TradingView Advanced Indian Market Widget -->
+                    <div id="tv-widget-container-box" style="width:100%; height:460px; background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d; position:relative;">
+                        <!-- Dynamically populated with Live Indian Market Multi-Engine Chart -->
                     </div>
                 </div>
 
@@ -201,29 +211,29 @@
 
                     <!-- Key Technical Levels Matrix -->
                     <div class="tech-levels-grid" id="featured-tech-levels">
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Pivot Point</div>
-                            <div class="lvl-val gold" id="lvl-pivot" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">24,350.00</div>
+                        <div class="tech-level-box" title="Pivot Point: 24,350.00">
+                            <div class="lvl-title">Pivot Point</div>
+                            <div class="lvl-val gold" id="lvl-pivot">24,350.00</div>
                         </div>
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R1)</div>
-                            <div class="lvl-val red" id="lvl-r1" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,480.00</div>
+                        <div class="tech-level-box" title="Resistance 1: 24,480.00">
+                            <div class="lvl-title">Resistance (R1)</div>
+                            <div class="lvl-val red" id="lvl-r1">24,480.00</div>
                         </div>
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Resistance (R2)</div>
-                            <div class="lvl-val red" id="lvl-r2" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">24,620.00</div>
+                        <div class="tech-level-box" title="Resistance 2: 24,620.00">
+                            <div class="lvl-title">Resistance (R2)</div>
+                            <div class="lvl-val red" id="lvl-r2">24,620.00</div>
                         </div>
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S1)</div>
-                            <div class="lvl-val green" id="lvl-s1" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,240.00</div>
+                        <div class="tech-level-box" title="Support 1: 24,240.00">
+                            <div class="lvl-title">Support (S1)</div>
+                            <div class="lvl-val green" id="lvl-s1">24,240.00</div>
                         </div>
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Support (S2)</div>
-                            <div class="lvl-val green" id="lvl-s2" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">24,080.00</div>
+                        <div class="tech-level-box" title="Support 2: 24,110.00">
+                            <div class="lvl-title">Support (S2)</div>
+                            <div class="lvl-val green" id="lvl-s2">24,110.00</div>
                         </div>
-                        <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                            <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600;">Trend Bias</div>
-                            <div class="lvl-val green" id="lvl-trend" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap;">Bullish Setup</div>
+                        <div class="tech-level-box" title="Trend Bias: Bullish Bias">
+                            <div class="lvl-title">Trend Bias</div>
+                            <div class="lvl-val green" id="lvl-trend">Bullish Bias</div>
                         </div>
                     </div>
 
@@ -669,7 +679,7 @@
     </script>
 
     <!-- Production App Scripts -->
-    <script src="app.js?v=9.8.1"></script>
+    <script src="app.js?v=9.9.5"></script>
 </body>
 </html>
 

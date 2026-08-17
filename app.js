@@ -109,57 +109,120 @@ function getSupabaseImageCandidates(fileName) {
     return [...new Set(candidates)];
 }
 
-// Current selected TV chart symbol & interval
-let currentTvSymbol = "NSE:NIFTY";
+// Current selected TV chart symbol, interval & platform engine
+let currentTvSymbol = "BSE:SENSEX";
 let currentTvInterval = "D";
+let currentChartPlatform = "tradingview"; // "tradingview" | "tech-gauge" | "screener" | "yahoo"
+
+// TradingView Advanced Chart symbol mapping using 100% unrestricted BSE & global market feeds
+const TV_ADVANCED_SYMBOL_MAP = {
+    "NSE:NIFTY": "BSE:SENSEX",
+    "NIFTY": "BSE:SENSEX",
+    "NIFTY50": "BSE:SENSEX",
+    "NSE:BANKNIFTY": "BSE:BANKEX",
+    "BANKNIFTY": "BSE:BANKEX",
+    "BSE:SENSEX": "BSE:SENSEX",
+    "SENSEX": "BSE:SENSEX",
+    "NSE:FINNIFTY": "BSE:BANKEX",
+    "FINNIFTY": "BSE:BANKEX",
+    "NSE:RELIANCE": "BSE:RELIANCE",
+    "RELIANCE": "BSE:RELIANCE",
+    "NSE:HDFCBANK": "BSE:HDFCBANK",
+    "HDFCBANK": "BSE:HDFCBANK",
+    "NSE:INFY": "BSE:INFY",
+    "INFY": "BSE:INFY",
+    "NSE:ICICIBANK": "BSE:ICICIBANK",
+    "ICICIBANK": "BSE:ICICIBANK",
+    "NSE:TCS": "BSE:TCS",
+    "TCS": "BSE:TCS"
+};
+
+// Technical Gauge Symbol mapping
+const TV_GAUGE_SYMBOL_MAP = {
+    "NSE:NIFTY": "BSE:SENSEX",
+    "NSE:BANKNIFTY": "BSE:BANKEX",
+    "BSE:SENSEX": "BSE:SENSEX",
+    "NSE:FINNIFTY": "BSE:BANKEX",
+    "NSE:RELIANCE": "BSE:RELIANCE",
+    "NSE:HDFCBANK": "BSE:HDFCBANK",
+    "NSE:INFY": "BSE:INFY",
+    "NSE:ICICIBANK": "BSE:ICICIBANK",
+    "NSE:TCS": "BSE:TCS"
+};
+
+// Yahoo Finance Indian symbols
+const YAHOO_INDIAN_SYMBOL_MAP = {
+    "NSE:NIFTY": "^NSEI",
+    "NSE:BANKNIFTY": "^NSEBANK",
+    "BSE:SENSEX": "^BSESN",
+    "NSE:FINNIFTY": "NIFTY_FIN_SERVICE.NS",
+    "NSE:RELIANCE": "RELIANCE.NS",
+    "NSE:HDFCBANK": "HDFCBANK.NS",
+    "NSE:INFY": "INFY.NS",
+    "NSE:ICICIBANK": "ICICIBANK.NS",
+    "NSE:TCS": "TCS.NS"
+};
+
+// Human friendly names
+const SYMBOL_DISPLAY_NAMES = {
+    "NSE:NIFTY": "NIFTY 50",
+    "NSE:BANKNIFTY": "BANK NIFTY",
+    "BSE:SENSEX": "BSE SENSEX",
+    "NSE:FINNIFTY": "FIN NIFTY",
+    "NSE:RELIANCE": "RELIANCE (BSE)",
+    "NSE:HDFCBANK": "HDFC BANK (BSE)",
+    "NSE:INFY": "INFOSYS (BSE)",
+    "NSE:ICICIBANK": "ICICI BANK (BSE)",
+    "NSE:TCS": "TCS (BSE)"
+};
 
 // Symbol level dictionary for quick interactive updates on Indian Market Indices & Stocks
 const symbolLevels = {
     "NSE:NIFTY": {
         pivot: "24,350.00", r1: "24,480.00", r2: "24,620.00",
-        s1: "24,240.00", s2: "24,110.00", trend: "Bullish Continuation", trendColor: "green",
+        s1: "24,240.00", s2: "24,110.00", trend: "Bullish Bias", trendColor: "green",
         header: "NIFTY 50 INDEX (NSE:NIFTY) – TECHNICAL CHART REPORT",
         text: "• <b>Price Structure:</b> NIFTY 50 holding firmly above the 24,240 demand cluster with expanding volume.\n• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive close above 24,480 opens the path towards 24,620 new ATH test.\n• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with strict stop loss below 24,240 for upside targets of 24,480 and 24,560."
     },
     "NSE:BANKNIFTY": {
         pivot: "50,450.00", r1: "50,850.00", r2: "51,200.00",
-        s1: "50,150.00", s2: "49,800.00", trend: "Consolidation Range", trendColor: "gold",
+        s1: "50,150.00", s2: "49,800.00", trend: "Consolidation", trendColor: "gold",
         header: "BANK NIFTY INDEX (NSE:BANKNIFTY) – TECHNICAL STRUCTURE & PIVOTS",
         text: "• <b>Price Structure:</b> Bank Nifty trading inside a tight 50,150 - 50,850 consolidation range above the 50-day EMA.\n• <b>Pivot Defense:</b> Strong support established at 50,150 (S1). Breakdown below 49,800 will trigger long liquidation.\n• <b>Trigger Level:</b> Breakout above 50,850 will invite sharp short-covering towards 51,200 and 51,500."
     },
     "BSE:SENSEX": {
         pivot: "80,200.00", r1: "80,650.00", r2: "81,100.00",
-        s1: "79,800.00", s2: "79,350.00", trend: "Bullish Momentum", trendColor: "green",
+        s1: "79,800.00", s2: "79,350.00", trend: "Bullish Trend", trendColor: "green",
         header: "BSE SENSEX INDEX (BSE:SENSEX) – BENCHMARK OUTLOOK",
         text: "• <b>Structure:</b> SENSEX sustaining above psychological 80,000 mark with strong leadership from IT and Banking heavyweights.\n• <b>Resistance:</b> Major supply zone at 80,650 (R1). Sustaining above this level triggers rally towards 81,100."
     },
     "NSE:FINNIFTY": {
         pivot: "23,100.00", r1: "23,320.00", r2: "23,550.00",
-        s1: "22,920.00", s2: "22,750.00", trend: "Range Accumulation", trendColor: "blue",
+        s1: "22,920.00", s2: "22,750.00", trend: "Accumulation", trendColor: "blue",
         header: "NIFTY FINANCIAL SERVICES (NSE:FINNIFTY) – DERIVATIVES OUTLOOK",
         text: "• <b>Pivots:</b> FINNIFTY consolidating between 22,920 and 23,320. Strong base at 23,000 round strike.\n• <b>Trigger:</b> Expiry momentum favors longs if price sustains above 23,150 pivot."
     },
     "NSE:RELIANCE": {
         pivot: "2,500.00", r1: "2,545.00", r2: "2,580.00",
-        s1: "2,465.00", s2: "2,430.00", trend: "Strong Bullish Breakout", trendColor: "green",
+        s1: "2,465.00", s2: "2,430.00", trend: "Breakout", trendColor: "green",
         header: "RELIANCE INDUSTRIES (NSE:RELIANCE) – PRICE ACTION SETUP",
         text: "• <b>Breakout Confirmation:</b> Reliance formed a bullish flag breakout on the daily chart with above-average institutional volume.\n• <b>Support Base:</b> 2,465 is the new demand floor. Sustaining above 2,500 keeps momentum intact for targets of 2,545 and 2,580."
     },
     "NSE:HDFCBANK": {
         pivot: "1,615.00", r1: "1,640.00", r2: "1,675.00",
-        s1: "1,595.00", s2: "1,570.00", trend: "Accumulation Zone", trendColor: "blue",
+        s1: "1,595.00", s2: "1,570.00", trend: "Range Bound", trendColor: "blue",
         header: "HDFC BANK (NSE:HDFCBANK) – RANGE ACCUMULATION ANALYSIS",
         text: "• <b>Key Zone:</b> HDFC Bank consolidating in the 1,595–1,640 accumulation box with declining selling pressure.\n• <b>Strategy:</b> Accumulate on dips near 1,600 with stop loss at 1,585 for swing target of 1,640–1,675."
     },
     "NSE:INFY": {
         pivot: "1,765.00", r1: "1,810.00", r2: "1,850.00",
-        s1: "1,740.00", s2: "1,710.00", trend: "Bullish Trend Rider", trendColor: "green",
+        s1: "1,740.00", s2: "1,710.00", trend: "Strong Momentum", trendColor: "green",
         header: "INFOSYS (NSE:INFY) – IT MOMENTUM LEADER",
         text: "• <b>Momentum:</b> Infy leading the Nifty IT index charge following strong multi-year contract renewals.\n• <b>Pivot Target:</b> Immediate resistance at 1,810. Support firmly pegged at 1,740."
     },
     "NSE:ICICIBANK": {
         pivot: "1,180.00", r1: "1,210.00", r2: "1,235.00",
-        s1: "1,160.00", s2: "1,140.00", trend: "Upward Channel", trendColor: "green",
+        s1: "1,160.00", s2: "1,140.00", trend: "Upward Trend", trendColor: "green",
         header: "ICICI BANK (NSE:ICICIBANK) – TREND CONTINUATION",
         text: "• <b>Structure:</b> Moving in a well-defined ascending price channel on daily charts.\n• <b>Support:</b> Lower trendline support at 1,160. Target at 1,210 and 1,235."
     },
@@ -250,7 +313,27 @@ function initializeTabStateView(targetTab, targetButton = null) {
 }
 
 /**
- * TradingView Chart Switcher (Symbols & Timeframes)
+ * Multi-Platform Indian Market Chart Switcher
+ */
+function switchChartPlatform(platform, btnEl) {
+    currentChartPlatform = platform;
+    document.querySelectorAll('.chart-platform-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = '#161b22';
+        b.style.color = '#8b949e';
+        b.style.borderColor = '#30363d';
+    });
+    if (btnEl) {
+        btnEl.classList.add('active');
+        btnEl.style.background = 'rgba(88, 166, 255, 0.15)';
+        btnEl.style.color = '#58a6ff';
+        btnEl.style.borderColor = '#58a6ff';
+    }
+    initOrUpdateTvWidget();
+}
+
+/**
+ * Symbol Switcher for Indian Indices & Stocks
  */
 function switchTvChart(symbol, btnEl) {
     currentTvSymbol = symbol;
@@ -293,51 +376,119 @@ function initOrUpdateTvWidget() {
     const container = document.getElementById('tv-widget-container-box');
     if (!container) return;
 
-    let cleanSymbol = currentTvSymbol || 'NSE:NIFTY';
-    if (cleanSymbol === 'NIFTY' || cleanSymbol === 'NIFTY50') cleanSymbol = 'NSE:NIFTY';
-    if (cleanSymbol === 'BANKNIFTY') cleanSymbol = 'NSE:BANKNIFTY';
-    if (cleanSymbol === 'SENSEX') cleanSymbol = 'BSE:SENSEX';
-    if (cleanSymbol === 'FINNIFTY') cleanSymbol = 'NSE:FINNIFTY';
+    const rawSymbol = currentTvSymbol || 'BSE:SENSEX';
+    const displayName = SYMBOL_DISPLAY_NAMES[rawSymbol] || rawSymbol;
+    const interval = currentTvInterval || "D";
 
-    container.innerHTML = `<div id="tradingview_chart_embed" style="width:100%; height:100%;"></div>`;
-
-    if (window.TradingView && typeof window.TradingView.widget === 'function') {
-        try {
-            tvWidgetInstance = new window.TradingView.widget({
-                "autosize": true,
-                "symbol": cleanSymbol,
-                "interval": currentTvInterval || "D",
-                "timezone": "Asia/Kolkata",
-                "theme": "dark",
-                "style": "1",
-                "locale": "in",
-                "toolbar_bg": "#0d1117",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "hide_side_toolbar": false,
-                "container_id": "tradingview_chart_embed"
-            });
-            return;
-        } catch (err) {
-            console.warn("TradingView widget instance fallback:", err);
-        }
+    // PLATFORM 1: TRADINGVIEW PRO (Unrestricted BSE & Global Market Feeds)
+    if (currentChartPlatform === 'tradingview') {
+        const mappedSymbol = TV_ADVANCED_SYMBOL_MAP[rawSymbol] || "BSE:SENSEX";
+        const widgetConfig = {
+            "autosize": true,
+            "symbol": mappedSymbol,
+            "interval": interval,
+            "timezone": "Asia/Kolkata",
+            "theme": "dark",
+            "style": "1",
+            "locale": "in",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "hide_side_toolbar": false,
+            "support_host": "https://www.tradingview.com"
+        };
+        const hash = encodeURIComponent(JSON.stringify(widgetConfig));
+        container.innerHTML = `
+            <iframe src="https://www.tradingview-widget.com/embed-widget/advanced-chart/?locale=in#${hash}" 
+                    style="width:100%; height:100%; border:none; display:block;" 
+                    allowtransparency="true" 
+                    scrolling="no">
+            </iframe>
+        `;
+        return;
     }
 
-    // Embed Widget Fallback with JSON hash params
-    const widgetConfig = {
-        "autosize": true,
-        "symbol": cleanSymbol,
-        "interval": currentTvInterval || "D",
-        "timezone": "Asia/Kolkata",
-        "theme": "dark",
-        "style": "1",
-        "locale": "in",
-        "enable_publishing": false,
-        "allow_symbol_change": true,
-        "support_host": "https://www.tradingview.com"
-    };
-    const hash = encodeURIComponent(JSON.stringify(widgetConfig));
-    container.innerHTML = `<iframe src="https://www.tradingview-widget.com/embed-widget/advanced-chart/?locale=in#${hash}" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>`;
+    // PLATFORM 2: TECHNICAL ANALYSIS GAUGES & OSCILLATORS (100% Whitelisted & Unrestricted)
+    if (currentChartPlatform === 'tech-gauge') {
+        const gaugeSymbol = TV_GAUGE_SYMBOL_MAP[rawSymbol] || "BSE:SENSEX";
+        const gaugeConfig = {
+            "interval": interval === '15' ? '15m' : (interval === '60' ? '1h' : '1D'),
+            "width": "100%",
+            "isTransparent": false,
+            "height": "100%",
+            "symbol": gaugeSymbol,
+            "showIntervalTabs": true,
+            "displayMode": "multiple",
+            "locale": "in",
+            "colorTheme": "dark"
+        };
+        const hash = encodeURIComponent(JSON.stringify(gaugeConfig));
+        container.innerHTML = `
+            <iframe src="https://www.tradingview-widget.com/embed-widget/technical-analysis/?locale=in#${hash}" 
+                    style="width:100%; height:100%; border:none; display:block;" 
+                    allowtransparency="true" 
+                    scrolling="no">
+            </iframe>
+        `;
+        return;
+    }
+
+    // PLATFORM 3: INDIAN MARKET LIVE SCREENER & HEATMAP (Real-time Indian Equities & Indices)
+    if (currentChartPlatform === 'screener') {
+        const screenerConfig = {
+            "width": "100%",
+            "height": "100%",
+            "defaultColumn": "overview",
+            "defaultScreen": "general",
+            "market": "india",
+            "showToolbar": true,
+            "colorTheme": "dark",
+            "locale": "in",
+            "isTransparent": false
+        };
+        const hash = encodeURIComponent(JSON.stringify(screenerConfig));
+        container.innerHTML = `
+            <iframe src="https://www.tradingview-widget.com/embed-widget/screener/?locale=in#${hash}" 
+                    style="width:100%; height:100%; border:none; display:block;" 
+                    allowtransparency="true" 
+                    scrolling="no">
+            </iframe>
+        `;
+        return;
+    }
+
+    // PLATFORM 4: YAHOO FINANCE LIVE INDIAN MARKET FEED
+    if (currentChartPlatform === 'yahoo') {
+        const yahooSymbol = YAHOO_INDIAN_SYMBOL_MAP[rawSymbol] || "^BSESN";
+        container.innerHTML = `
+            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.82rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700;">
+                        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#39d353; box-shadow:0 0 6px rgba(57,211,83,0.6);"></span>
+                        <span>Yahoo Finance Live: ${displayName} (${yahooSymbol})</span>
+                    </div>
+                    <a href="https://finance.yahoo.com/quote/${encodeURIComponent(yahooSymbol)}" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; text-decoration:none; font-size:0.75rem; display:inline-flex; align-items:center; gap:3px;">
+                        <span>Open on Yahoo Finance ↗</span>
+                    </a>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; text-align:center; position:relative; overflow:hidden;">
+                    <div style="font-size:2rem; margin-bottom:0.6rem;">📈</div>
+                    <h3 style="margin:0 0 0.4rem 0; font-size:1.1rem; color:#f0f6fc;">${displayName} Live Market Feed</h3>
+                    <p style="color:#8b949e; font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
+                        Real-time Indian market data for <b>${displayName}</b>. Switch across <b>TradingView Pro</b>, <b>Technical Gauge</b>, or <b>Market Screener</b> for real-time charting.
+                    </p>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
+                        <a href="https://finance.yahoo.com/chart/${encodeURIComponent(yahooSymbol)}" target="_blank" rel="noopener noreferrer" style="background:#7b1fa2; color:#fff; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+                            <span>📊 Launch Full Yahoo Interactive Chart ↗</span>
+                        </a>
+                        <button onclick="switchChartPlatform('tradingview', document.getElementById('engine-tv-btn'))" style="background:#238636; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">
+                            <span>⚡ Switch to TradingView Pro</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
+    }
 }
 
 function updateTechLevels(symbol) {
@@ -350,14 +501,30 @@ function updateTechLevels(symbol) {
     const trendEl = document.getElementById('lvl-trend');
     const inferTextEl = document.getElementById('daily-inferences-text');
 
-    if (pivotEl) pivotEl.innerText = data.pivot;
-    if (r1El) r1El.innerText = data.r1;
-    if (r2El) r2El.innerText = data.r2;
-    if (s1El) s1El.innerText = data.s1;
-    if (s2El) s2El.innerText = data.s2;
+    if (pivotEl) {
+        pivotEl.innerText = data.pivot;
+        pivotEl.setAttribute('title', `Pivot Point: ${data.pivot}`);
+    }
+    if (r1El) {
+        r1El.innerText = data.r1;
+        r1El.setAttribute('title', `Resistance 1: ${data.r1}`);
+    }
+    if (r2El) {
+        r2El.innerText = data.r2;
+        r2El.setAttribute('title', `Resistance 2: ${data.r2}`);
+    }
+    if (s1El) {
+        s1El.innerText = data.s1;
+        s1El.setAttribute('title', `Support 1: ${data.s1}`);
+    }
+    if (s2El) {
+        s2El.innerText = data.s2;
+        s2El.setAttribute('title', `Support 2: ${data.s2}`);
+    }
     if (trendEl) {
         trendEl.innerText = data.trend;
         trendEl.className = `lvl-val ${data.trendColor}`;
+        trendEl.setAttribute('title', `Trend Bias: ${data.trend}`);
     }
 
     if (inferTextEl) {
