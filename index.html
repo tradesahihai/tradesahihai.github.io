@@ -147,31 +147,80 @@
 
                 <!-- Interactive Live Multi-Platform Indian Market Chart -->
                 <div class="display-card-v2" id="live-market-indices-card" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:0.85rem; margin-bottom:1.5rem;">
-                    <div class="chart-toolbar" style="display:flex; justify-content:space-between; align-items:center; background:#0d1117; padding:0.5rem 0.75rem; border-radius:6px 6px 0 0; border:1px solid #30363d; border-bottom:none; flex-wrap:wrap; gap:0.5rem;">
-                        <div class="chart-symbol-pills" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-                            <button class="chart-pill-btn active" style="background:#238636; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="switchTvChart('BSE:SENSEX', this)">SENSEX</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:RELIANCE', this)">RELIANCE</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:HDFCBANK', this)">HDFC BANK</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:INFY', this)">INFOSYS</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:ICICIBANK', this)">ICICI BANK</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:TCS', this)">TCS</button>
-                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:FINNIFTY', this)">FIN NIFTY</button>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                            <!-- Platform Engine Switcher -->
-                            <div class="chart-platform-pills" style="display:flex; gap:0.25rem;">
-                                <button class="chart-platform-btn active" id="engine-tv-btn" onclick="switchChartPlatform('tradingview', this)" title="TradingView Live Unrestricted Candlestick Engine">TradingView Pro</button>
-                                <button class="chart-platform-btn" id="engine-gauge-btn" onclick="switchChartPlatform('tech-gauge', this)" title="Technical Analysis Gauges & Moving Averages">Technical Gauge</button>
-                                <button class="chart-platform-btn" id="engine-screener-btn" onclick="switchChartPlatform('screener', this)" title="Indian Market Live Screener & Heatmap">Market Screener</button>
-                                <button class="chart-platform-btn" id="engine-yahoo-btn" onclick="switchChartPlatform('yahoo', this)" title="Yahoo Finance Live Indian Market Feed">Yahoo Live</button>
+                    <div class="chart-toolbar" style="display:flex; justify-content:space-between; align-items:center; background:#0d1117; padding:0.6rem 0.85rem; border-radius:6px 6px 0 0; border:1px solid #30363d; border-bottom:none; flex-wrap:wrap; gap:0.6rem;">
+                        <!-- DROPDOWN 1: MAJOR STOCK & INDICES SELECTOR + SEARCH OPTION -->
+                        <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; flex:1; min-width:280px;">
+                            <div style="display:flex; align-items:center; gap:0.35rem;">
+                                <label for="chart-symbol-select" style="font-size:0.72rem; color:#8b949e; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap;">Index / Stock:</label>
+                                <select id="chart-symbol-select" class="chart-dropdown-select" onchange="onSymbolSelectChange(this.value)" style="min-width:180px;">
+                                    <optgroup label="🏛️ Major Benchmark & Sectoral Indices">
+                                        <option value="NSE:NIFTY" selected>NIFTY 50 (NSE:NIFTY)</option>
+                                        <option value="NSE:BANKNIFTY">BANK NIFTY (NSE:BANKNIFTY)</option>
+                                        <option value="BSE:SENSEX">BSE SENSEX (BSE:SENSEX)</option>
+                                        <option value="NSE:FINNIFTY">FIN NIFTY (NSE:FINNIFTY)</option>
+                                        <option value="NSE:MIDCPNIFTY">MIDCAP NIFTY (NSE:MIDCPNIFTY)</option>
+                                        <option value="NSE:NIFTYNXT50">NIFTY NEXT 50 (NSE:NIFTYNXT50)</option>
+                                        <option value="NSE:NIFTYIT">NIFTY IT (NSE:NIFTYIT)</option>
+                                        <option value="NSE:NIFTYAUTO">NIFTY AUTO (NSE:NIFTYAUTO)</option>
+                                        <option value="NSE:NIFTYPHARMA">NIFTY PHARMA (NSE:NIFTYPHARMA)</option>
+                                        <option value="NSE:NIFTYFMCG">NIFTY FMCG (NSE:NIFTYFMCG)</option>
+                                        <option value="NSE:NIFTYMETAL">NIFTY METAL (NSE:NIFTYMETAL)</option>
+                                    </optgroup>
+                                    <optgroup label="🏢 Major Nifty 50 Heavyweight Stocks">
+                                        <option value="NSE:RELIANCE">RELIANCE (Reliance Industries)</option>
+                                        <option value="NSE:HDFCBANK">HDFC BANK (HDFC Bank Ltd)</option>
+                                        <option value="NSE:INFY">INFOSYS (Infosys Ltd)</option>
+                                        <option value="NSE:ICICIBANK">ICICI BANK (ICICI Bank Ltd)</option>
+                                        <option value="NSE:TCS">TCS (Tata Consultancy Services)</option>
+                                        <option value="NSE:SBIN">SBIN (State Bank of India)</option>
+                                        <option value="NSE:BHARTIARTL">BHARTI AIRTEL (Bharti Airtel Ltd)</option>
+                                        <option value="NSE:ITC">ITC (ITC Limited)</option>
+                                        <option value="NSE:LT">L&T (Larsen & Toubro)</option>
+                                        <option value="NSE:AXISBANK">AXIS BANK (Axis Bank Ltd)</option>
+                                        <option value="NSE:KOTAKBANK">KOTAK BANK (Kotak Mahindra Bank)</option>
+                                        <option value="NSE:TATAMOTORS">TATA MOTORS (Tata Motors Ltd)</option>
+                                        <option value="NSE:SUNPHARMA">SUN PHARMA (Sun Pharmaceutical)</option>
+                                        <option value="NSE:BAJFINANCE">BAJAJ FINANCE (Bajaj Finance Ltd)</option>
+                                        <option value="NSE:MARUTI">MARUTI (Maruti Suzuki)</option>
+                                        <option value="NSE:TITAN">TITAN (Titan Company)</option>
+                                        <option value="NSE:ASIANPAINT">ASIAN PAINTS (Asian Paints Ltd)</option>
+                                        <option value="NSE:WIPRO">WIPRO (Wipro Limited)</option>
+                                        <option value="NSE:HCLTECH">HCL TECH (HCL Technologies)</option>
+                                        <option value="NSE:TATASTEEL">TATA STEEL (Tata Steel Ltd)</option>
+                                    </optgroup>
+                                </select>
                             </div>
-                            <!-- Timeframe Pills -->
-                            <div class="chart-timeframe-pills" style="display:flex; gap:0.25rem;">
-                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('15', this)">15m</button>
-                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('60', this)">1h</button>
-                                <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:3px 8px; font-size:0.72rem; font-weight:700; border-radius:3px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
+
+                            <!-- Live Search Input for all Stocks & Indices -->
+                            <div style="position:relative; display:flex; align-items:center;">
+                                <input type="text" id="chart-symbol-search-input" placeholder="🔍 Search stock/index..." oninput="onSymbolSearchInput(this.value)" autocomplete="off" style="background:#161b22; color:#f0f6fc; border:1px solid #30363d; border-radius:6px; padding:5px 24px 5px 8px; font-size:0.75rem; outline:none; width:155px; transition:all 0.15s ease;" onfocus="this.style.borderColor='#58a6ff'; this.style.width='180px';" onblur="setTimeout(() => { if (!this.value) this.style.width='155px'; }, 200)">
+                                <button id="clear-symbol-search-btn" onclick="clearSymbolSearch()" style="position:absolute; right:6px; background:transparent; border:none; color:#8b949e; cursor:pointer; font-size:0.75rem; display:none;" title="Clear search">✕</button>
+                                <!-- Search Autocomplete Dropdown Menu -->
+                                <div id="chart-search-results-dropdown" style="display:none; position:absolute; top:calc(100% + 4px); left:0; width:260px; max-height:240px; overflow-y:auto; background:#161b22; border:1px solid #30363d; border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.6); z-index:150;"></div>
+                            </div>
+                        </div>
+
+                        <!-- DROPDOWN 2: MAJOR PLATFORMS TO CHECK & TIMEFRAME -->
+                        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                            <div style="display:flex; align-items:center; gap:0.35rem;">
+                                <label for="chart-platform-select" style="font-size:0.72rem; color:#8b949e; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap;">Platform:</label>
+                                <select id="chart-platform-select" class="chart-dropdown-select" onchange="onPlatformSelectChange(this.value)" style="color:#58a6ff; font-weight:700; min-width:190px;">
+                                    <option value="pro-canvas" selected>📈 Pro Candlestick (Interactive EMA/SMA/Vol)</option>
+                                    <option value="nse-official">🏛️ NSE Official Terminal (nseindia.com)</option>
+                                    <option value="tradingview">📊 TradingView Advanced Embed</option>
+                                    <option value="tech-gauge">⚡ Technical Analysis Gauge</option>
+                                    <option value="screener">🗺️ Indian Market Screener & Heatmap</option>
+                                    <option value="yahoo">🟣 Yahoo Finance Live Feed</option>
+                                    <option value="google">🌐 Google Finance Portal</option>
+                                    <option value="zerodha">🪁 Zerodha Kite Market Hub</option>
+                                </select>
+                            </div>
+
+                            <!-- Timeframe Selector -->
+                            <div class="chart-timeframe-pills" style="display:flex; gap:0.2rem; background:#161b22; border:1px solid #30363d; padding:2px; border-radius:6px;">
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer; border-radius:4px;" onclick="switchTvInterval('15', this)">15m</button>
+                                <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer; border-radius:4px;" onclick="switchTvInterval('60', this)">1h</button>
+                                <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:3px 8px; font-size:0.72rem; font-weight:700; border-radius:4px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
                             </div>
                         </div>
                     </div>
@@ -679,7 +728,7 @@
     </script>
 
     <!-- Production App Scripts -->
-    <script src="app.js?v=9.9.5"></script>
+    <script src="app.js?v=10.1.0"></script>
 </body>
 </html>
 
