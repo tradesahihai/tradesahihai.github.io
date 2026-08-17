@@ -146,9 +146,13 @@
                         <div class="chart-symbol-pills" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
                             <button class="chart-pill-btn active" style="background:#238636; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="switchTvChart('NSE:NIFTY', this)">NIFTY 50</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:BANKNIFTY', this)">BANK NIFTY</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('BSE:SENSEX', this)">SENSEX</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:FINNIFTY', this)">FIN NIFTY</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:RELIANCE', this)">RELIANCE</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:HDFCBANK', this)">HDFC BANK</button>
                             <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:INFY', this)">INFOSYS</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:ICICIBANK', this)">ICICI BANK</button>
+                            <button class="chart-pill-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="switchTvChart('NSE:TCS', this)">TCS</button>
                         </div>
                         <div class="chart-timeframe-pills" style="display:flex; gap:0.25rem;">
                             <button class="chart-tf-btn" style="background:transparent; color:#8b949e; border:none; padding:3px 8px; font-size:0.72rem; cursor:pointer;" onclick="switchTvInterval('15', this)">15m</button>
@@ -156,8 +160,8 @@
                             <button class="chart-tf-btn active" style="background:rgba(41,98,255,0.2); color:#58a6ff; border:none; padding:3px 8px; font-size:0.72rem; font-weight:700; border-radius:3px; cursor:pointer;" onclick="switchTvInterval('D', this)">1D</button>
                         </div>
                     </div>
-                    <div style="width:100%; height:420px; background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d;">
-                        <iframe id="tv-widget-iframe" src="https://s.tradingview.com/widgetembed/?symbol=NSE%3ANIFTY&interval=D&theme=dark&style=1&timezone=Asia%2FKolkata" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>
+                    <div id="tv-widget-container-box" style="width:100%; height:460px; background:#0d1117; border-radius:0 0 6px 6px; overflow:hidden; border:1px solid #30363d;">
+                        <!-- Dynamically populated with TradingView Advanced Indian Market Widget -->
                     </div>
                 </div>
 
@@ -408,13 +412,251 @@
                 </div>
             </div>
 
-            <!-- Footer Branding & Disclaimer -->
-            <div style="margin-top:1.25rem; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#657185; flex-wrap:wrap; gap:0.5rem;">
-                <div>© 2026 Trade Sahi Hai • Built for High-Frequency Systems & Precision Analytics</div>
-                <div>Educational & Informational Analysis Only • Not Financial Advisory</div>
+            <!-- Footer Interactive Hub: Social Links, Action Buttons & Risk Notice -->
+            <div class="footer-interactive-hub">
+                <div class="footer-nav-row">
+                    <!-- Action Dialog Trigger Buttons -->
+                    <div class="footer-action-buttons">
+                        <button class="footer-btn highlight" onclick="openSiteModal('modal-disclaimer')" title="View Stock Market Risk & Regulatory Disclaimer">
+                            <span>⚠️</span> <b>Risk Disclaimer</b>
+                        </button>
+                        <button class="footer-btn" onclick="openSiteModal('modal-about')" title="Learn more about Trade Sahi Hai">
+                            <span>ℹ️</span> <b>About Us</b>
+                        </button>
+                        <button class="footer-btn" onclick="openSiteModal('modal-contact')" title="Get in touch with our team">
+                            <span>✉️</span> <b>Contact</b>
+                        </button>
+                        <button class="footer-btn" onclick="openSiteModal('modal-terms')" title="Terms of Service & Usage">
+                            <span>📜</span> <b>Terms</b>
+                        </button>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div class="footer-social-links">
+                        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="social-icon-btn tg" title="Join our Telegram Community">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                        </a>
+                        <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="social-icon-btn tw" title="Follow us on X (Twitter)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" class="social-icon-btn yt" title="Subscribe to YouTube Video Breakdowns">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                        <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="social-icon-btn gh" title="GitHub Repository">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                        </a>
+                        <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-icon-btn in" title="Connect on LinkedIn">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- High-Impact Stock Market Risk Regulatory Banner -->
+                <div class="footer-risk-banner">
+                    <span style="font-size:1.1rem; line-height:1;">⚠️</span>
+                    <div>
+                        <b style="color:#ff7b72;">SEBI Risk Disclosure on Derivatives & Capital Risk:</b> 
+                        9 out of 10 individual traders in the Equity Futures & Options (F&O) segment incurred net losses. 
+                        Trading stocks, futures, and options involves significant financial risk. All content published on 
+                        <b>Trade Sahi Hai</b> is strictly for educational and analytical study purposes and does not constitute financial, investment, or trading advice.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Line -->
+            <div style="margin-top:1rem; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#657185; flex-wrap:wrap; gap:0.5rem;">
+                <div>© 2026 Trade Sahi Hai • Built for Precision Market Analytics</div>
+                <div>Educational Technical Research Portal • Not a SEBI Registered Adviser</div>
             </div>
         </div>
     </footer>
+
+    <!-- ==========================================================================
+         MODAL 1: COMPREHENSIVE STOCK MARKET RISK DISCLAIMER
+         ========================================================================== -->
+    <div id="modal-disclaimer" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-disclaimer')">
+        <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+            <div class="site-modal-header">
+                <h3 id="disclaimer-title"><span>⚠️</span> Stock Market Risk & Legal Disclaimer</h3>
+                <button class="site-modal-close" onclick="closeSiteModal('modal-disclaimer')" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="site-modal-body">
+                <h4>1. Regulatory Status & Educational Purpose</h4>
+                <p>
+                    <b>Trade Sahi Hai</b> is an independent technical analysis research and educational platform. We are <b>NOT</b> registered with the Securities and Exchange Board of India (SEBI) as a Research Analyst, Investment Adviser, Portfolio Manager, or Broker under SEBI (Investment Advisers) Regulations, 2013 or SEBI (Research Analysts) Regulations, 2014.
+                </p>
+                <p>
+                    All charts, pivot levels, indicators, candlestick patterns, algorithmic models, simulated trade metrics, strategy playbooks, and video commentary available on this site are published strictly for <b>educational, illustrative, and informational purposes only</b>.
+                </p>
+
+                <h4>2. Mandatory SEBI Risk Disclosure on Derivatives (F&O)</h4>
+                <p>
+                    As per SEBI's official study on individual trader participation in the Equity Derivatives (F&O) segment:
+                </p>
+                <ul>
+                    <li><b>9 out of 10</b> individual traders in the equity F&O segment incurred net losses.</li>
+                    <li>On average, loss-making traders registered a net loss close to <b>₹50,000</b> per annum.</li>
+                    <li>Over and above the net trading losses, loss-makers expended an additional <b>28%</b> of net losses as transaction and brokerage costs.</li>
+                    <li>Even among the active profitable traders, transaction costs consumed between <b>15% to 50%</b> of gross trading profits.</li>
+                </ul>
+
+                <h4>3. Capital at Risk & No Profit Guarantee</h4>
+                <p>
+                    Trading in equities, index futures, options, commodities, and currencies involves substantial risk of loss and is not suitable for every investor. You may lose some or all of your invested capital. Past performance, backtests, and technical setup success rates are not indicative of future returns.
+                </p>
+
+                <h4>4. No Financial Advice or Recommendations</h4>
+                <p>
+                    Nothing contained on this website constitutes a solicitation, recommendation, endorsement, or offer by Trade Sahi Hai to buy, sell, or hold any security, derivative, or financial instrument. Always consult a qualified, SEBI-registered financial advisor before undertaking any trading or investment activities.
+                </p>
+            </div>
+            <div class="site-modal-footer">
+                <button class="footer-btn highlight" onclick="closeSiteModal('modal-disclaimer')">I Understand & Acknowledge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL 2: ABOUT US
+         ========================================================================== -->
+    <div id="modal-about" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-about')">
+        <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="about-title">
+            <div class="site-modal-header">
+                <h3 id="about-title"><span>ℹ️</span> About Trade Sahi Hai</h3>
+                <button class="site-modal-close" onclick="closeSiteModal('modal-about')" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="site-modal-body">
+                <h4>🎯 Our Mission</h4>
+                <p>
+                    <b>Trade Sahi Hai</b> is dedicated to bringing institutional-grade technical analysis, precision mathematical pivot calculations, and disciplined risk-first trading playbooks to the Indian trading community.
+                </p>
+
+                <h4>⚡ Core Architectural Pillars</h4>
+                <ul>
+                    <li><b>Dynamic Daily Technicals:</b> Automated tracking of Central Pivot Range (CPR), Camarilla levels, and institutional support/resistance clusters for NIFTY 50, BANK NIFTY, and key bluechip stocks.</li>
+                    <li><b>Systematic Strategy Playbooks:</b> Transparent, rules-based execution models covering Opening Range Breakouts (ORB), VWAP mean-reversion, and Order Flow imbalance setups.</li>
+                    <li><b>Built-in Risk & Position Sizing:</b> Real-time risk-of-ruin mathematical calculators to enforce strict position sizing and 1:2+ Risk-to-Reward disciplines on every trade.</li>
+                    <li><b>Cloud-Synced Architecture:</b> High-speed static-first portal integrated with GitHub version control and Supabase media pipelines for tamper-proof data logs.</li>
+                </ul>
+
+                <h4>🛡️ Ethical Trading Philosophy</h4>
+                <p>
+                    We reject "get-rich-quick" schemes, fake P&L screenshots, and unsolicited stock tips. We believe consistent trading longevity is built upon risk management, emotional neutrality, and continuous market education.
+                </p>
+            </div>
+            <div class="site-modal-footer">
+                <button class="footer-btn" onclick="closeSiteModal('modal-about')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL 3: CONTACT US
+         ========================================================================== -->
+    <div id="modal-contact" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-contact')">
+        <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+            <div class="site-modal-header">
+                <h3 id="contact-title"><span>✉️</span> Contact & Community Support</h3>
+                <button class="site-modal-close" onclick="closeSiteModal('modal-contact')" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="site-modal-body">
+                <h4>📬 Direct Inquiries</h4>
+                <p>Have suggestions, feedback, technical questions, or need help with repository integrations?</p>
+                <ul>
+                    <li><b>Email:</b> <a href="mailto:vivekkr626@gmail.com" style="color:#58a6ff; text-decoration:none;">vivekkr626@gmail.com</a></li>
+                    <li><b>Platform Support:</b> <a href="mailto:support@tradesahihai.com" style="color:#58a6ff; text-decoration:none;">support@tradesahihai.com</a></li>
+                </ul>
+
+                <h4>💬 Community & Social Channels</h4>
+                <ul>
+                    <li><b>Telegram Channel:</b> Live intraday market updates, level alerts, and educational charts.</li>
+                    <li><b>X / Twitter:</b> Real-time market commentary, index insights, and strategy breakdowns.</li>
+                    <li><b>YouTube:</b> Daily market recaps, technical analysis bytes, and strategy tutorials.</li>
+                    <li><b>GitHub:</b> Open-source data repository, charting templates, and issue tracking.</li>
+                </ul>
+
+                <h4>⏱️ Support Hours</h4>
+                <p style="color:#8b949e; font-size:0.8rem;">
+                    Monday – Friday: 8:30 AM to 6:00 PM IST (Indian Market Trading Hours). Inquiries received outside these hours are processed on the next business day.
+                </p>
+            </div>
+            <div class="site-modal-footer">
+                <button class="footer-btn" onclick="closeSiteModal('modal-contact')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL 4: TERMS OF USE
+         ========================================================================== -->
+    <div id="modal-terms" class="site-modal-overlay" onclick="handleModalBackdropClick(event, 'modal-terms')">
+        <div class="site-modal-card" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+            <div class="site-modal-header">
+                <h3 id="terms-title"><span>📜</span> Terms of Use & Privacy Policy</h3>
+                <button class="site-modal-close" onclick="closeSiteModal('modal-terms')" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="site-modal-body">
+                <h4>1. Acceptance of Terms</h4>
+                <p>
+                    By accessing and using <b>Trade Sahi Hai</b>, you agree to comply with and be bound by these Terms of Use, our Risk Disclaimers, and Privacy Guidelines. If you do not agree with these terms, please do not use this portal.
+                </p>
+
+                <h4>2. Intellectual Property & Fair Usage</h4>
+                <p>
+                    The tools, layout designs, educational playbooks, and proprietary analysis published on this platform are protected under applicable intellectual property laws. Content may be referenced for personal educational study with proper attribution.
+                </p>
+
+                <h4>3. Privacy & Local Storage</h4>
+                <p>
+                    We respect your privacy. This application does not collect invasive trackers. Tab selections, local preferences, and risk calculator inputs are stored solely on your device's browser memory (session/local storage) and are never sold or transmitted to third parties.
+                </p>
+
+                <h4>4. Limitation of Liability</h4>
+                <p>
+                    In no event shall Trade Sahi Hai, its creators, or contributors be held liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use this platform or from any market transactions executed based on information presented here.
+                </p>
+            </div>
+            <div class="site-modal-footer">
+                <button class="footer-btn" onclick="closeSiteModal('modal-terms')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Dialog Management Helpers
+        function openSiteModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeSiteModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleModalBackdropClick(event, modalId) {
+            if (event.target && event.target.id === modalId) {
+                closeSiteModal(modalId);
+            }
+        }
+
+        // Close active modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.site-modal-overlay');
+                openModals.forEach(function(m) {
+                    m.style.display = 'none';
+                });
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 
     <!-- Production App Scripts -->
     <script src="app.js?v=9.6.0"></script>

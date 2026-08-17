@@ -113,37 +113,61 @@ function getSupabaseImageCandidates(fileName) {
 let currentTvSymbol = "NSE:NIFTY";
 let currentTvInterval = "D";
 
-// Symbol level dictionary for quick interactive updates
+// Symbol level dictionary for quick interactive updates on Indian Market Indices & Stocks
 const symbolLevels = {
     "NSE:NIFTY": {
         pivot: "24,350.00", r1: "24,480.00", r2: "24,620.00",
         s1: "24,240.00", s2: "24,110.00", trend: "Bullish Continuation", trendColor: "green",
-        header: "NIFTY 50 INDEX – TECHNICAL CHART REPORT",
-        text: "• <b>Price Structure:</b> NIFTY 50 bounced firmly off the 24,240 support cluster, forming a bullish piercing candle pattern with expanding volume.\n• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive 15-minute close above 24,480 opens the path towards 24,620 new ATH test.\n• <b>Derivative Data & OI:</b> Heavy Put writing witnessed at 24,300 and 24,200 strikes indicating aggressive bull defense. Call unwinding noticed at 24,400 CE.\n• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with a strict stop loss below 24,240 for upside targets of 24,480 and 24,560."
+        header: "NIFTY 50 INDEX (NSE:NIFTY) – TECHNICAL CHART REPORT",
+        text: "• <b>Price Structure:</b> NIFTY 50 holding firmly above the 24,240 demand cluster with expanding volume.\n• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive close above 24,480 opens the path towards 24,620 new ATH test.\n• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with strict stop loss below 24,240 for upside targets of 24,480 and 24,560."
     },
     "NSE:BANKNIFTY": {
         pivot: "50,450.00", r1: "50,850.00", r2: "51,200.00",
         s1: "50,150.00", s2: "49,800.00", trend: "Consolidation Range", trendColor: "gold",
-        header: "BANK NIFTY INDEX – TECHNICAL STRUCTURE & PIVOTS",
-        text: "• <b>Price Structure:</b> Bank Nifty trading inside a tight 50,150 - 50,850 consolidation range above the 50-day Exponential Moving Average.\n• <b>Pivot Defense:</b> Strong support established at 50,150 (S1). Breakdown below 49,800 will trigger long liquidation.\n• <b>Trigger Level:</b> Breakout above 50,850 will invite sharp short-covering towards 51,200 and 51,500."
+        header: "BANK NIFTY INDEX (NSE:BANKNIFTY) – TECHNICAL STRUCTURE & PIVOTS",
+        text: "• <b>Price Structure:</b> Bank Nifty trading inside a tight 50,150 - 50,850 consolidation range above the 50-day EMA.\n• <b>Pivot Defense:</b> Strong support established at 50,150 (S1). Breakdown below 49,800 will trigger long liquidation.\n• <b>Trigger Level:</b> Breakout above 50,850 will invite sharp short-covering towards 51,200 and 51,500."
+    },
+    "BSE:SENSEX": {
+        pivot: "80,200.00", r1: "80,650.00", r2: "81,100.00",
+        s1: "79,800.00", s2: "79,350.00", trend: "Bullish Momentum", trendColor: "green",
+        header: "BSE SENSEX INDEX (BSE:SENSEX) – BENCHMARK OUTLOOK",
+        text: "• <b>Structure:</b> SENSEX sustaining above psychological 80,000 mark with strong leadership from IT and Banking heavyweights.\n• <b>Resistance:</b> Major supply zone at 80,650 (R1). Sustaining above this level triggers rally towards 81,100."
+    },
+    "NSE:FINNIFTY": {
+        pivot: "23,100.00", r1: "23,320.00", r2: "23,550.00",
+        s1: "22,920.00", s2: "22,750.00", trend: "Range Accumulation", trendColor: "blue",
+        header: "NIFTY FINANCIAL SERVICES (NSE:FINNIFTY) – DERIVATIVES OUTLOOK",
+        text: "• <b>Pivots:</b> FINNIFTY consolidating between 22,920 and 23,320. Strong base at 23,000 round strike.\n• <b>Trigger:</b> Expiry momentum favors longs if price sustains above 23,150 pivot."
     },
     "NSE:RELIANCE": {
         pivot: "2,500.00", r1: "2,545.00", r2: "2,580.00",
         s1: "2,465.00", s2: "2,430.00", trend: "Strong Bullish Breakout", trendColor: "green",
-        header: "RELIANCE INDUSTRIES – PRICE ACTION & SWING SETUP",
+        header: "RELIANCE INDUSTRIES (NSE:RELIANCE) – PRICE ACTION SETUP",
         text: "• <b>Breakout Confirmation:</b> Reliance formed a bullish flag breakout on the daily chart with above-average institutional volume.\n• <b>Support Base:</b> 2,465 is the new demand floor. Sustaining above 2,500 keeps momentum intact for targets of 2,545 and 2,580."
     },
     "NSE:HDFCBANK": {
         pivot: "1,615.00", r1: "1,640.00", r2: "1,675.00",
         s1: "1,595.00", s2: "1,570.00", trend: "Accumulation Zone", trendColor: "blue",
-        header: "HDFC BANK – RANGE ACCUMULATION ANALYSIS",
+        header: "HDFC BANK (NSE:HDFCBANK) – RANGE ACCUMULATION ANALYSIS",
         text: "• <b>Key Zone:</b> HDFC Bank consolidating in the 1,595–1,640 accumulation box with declining selling pressure.\n• <b>Strategy:</b> Accumulate on dips near 1,600 with stop loss at 1,585 for swing target of 1,640–1,675."
     },
     "NSE:INFY": {
         pivot: "1,765.00", r1: "1,810.00", r2: "1,850.00",
         s1: "1,740.00", s2: "1,710.00", trend: "Bullish Trend Rider", trendColor: "green",
-        header: "INFOSYS – IT MOMENTUM LEADER",
+        header: "INFOSYS (NSE:INFY) – IT MOMENTUM LEADER",
         text: "• <b>Momentum:</b> Infy leading the Nifty IT index charge following strong multi-year contract renewals.\n• <b>Pivot Target:</b> Immediate resistance at 1,810. Support firmly pegged at 1,740."
+    },
+    "NSE:ICICIBANK": {
+        pivot: "1,180.00", r1: "1,210.00", r2: "1,235.00",
+        s1: "1,160.00", s2: "1,140.00", trend: "Upward Channel", trendColor: "green",
+        header: "ICICI BANK (NSE:ICICIBANK) – TREND CONTINUATION",
+        text: "• <b>Structure:</b> Moving in a well-defined ascending price channel on daily charts.\n• <b>Support:</b> Lower trendline support at 1,160. Target at 1,210 and 1,235."
+    },
+    "NSE:TCS": {
+        pivot: "4,150.00", r1: "4,240.00", r2: "4,320.00",
+        s1: "4,080.00", s2: "4,000.00", trend: "Bullish Flag", trendColor: "green",
+        header: "TATA CONSULTANCY SERVICES (NSE:TCS) – SWING OUTLOOK",
+        text: "• <b>Setup:</b> TCS consolidating near 52-week highs. Sustained close above 4,200 opens room for 4,320."
     }
 };
 
@@ -159,11 +183,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
     initializeTabStateView(activeTab);
 
-    // 4. Fetch Moneycontrol & Yahoo Finance News Feeds
+    // 4. Initialize Live TradingView Chart for Indian Markets
+    initOrUpdateTvWidget();
+
+    // 5. Fetch Moneycontrol & Yahoo Finance News Feeds
     fetchMoneycontrolNews();
     fetchYahooFinanceNews();
 
-    // 5. Fetch Cloud and Flat File analysis streams
+    // 6. Fetch Cloud and Flat File analysis streams
     fetchCloudAndFlatData();
 });
 
@@ -262,14 +289,57 @@ function switchTvInterval(interval, btnEl) {
     initOrUpdateTvWidget();
 }
 
+let tvWidgetInstance = null;
+
 function initOrUpdateTvWidget() {
-    const iframe = document.getElementById('tv-widget-iframe');
-    let tvEmbedSymbol = currentTvSymbol;
-    if (tvEmbedSymbol === 'NSE:NIFTY50') tvEmbedSymbol = 'NSE:NIFTY';
-    
-    if (iframe) {
-        iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvEmbedSymbol)}&interval=${currentTvInterval}&theme=dark&style=1&timezone=Asia%2FKolkata`;
+    const container = document.getElementById('tv-widget-container-box');
+    if (!container) return;
+
+    let cleanSymbol = currentTvSymbol || 'NSE:NIFTY';
+    if (cleanSymbol === 'NIFTY' || cleanSymbol === 'NIFTY50') cleanSymbol = 'NSE:NIFTY';
+    if (cleanSymbol === 'BANKNIFTY') cleanSymbol = 'NSE:BANKNIFTY';
+    if (cleanSymbol === 'SENSEX') cleanSymbol = 'BSE:SENSEX';
+    if (cleanSymbol === 'FINNIFTY') cleanSymbol = 'NSE:FINNIFTY';
+
+    container.innerHTML = `<div id="tradingview_chart_embed" style="width:100%; height:100%;"></div>`;
+
+    if (window.TradingView && typeof window.TradingView.widget === 'function') {
+        try {
+            tvWidgetInstance = new window.TradingView.widget({
+                "autosize": true,
+                "symbol": cleanSymbol,
+                "interval": currentTvInterval || "D",
+                "timezone": "Asia/Kolkata",
+                "theme": "dark",
+                "style": "1",
+                "locale": "in",
+                "toolbar_bg": "#0d1117",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "hide_side_toolbar": false,
+                "container_id": "tradingview_chart_embed"
+            });
+            return;
+        } catch (err) {
+            console.warn("TradingView widget instance fallback:", err);
+        }
     }
+
+    // Embed Widget Fallback with JSON hash params
+    const widgetConfig = {
+        "autosize": true,
+        "symbol": cleanSymbol,
+        "interval": currentTvInterval || "D",
+        "timezone": "Asia/Kolkata",
+        "theme": "dark",
+        "style": "1",
+        "locale": "in",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "support_host": "https://www.tradingview.com"
+    };
+    const hash = encodeURIComponent(JSON.stringify(widgetConfig));
+    container.innerHTML = `<iframe src="https://www.tradingview-widget.com/embed-widget/advanced-chart/?locale=in#${hash}" style="width:100%; height:100%; border:none;" allowtransparency="true" scrolling="no"></iframe>`;
 }
 
 function updateTechLevels(symbol) {
