@@ -20,7 +20,7 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
 
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
-            var styleNode = document.creacd .teElement('style');
+            var styleNode = document.createElement('style');
             styleNode.id = "instant-persistence-css";
             styleNode.innerHTML = `
                 .viewport-panel { display: none !important; }

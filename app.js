@@ -241,8 +241,11 @@ const SYMBOL_CATALOG = [
     { symbol: "NASDAQ:CRWD", name: "CROWDSTRIKE", fullName: "CrowdStrike Holdings Inc. (Cybersecurity)", code: "CRWD", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:CRWD", yahooTicker: "CRWD", googleTicker: "CRWD:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 284.00, drift: 0.85, vol: 3.10, volumeBase: 5500000 },
     { symbol: "NASDAQ:SMCI", name: "SUPER MICRO", fullName: "Super Micro Computer Inc. (AI Servers)", code: "SMCI", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:SMCI", yahooTicker: "SMCI", googleTicker: "SMCI:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 44.50, drift: 0.35, vol: 1.45, volumeBase: 38000000 },
     { symbol: "NASDAQ:COIN", name: "COINBASE", fullName: "Coinbase Global Inc. (Crypto Exchange)", code: "COIN", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:COIN", yahooTicker: "COIN", googleTicker: "COIN:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 174.00, drift: 0.75, vol: 3.10, volumeBase: 12000000 },
+    { symbol: "NASDAQ:IBM", name: "IBM (NASDAQ/US)", fullName: "International Business Machines Corp (Cloud & AI)", code: "IBM", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NYSE:IBM", yahooTicker: "IBM", googleTicker: "IBM:NYSE", currency: "USD", currencySymbol: "$", basePrice: 194.50, drift: 0.55, vol: 2.10, volumeBase: 4200000 },
 
     // NYSE Bluechip Equities
+    { symbol: "NYSE:IBM", name: "IBM", fullName: "International Business Machines Corp (AI & Enterprise Cloud)", code: "IBM", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:IBM", yahooTicker: "IBM", googleTicker: "IBM:NYSE", currency: "USD", currencySymbol: "$", basePrice: 194.50, drift: 0.55, vol: 2.10, volumeBase: 4200000 },
+    { symbol: "NYSE:CRM", name: "SALESFORCE", fullName: "Salesforce Inc. (Enterprise CRM & Agentforce)", code: "CRM", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:CRM", yahooTicker: "CRM", googleTicker: "CRM:NYSE", currency: "USD", currencySymbol: "$", basePrice: 262.40, drift: 0.65, vol: 2.40, volumeBase: 5800000 },
     { symbol: "NYSE:BRK.B", name: "BERKSHIRE", fullName: "Berkshire Hathaway Inc. Class B", code: "BRK.B", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:BRK.B", yahooTicker: "BRK-B", googleTicker: "BRK.B:NYSE", currency: "USD", currencySymbol: "$", basePrice: 448.00, drift: 0.65, vol: 2.10, volumeBase: 3900000 },
     { symbol: "NYSE:JPM", name: "JPMORGAN", fullName: "JPMorgan Chase & Co. (Global Banking)", code: "JPM", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:JPM", yahooTicker: "JPM", googleTicker: "JPM:NYSE", currency: "USD", currencySymbol: "$", basePrice: 214.50, drift: 0.45, vol: 1.55, volumeBase: 8800000 },
     { symbol: "NYSE:V", name: "VISA", fullName: "Visa Inc. (Global Payment Processing)", code: "V", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:V", yahooTicker: "V", googleTicker: "V:NYSE", currency: "USD", currencySymbol: "$", basePrice: 278.40, drift: 0.50, vol: 1.70, volumeBase: 5900000 },
@@ -350,6 +353,24 @@ const symbolLevels = {
         s1: "$206.00", s2: "$195.00", trend: "High Volatility", trendColor: "gold",
         header: "TESLA INC (NASDAQ:TSLA) – TECHNICAL MOMENTUM",
         text: "• <b>Volatility:</b> Active accumulation above $206 support with targets toward $230."
+    },
+    "NYSE:IBM": {
+        pivot: "$194.00", r1: "$199.50", r2: "$205.00",
+        s1: "$189.50", s2: "$184.00", trend: "Bullish Trend", trendColor: "green",
+        header: "IBM (NYSE:IBM) – HYBRID CLOUD & ENTERPRISE AI OUTLOOK",
+        text: "• <b>Price Action:</b> IBM consolidating constructively near 52-week highs above the $189.50 demand floor.\n• <b>Pivot Targets:</b> Decisive breakout above $199.50 (R1) targets extensions to $205.00 and $210.00+."
+    },
+    "NASDAQ:IBM": {
+        pivot: "$194.00", r1: "$199.50", r2: "$205.00",
+        s1: "$189.50", s2: "$184.00", trend: "Bullish Trend", trendColor: "green",
+        header: "IBM (NASDAQ/US:IBM) – TECHNICAL ANALYSIS",
+        text: "• <b>Price Action:</b> IBM holding firm accumulation above $189.50 support with bullish momentum intact."
+    },
+    "NYSE:CRM": {
+        pivot: "$262.00", r1: "$270.00", r2: "$280.00",
+        s1: "$254.00", s2: "$245.00", trend: "Active Momentum", trendColor: "green",
+        header: "SALESFORCE (NYSE:CRM) – ENTERPRISE AGENTIC AI ANALYSIS",
+        text: "• <b>Structure:</b> Consolidating above $254.00 support with strong institutional volume on breakout tests."
     }
 };
 
@@ -367,7 +388,9 @@ function computeStockProfile(rawCode, currency = 'INR') {
                  str.startsWith('NASDAQ:') || 
                  str.startsWith('NYSE:') || 
                  str.startsWith('INDEX:') ||
-                 ['NVDA','AAPL','MSFT','GOOGL','GOOG','AMZN','META','TSLA','AMD','NFLX','AVGO','QQQ','SPY','PLTR','ARM','SMCI','COIN','CRWD','COST','ADBE','INTC','QCOM','PYPL','IXIC','NDX','SPX','BRK.B','JPM','V','WMT','LLY','ORCL','DIS','UBER'].includes(str.replace(/^NASDAQ:|^NYSE:|^INDEX:/, ''));
+                 str.startsWith('AMEX:') ||
+                 str.startsWith('US:') ||
+                 ['IBM','NVDA','AAPL','MSFT','GOOGL','GOOG','AMZN','META','TSLA','AMD','NFLX','AVGO','QQQ','SPY','PLTR','ARM','SMCI','COIN','CRWD','COST','ADBE','INTC','QCOM','PYPL','IXIC','NDX','SPX','BRK.B','BRK.A','JPM','V','MA','WMT','LLY','ORCL','DIS','UBER','CRM','NOW','PANW','SNOW','SQ','SHOP','MU','TXN','ABNB','SPOT','BA','CAT','GE','JNJ','PFE','BAC','WFC','GS','MS','AXP','DELL','HPQ','MRK','ABBV'].includes(str.replace(/^NASDAQ:|^NYSE:|^INDEX:|^AMEX:|^US:/, ''));
 
     if (isUS) {
         // Sensible USD base price between $35 and $580
@@ -424,17 +447,25 @@ function getOrRegisterSymbol(rawInput) {
         exchange = 'BSE';
         code = upper.replace('.BO', '');
     } else {
-        // Detect known NASDAQ or US tickers
-        const usTechs = ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'GOOG', 'AMZN', 'META', 'TSLA', 'AMD', 'NFLX', 'AVGO', 'QQQ', 'SPY', 'INTC', 'QCOM', 'ADBE', 'COST', 'PYPL', 'ARM', 'PLTR', 'CRWD', 'SMCI', 'COIN', 'UBER', 'IXIC', 'NDX', 'SPX', 'BRK.B', 'JPM', 'V', 'WMT', 'LLY', 'ORCL', 'DIS'];
+        // Detect known US / NASDAQ / NYSE tickers
+        const usTechs = [
+            'IBM', 'NVDA', 'AAPL', 'MSFT', 'GOOGL', 'GOOG', 'AMZN', 'META', 'TSLA', 'AMD', 
+            'NFLX', 'AVGO', 'QQQ', 'SPY', 'INTC', 'QCOM', 'ADBE', 'COST', 'PYPL', 'ARM', 
+            'PLTR', 'CRWD', 'SMCI', 'COIN', 'UBER', 'IXIC', 'NDX', 'SPX', 'BRK.B', 'BRK.A', 
+            'JPM', 'V', 'MA', 'WMT', 'LLY', 'ORCL', 'DIS', 'CRM', 'NOW', 'PANW', 'SNOW', 
+            'SQ', 'SHOP', 'MU', 'TXN', 'ABNB', 'SPOT', 'BA', 'CAT', 'GE', 'JNJ', 'PFE', 
+            'BAC', 'WFC', 'GS', 'MS', 'AXP', 'DELL', 'HPQ', 'MRK', 'ABBV'
+        ];
         if (usTechs.includes(code)) {
-            exchange = ['BRK.B', 'JPM', 'V', 'WMT', 'LLY', 'ORCL', 'DIS', 'UBER'].includes(code) ? 'NYSE' : 'NASDAQ';
+            const nyseList = ['IBM', 'BRK.B', 'BRK.A', 'JPM', 'V', 'MA', 'WMT', 'LLY', 'ORCL', 'DIS', 'UBER', 'CRM', 'NOW', 'SNOW', 'SQ', 'SHOP', 'SPOT', 'BA', 'CAT', 'GE', 'JNJ', 'PFE', 'BAC', 'WFC', 'GS', 'MS', 'AXP', 'DELL', 'HPQ', 'MRK', 'ABBV'];
+            exchange = nyseList.includes(code) ? 'NYSE' : 'NASDAQ';
         }
     }
 
     code = code.replace(/[^A-Z0-9&_.-]/g, '');
     if (!code) code = 'CUSTOM';
 
-    const isUS = exchange === 'NASDAQ' || exchange === 'NYSE' || exchange === 'INDEX';
+    const isUS = exchange === 'NASDAQ' || exchange === 'NYSE' || exchange === 'INDEX' || exchange === 'AMEX' || exchange === 'US';
     const isIndex = code.startsWith('NIFTY') || code === 'SENSEX' || code.includes('INDEX') || code.includes('BANK') || code === 'IXIC' || code === 'NDX' || code === 'SPX' || code === 'DJI';
     
     let symbolKey = `${exchange}:${code}`;
@@ -1345,7 +1376,10 @@ function generateRealisticCandles(symbol, interval) {
 }
 
 function renderProCandlestickChart(container, symbol, interval) {
-    const displayName = SYMBOL_DISPLAY_NAMES[symbol] || symbol;
+    const resolved = getOrRegisterSymbol(symbol);
+    const displayName = resolved.name || SYMBOL_DISPLAY_NAMES[symbol] || symbol;
+    const currSym = resolved.currencySymbol || (resolved.currency === 'USD' ? '$' : '₹');
+    const isUS = resolved.currency === 'USD' || resolved.exchange === 'NASDAQ' || resolved.exchange === 'NYSE';
     const candles = generateRealisticCandles(symbol, interval);
     proChartState.candles = candles;
     proChartState.hoverIndex = -1;
@@ -1362,13 +1396,13 @@ function renderProCandlestickChart(container, symbol, interval) {
             <div id="pro-chart-hud" class="pro-chart-hud">
                 <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
                     <span class="pro-symbol-pill">${displayName}</span>
-                    <span style="font-size:0.95rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">₹${latest.close.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    <span style="color:${isUp ? '#39d353' : '#f85149'}; font-weight:600;">${isUp ? '+' : ''}${diff.toFixed(2)} (${isUp ? '+' : ''}${pct}%)</span>
+                    <span style="font-size:0.95rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">${currSym}${latest.close.toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    <span style="color:${isUp ? '#39d353' : '#f85149'}; font-weight:600;">${isUp ? '+' : ''}${currSym}${Math.abs(diff).toFixed(2)} (${isUp ? '+' : ''}${pct}%)</span>
                     <div id="pro-candle-ohlc-info" class="pro-ohlc-info">
-                        <span>O: <b>${latest.open.toFixed(2)}</b></span>
-                        <span>H: <b>${latest.high.toFixed(2)}</b></span>
-                        <span>L: <b>${latest.low.toFixed(2)}</b></span>
-                        <span>C: <b style="color:${latest.close >= latest.open ? '#39d353' : '#f85149'};">${latest.close.toFixed(2)}</b></span>
+                        <span>O: <b>${currSym}${latest.open.toFixed(2)}</b></span>
+                        <span>H: <b>${currSym}${latest.high.toFixed(2)}</b></span>
+                        <span>L: <b>${currSym}${latest.low.toFixed(2)}</b></span>
+                        <span>C: <b style="color:${latest.close >= latest.open ? '#39d353' : '#f85149'};">${currSym}${latest.close.toFixed(2)}</b></span>
                     </div>
                 </div>
                 <!-- Indicators & Zoom Controls (9 EMA, 21 EMA, Volume, Hammer) -->
@@ -3101,7 +3135,7 @@ async function removeStockFromWatchlist(canonicalSymbol) {
 }
 
 async function addPresetGroup(groupType) {
-    const nasdaqList = ["NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:GOOGL", "NASDAQ:AMZN", "NASDAQ:META", "NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:NFLX"];
+    const nasdaqList = ["NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:GOOGL", "NASDAQ:AMZN", "NASDAQ:META", "NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:NFLX", "NYSE:IBM"];
     const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NASDAQ:IXIC", "NASDAQ:NDX", "INDEX:SPX"];
     const bluechipsList = ["NSE:RELIANCE", "NSE:HDFCBANK", "NSE:INFY", "NSE:ICICIBANK", "NSE:TCS", "NSE:SBIN", "NSE:BHARTIARTL", "NSE:LT"];
 
