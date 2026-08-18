@@ -480,13 +480,8 @@ function applyThemeMode(theme) {
         }
     }
 
-    // Refresh active chart engine if on pro-canvas or TradingView
-    if (typeof drawProCanvasChart === 'function') {
-        drawProCanvasChart();
-    }
-    if (currentChartPlatform && currentChartPlatform !== 'pro-canvas') {
-        initOrUpdateTvWidget();
-    }
+    // Refresh active chart engine cleanly for all platforms including Pro Candlestick
+    initOrUpdateTvWidget();
 }
 
 /**
@@ -881,8 +876,8 @@ function initOrUpdateTvWidget() {
     if (currentChartPlatform === 'yahoo') {
         const yahooSymbol = resolved.yahooTicker || `${resolved.code}.NS`;
         container.innerHTML = `
-            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box;">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.82rem;">
+            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:var(--card-tertiary-bg); color:var(--text-header); box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:var(--card-secondary-bg); border-bottom:1px solid var(--border-subtle); font-size:0.82rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700;">
                         <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#39d353; box-shadow:0 0 6px rgba(57,211,83,0.6);"></span>
                         <span>Yahoo Finance Live: ${displayName} (${yahooSymbol})</span>
@@ -893,8 +888,8 @@ function initOrUpdateTvWidget() {
                 </div>
                 <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; text-align:center; position:relative; overflow:hidden;">
                     <div style="font-size:2.2rem; margin-bottom:0.6rem;">🟣</div>
-                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:#f0f6fc;">${displayName} Live Market Feed</h3>
-                    <p style="color:#8b949e; font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
+                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:var(--text-header);">${displayName} Live Market Feed</h3>
+                    <p style="color:var(--text-muted); font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
                         Real-time market quote and statistics for <b>${displayName}</b> (${yahooSymbol}). Switch across <b>Pro Candlestick</b>, <b>NSE Official</b>, or <b>TradingView Embed</b> for multi-angle technical analysis.
                     </p>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
@@ -915,8 +910,8 @@ function initOrUpdateTvWidget() {
     if (currentChartPlatform === 'google') {
         const gTicker = resolved.googleTicker || `${resolved.code}:NSE`;
         container.innerHTML = `
-            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box;">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.82rem;">
+            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:var(--card-tertiary-bg); color:var(--text-header); box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:var(--card-secondary-bg); border-bottom:1px solid var(--border-subtle); font-size:0.82rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700;">
                         <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#4285F4; box-shadow:0 0 6px rgba(66,133,244,0.6);"></span>
                         <span>Google Finance Live: ${displayName} (${gTicker})</span>
@@ -927,8 +922,8 @@ function initOrUpdateTvWidget() {
                 </div>
                 <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; text-align:center;">
                     <div style="font-size:2.2rem; margin-bottom:0.6rem;">🌐</div>
-                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:#f0f6fc;">${displayName} on Google Finance</h3>
-                    <p style="color:#8b949e; font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
+                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:var(--text-header);">${displayName} on Google Finance</h3>
+                    <p style="color:var(--text-muted); font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
                         Track real-time financial metrics, key valuation ratios, and corporate announcements for <b>${displayName}</b> (${gTicker}) via Google Finance.
                     </p>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
@@ -948,8 +943,8 @@ function initOrUpdateTvWidget() {
     // PLATFORM 8: ZERODHA KITE MARKET HUB
     if (currentChartPlatform === 'zerodha') {
         container.innerHTML = `
-            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box;">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.82rem;">
+            <div style="width:100%; height:100%; display:flex; flex-direction:column; background:var(--card-tertiary-bg); color:var(--text-header); box-sizing:border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:var(--card-secondary-bg); border-bottom:1px solid var(--border-subtle); font-size:0.82rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700;">
                         <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ff5722; box-shadow:0 0 6px rgba(255,87,34,0.6);"></span>
                         <span>Zerodha Kite Portal: ${displayName} (${resolved.code})</span>
@@ -960,8 +955,8 @@ function initOrUpdateTvWidget() {
                 </div>
                 <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; text-align:center;">
                     <div style="font-size:2.2rem; margin-bottom:0.6rem;">🪁</div>
-                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:#f0f6fc;">${displayName} Market Hub</h3>
-                    <p style="color:#8b949e; font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
+                    <h3 style="margin:0 0 0.4rem 0; font-size:1.15rem; color:var(--text-header);">${displayName} Market Hub</h3>
+                    <p style="color:var(--text-muted); font-size:0.84rem; max-width:480px; margin:0 0 1.25rem 0; line-height:1.5;">
                         Direct launcher for <b>Zerodha Kite</b> broker platform, market depth, orders, and ChartIQ / TradingView indicators for <b>${displayName}</b> (${resolved.code}).
                     </p>
                     <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:center;">
@@ -1003,15 +998,15 @@ async function renderNseOfficialTerminal(container, symbolParam) {
     const low52 = Number((p * 0.72).toFixed(2));
 
     container.innerHTML = `
-        <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#0d1117; color:#f0f6fc; box-sizing:border-box;">
+        <div style="width:100%; height:100%; display:flex; flex-direction:column; background:var(--card-tertiary-bg); color:var(--text-header); box-sizing:border-box;">
             <!-- Header bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#161b22; border-bottom:1px solid #30363d; font-size:0.8rem; flex-wrap:wrap; gap:0.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:var(--card-secondary-bg); border-bottom:1px solid var(--border-subtle); font-size:0.8rem; flex-wrap:wrap; gap:0.5rem;">
                 <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700;">
                     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#238636; box-shadow:0 0 6px rgba(35,134,54,0.6);"></span>
                     <span>National Stock Exchange of India (NSE Official Feed)</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:0.5rem;">
-                    <span id="nse-feed-status-badge" style="background:#21262d; border:1px solid #30363d; padding:2px 8px; border-radius:4px; font-size:0.72rem; color:#39d353;">nseindia.com Live</span>
+                    <span id="nse-feed-status-badge" style="background:var(--chip-bg); border:1px solid var(--border-subtle); padding:2px 8px; border-radius:4px; font-size:0.72rem; color:#39d353;">nseindia.com Live</span>
                     <a href="${nseUrl}" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-size:0.75rem; text-decoration:none; font-weight:600;">Open on NSE India ↗</a>
                 </div>
             </div>
@@ -1021,8 +1016,8 @@ async function renderNseOfficialTerminal(container, symbolParam) {
                 <div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
                         <div>
-                            <div style="font-size:0.8rem; color:#8b949e; text-transform:uppercase; letter-spacing:0.5px;">Official Exchange Quote • ${resolved.symbol}</div>
-                            <h2 style="margin:0.2rem 0; font-size:1.4rem; color:#f0f6fc;">${displayName} (${resolved.code})</h2>
+                            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Official Exchange Quote • ${resolved.symbol}</div>
+                            <h2 style="margin:0.2rem 0; font-size:1.4rem; color:var(--text-header);">${displayName} (${resolved.code})</h2>
                             <div style="display:flex; align-items:baseline; gap:0.75rem;">
                                 <span style="font-size:1.8rem; font-weight:800; color:#39d353;">₹${p.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                                 <span style="font-size:1rem; font-weight:700; color:#39d353;">+${change.toFixed(2)} (+${pChange.toFixed(2)}%)</span>
@@ -1037,40 +1032,40 @@ async function renderNseOfficialTerminal(container, symbolParam) {
 
                     <!-- Key NSE Metrics Grid -->
                     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:0.6rem; margin-bottom:1.25rem;">
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">Open</div>
-                            <div style="font-weight:700; font-size:0.9rem; color:#f0f6fc;">₹${openPrice.toLocaleString('en-IN')}</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">Open</div>
+                            <div style="font-weight:700; font-size:0.9rem; color:var(--text-header);">₹${openPrice.toLocaleString('en-IN')}</div>
                         </div>
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">Day High</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">Day High</div>
                             <div style="font-weight:700; font-size:0.9rem; color:#39d353;">₹${highPrice.toLocaleString('en-IN')}</div>
                         </div>
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">Day Low</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">Day Low</div>
                             <div style="font-weight:700; font-size:0.9rem; color:#f85149;">₹${lowPrice.toLocaleString('en-IN')}</div>
                         </div>
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">Prev. Close</div>
-                            <div style="font-weight:700; font-size:0.9rem; color:#c9d1d9;">₹${prevClose.toLocaleString('en-IN')}</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">Prev. Close</div>
+                            <div style="font-weight:700; font-size:0.9rem; color:var(--text-emphasis);">₹${prevClose.toLocaleString('en-IN')}</div>
                         </div>
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">52-Week High</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">52-Week High</div>
                             <div style="font-weight:700; font-size:0.9rem; color:#ffb300;">₹${high52.toLocaleString('en-IN')}</div>
                         </div>
-                        <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.6rem;">
-                            <div style="color:#8b949e; font-size:0.7rem;">52-Week Low</div>
-                            <div style="font-weight:700; font-size:0.9rem; color:#8b949e;">₹${low52.toLocaleString('en-IN')}</div>
+                        <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.6rem;">
+                            <div style="color:var(--text-muted); font-size:0.7rem;">52-Week Low</div>
+                            <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">₹${low52.toLocaleString('en-IN')}</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Bottom Quick Links & Platform Jump -->
-                <div style="background:#161b22; border:1px solid #30363d; border-radius:6px; padding:0.8rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
-                    <div style="font-size:0.78rem; color:#8b949e;">
+                <div style="background:var(--card-secondary-bg); border:1px solid var(--border-subtle); border-radius:6px; padding:0.8rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+                    <div style="font-size:0.78rem; color:var(--text-muted);">
                         Exchange: <b>National Stock Exchange (NSE)</b> • Live Quote: <b>${displayName}</b>
                     </div>
                     <div style="display:flex; gap:0.5rem;">
-                        <a href="https://www.nseindia.com/market-data/live-equity-market" target="_blank" rel="noopener noreferrer" style="background:#21262d; border:1px solid #30363d; color:#c9d1d9; padding:5px 12px; border-radius:4px; font-size:0.75rem; text-decoration:none; font-weight:600;">
+                        <a href="https://www.nseindia.com/market-data/live-equity-market" target="_blank" rel="noopener noreferrer" style="background:var(--chip-bg); border:1px solid var(--border-subtle); color:var(--text-emphasis); padding:5px 12px; border-radius:4px; font-size:0.75rem; text-decoration:none; font-weight:600;">
                             <span>🗺️ NSE Heatmap ↗</span>
                         </a>
                         <button onclick="onPlatformSelectChange('pro-canvas')" style="background:#238636; color:#fff; border:none; padding:5px 12px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;">
@@ -1246,8 +1241,6 @@ function renderProCandlestickChart(container, symbol, interval) {
     proChartState.candles = candles;
     proChartState.hoverIndex = -1;
 
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-
     const latest = candles[candles.length - 1];
     const prev = candles[candles.length - 2] || latest;
     const diff = latest.close - prev.close;
@@ -1255,37 +1248,37 @@ function renderProCandlestickChart(container, symbol, interval) {
     const isUp = diff >= 0;
 
     container.innerHTML = `
-        <div style="width:100%; height:100%; display:flex; flex-direction:column; background:${isLight ? '#ffffff' : '#0d1117'}; color:${isLight ? '#0f172a' : '#f0f6fc'}; box-sizing:border-box; user-select:none; position:relative; overflow:hidden;">
+        <div class="pro-chart-container">
             <!-- Top Pro HUD Bar -->
-            <div id="pro-chart-hud" style="display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.75rem; background:${isLight ? '#f8fafc' : '#161b22'}; border-bottom:1px solid ${isLight ? '#e2e8f0' : '#30363d'}; font-size:0.75rem; flex-wrap:wrap; gap:0.4rem;">
+            <div id="pro-chart-hud" class="pro-chart-hud">
                 <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
-                    <span style="font-weight:700; color:${isLight ? '#0f172a' : '#f0f6fc'}; background:${isLight ? '#e2e8f0' : '#21262d'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:4px;">${displayName}</span>
+                    <span class="pro-symbol-pill">${displayName}</span>
                     <span style="font-size:0.95rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">₹${latest.close.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     <span style="color:${isUp ? '#39d353' : '#f85149'}; font-weight:600;">${isUp ? '+' : ''}${diff.toFixed(2)} (${isUp ? '+' : ''}${pct}%)</span>
-                    <div id="pro-candle-ohlc-info" style="color:${isLight ? '#475569' : '#8b949e'}; display:inline-flex; gap:0.45rem; font-family:monospace; font-size:0.72rem;">
-                        <span>O: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.open.toFixed(2)}</b></span>
-                        <span>H: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.high.toFixed(2)}</b></span>
-                        <span>L: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.low.toFixed(2)}</b></span>
-                        <span>C: <b style="color:${isLight ? '#0f172a' : '#c9d1d9'};">${latest.close.toFixed(2)}</b></span>
+                    <div id="pro-candle-ohlc-info" class="pro-ohlc-info">
+                        <span>O: <b>${latest.open.toFixed(2)}</b></span>
+                        <span>H: <b>${latest.high.toFixed(2)}</b></span>
+                        <span>L: <b>${latest.low.toFixed(2)}</b></span>
+                        <span>C: <b style="color:${latest.close >= latest.open ? '#39d353' : '#f85149'};">${latest.close.toFixed(2)}</b></span>
                     </div>
                 </div>
                 <!-- Indicators & Zoom Controls (9 EMA, 21 EMA, Volume, Hammer) -->
                 <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
-                    <button class="pro-ind-btn ${showEma9 ? 'active' : ''}" onclick="toggleProIndicator('ema9')" style="background:${showEma9 ? 'rgba(0,210,255,0.18)' : 'transparent'}; color:${showEma9 ? '#00d2ff' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showEma9 ? '#00d2ff' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 9</button>
-                    <button class="pro-ind-btn ${showEma21 ? 'active' : ''}" onclick="toggleProIndicator('ema21')" style="background:${showEma21 ? 'rgba(245,158,11,0.18)' : 'transparent'}; color:${showEma21 ? '#f59e0b' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showEma21 ? '#f59e0b' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">EMA 21</button>
-                    <button class="pro-ind-btn ${showVolume ? 'active' : ''}" onclick="toggleProIndicator('volume')" style="background:${showVolume ? 'rgba(57,211,83,0.18)' : 'transparent'}; color:${showVolume ? '#39d353' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showVolume ? '#39d353' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:600;">VOL</button>
-                    <button class="pro-ind-btn ${showHammer ? 'active' : ''}" onclick="toggleProIndicator('hammer')" title="Toggle Hammer Candlestick Pattern Indicator" style="background:${showHammer ? 'rgba(16,185,129,0.22)' : 'transparent'}; color:${showHammer ? '#10b981' : (isLight ? '#475569' : '#8b949e')}; border:1px solid ${showHammer ? '#10b981' : (isLight ? '#cbd5e1' : '#30363d')}; padding:2px 7px; border-radius:3px; font-size:0.68rem; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:2px;">🔨 HAMMER</button>
-                    <span style="display:inline-block; width:1px; height:14px; background:${isLight ? '#cbd5e1' : '#30363d'}; margin:0 2px;"></span>
-                    <button onclick="zoomProChart(1.2)" title="Zoom In" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">+</button>
-                    <button onclick="zoomProChart(0.8)" title="Zoom Out" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.75rem; cursor:pointer; font-weight:700;">−</button>
-                    <button onclick="resetProChartZoom()" title="Reset View" style="background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#c9d1d9'}; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'}; padding:2px 6px; border-radius:3px; font-size:0.72rem; cursor:pointer;">↺</button>
+                    <button class="pro-ind-btn ${showEma9 ? 'active ema9' : ''}" onclick="toggleProIndicator('ema9')">EMA 9</button>
+                    <button class="pro-ind-btn ${showEma21 ? 'active ema21' : ''}" onclick="toggleProIndicator('ema21')">EMA 21</button>
+                    <button class="pro-ind-btn ${showVolume ? 'active volume' : ''}" onclick="toggleProIndicator('volume')">VOL</button>
+                    <button class="pro-ind-btn ${showHammer ? 'active hammer' : ''}" onclick="toggleProIndicator('hammer')" title="Toggle Hammer Candlestick Pattern Indicator">🔨 HAMMER</button>
+                    <span style="display:inline-block; width:1px; height:14px; background:var(--border-subtle); margin:0 2px;"></span>
+                    <button class="pro-zoom-btn" onclick="zoomProChart(1.2)" title="Zoom In">+</button>
+                    <button class="pro-zoom-btn" onclick="zoomProChart(0.8)" title="Zoom Out">−</button>
+                    <button class="pro-zoom-btn" onclick="resetProChartZoom()" title="Reset View">↺</button>
                 </div>
             </div>
             <!-- Canvas Container -->
             <div id="pro-canvas-wrap" style="flex:1; width:100%; height:100%; position:relative; overflow:hidden;">
                 <canvas id="pro-candlestick-canvas" style="width:100%; height:100%; display:block;"></canvas>
                 <div id="pro-chart-crosshair-badge-price" style="display:none; position:absolute; right:0; background:#2962ff; color:#fff; font-size:0.68rem; font-family:monospace; padding:1px 4px; border-radius:2px; pointer-events:none; z-index:10;"></div>
-                <div id="pro-chart-crosshair-badge-time" style="display:none; position:absolute; bottom:0; background:${isLight ? '#f1f5f9' : '#21262d'}; color:${isLight ? '#0f172a' : '#f0f6fc'}; font-size:0.68rem; font-family:monospace; padding:1px 4px; border-radius:2px; pointer-events:none; z-index:10; border:1px solid ${isLight ? '#cbd5e1' : '#30363d'};"></div>
+                <div id="pro-chart-crosshair-badge-time" class="pro-crosshair-badge-time" style="display:none; position:absolute; bottom:0;"></div>
             </div>
         </div>
     `;
@@ -1754,11 +1747,11 @@ function drawProCanvasChart(hoverX, hoverY) {
                 ` : '';
 
                 ohlcEl.innerHTML = `
-                    <span>O: <b style="color:#c9d1d9;">${hoveredCandle.open.toFixed(2)}</b></span>
-                    <span>H: <b style="color:#c9d1d9;">${hoveredCandle.high.toFixed(2)}</b></span>
-                    <span>L: <b style="color:#c9d1d9;">${hoveredCandle.low.toFixed(2)}</b></span>
+                    <span>O: <b>${hoveredCandle.open.toFixed(2)}</b></span>
+                    <span>H: <b>${hoveredCandle.high.toFixed(2)}</b></span>
+                    <span>L: <b>${hoveredCandle.low.toFixed(2)}</b></span>
                     <span>C: <b style="color:${isCandleGreen ? '#39d353' : '#f85149'};">${hoveredCandle.close.toFixed(2)}</b></span>
-                    <span>V: <b style="color:#8b949e;">${(hoveredCandle.volume / 1000).toFixed(1)}k</b></span>
+                    <span>V: <b style="color:var(--text-muted);">${(hoveredCandle.volume / 1000).toFixed(1)}k</b></span>
                     ${showEma9 && hoveredCandle.ema9 ? `<span>EMA9: <b style="color:#00d2ff;">${hoveredCandle.ema9.toFixed(2)}</b></span>` : ''}
                     ${showEma21 && hoveredCandle.ema21 ? `<span>EMA21: <b style="color:#f59e0b;">${hoveredCandle.ema21.toFixed(2)}</b></span>` : ''}
                     ${patternTag}
@@ -2193,29 +2186,29 @@ async function fetchCloudAndFlatData() {
         if (levels.pivot || levels.r1 || levels.s1) {
             techLevelsHtml = `
                 <div class="tech-levels-grid" style="margin:0.75rem 0;">
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Pivot Point</div>
-                        <div class="lvl-val gold" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.pivot || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Pivot Point</div>
+                        <div class="lvl-val gold">${levels.pivot || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Resistance (R1)</div>
-                        <div class="lvl-val red" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.r1 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Resistance (R1)</div>
+                        <div class="lvl-val red">${levels.r1 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Resistance (R2)</div>
-                        <div class="lvl-val red" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.r2 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Resistance (R2)</div>
+                        <div class="lvl-val red">${levels.r2 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Support (S1)</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.s1 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Support (S1)</div>
+                        <div class="lvl-val green">${levels.s1 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Support (S2)</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.s2 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Support (S2)</div>
+                        <div class="lvl-val green">${levels.s2 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Trend Bias</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${levels.trend || 'Bullish Continuation'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Trend Bias</div>
+                        <div class="lvl-val green">${levels.trend || 'Bullish Continuation'}</div>
                     </div>
                 </div>
             `;
@@ -2231,20 +2224,20 @@ async function fetchCloudAndFlatData() {
         const formattedHtml = formatMarkdownBody(cleanedRawText);
 
         return `
-            <div class="display-card-v2" style="background:#161b22; padding:0.85rem 1.15rem; border:1px solid #30363d; border-radius:8px; margin-bottom:0.65rem; transition:border-color 0.2s ease;">
+            <div class="display-card-v2" style="padding:0.85rem 1.15rem; margin-bottom:0.65rem;">
                 <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; gap:0.75rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; flex:1; min-width:0;">
-                        <span style="font-size:0.88rem; color:#f0f6fc; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📄 ${title}</span>
-                        <span style="font-size:0.72rem; color:#8b949e; white-space:nowrap;">• ${postDateStr}</span>
+                        <span style="font-size:0.88rem; color:var(--text-header); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📄 ${title}</span>
+                        <span style="font-size:0.72rem; color:var(--text-muted); white-space:nowrap;">• ${postDateStr}</span>
                     </div>
                     <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
-                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="background:#21262d; border:1px solid #30363d; color:#58a6ff; padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">📖 Read More ▾</button>
+                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">📖 Read More ▾</button>
                     </div>
                 </div>
-                <div id="${uniqueId}" style="display:none; padding-top:0.85rem; margin-top:0.85rem; border-top:1px solid #21262d;">
+                <div id="${uniqueId}" style="display:none; padding-top:0.85rem; margin-top:0.85rem; border-top:1px solid var(--border-subtle);">
                     ${mediaHtml}
                     ${techLevelsHtml}
-                    <div class="card-body-text" style="line-height: 1.65; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0; background:#0d1117; padding:1rem; border-radius:6px; border:1px solid #21262d;">
+                    <div class="card-body-text" style="line-height: 1.65; font-size:0.85rem; margin: 0.75rem 0 0 0; padding:1rem; border-radius:6px; border:1px solid var(--border-subtle);">
                         ${formattedHtml}
                     </div>
                     <div style="margin-top:0.6rem; display:flex; justify-content:flex-end; align-items:center; font-size:0.72rem;">
@@ -2269,29 +2262,29 @@ async function fetchCloudAndFlatData() {
         if (levels.pivot || levels.r1 || levels.s1) {
             techLevelsHtml = `
                 <div class="tech-levels-grid" style="margin:0.75rem 0;">
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Pivot Point</div>
-                        <div class="lvl-val gold" style="color:#ffb300; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.pivot || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Pivot Point</div>
+                        <div class="lvl-val gold">${levels.pivot || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Resistance (R1)</div>
-                        <div class="lvl-val red" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.r1 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Resistance (R1)</div>
+                        <div class="lvl-val red">${levels.r1 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Resistance (R2)</div>
-                        <div class="lvl-val red" style="color:#f85149; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.r2 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Resistance (R2)</div>
+                        <div class="lvl-val red">${levels.r2 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Support (S1)</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.s1 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Support (S1)</div>
+                        <div class="lvl-val green">${levels.s1 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Support (S2)</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.95rem; font-weight:700; margin-top:2px;">${levels.s2 || '-'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Support (S2)</div>
+                        <div class="lvl-val green">${levels.s2 || '-'}</div>
                     </div>
-                    <div class="tech-level-box" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:0.5rem 0.65rem; text-align:center;">
-                        <div class="lvl-title" style="font-size:0.65rem; color:#8b949e; text-transform:uppercase; font-weight:600; white-space:nowrap;">Trend Bias</div>
-                        <div class="lvl-val green" style="color:#39d353; font-size:0.85rem; font-weight:700; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${levels.trend || 'Bullish Continuation'}</div>
+                    <div class="tech-level-box">
+                        <div class="lvl-title">Trend Bias</div>
+                        <div class="lvl-val green">${levels.trend || 'Bullish Continuation'}</div>
                     </div>
                 </div>
             `;
@@ -2308,25 +2301,25 @@ async function fetchCloudAndFlatData() {
         const startOpen = isToday;
 
         return `
-            <div class="display-card-v2" style="background:#161b22; padding:1.15rem; border:1px solid #30363d; border-radius:8px; margin-bottom:0.75rem; transition:border-color 0.2s ease;">
+            <div class="display-card-v2" style="padding:1.15rem; margin-bottom:0.75rem;">
                 <div onclick="toggleHistoricalDrawer('${uniqueId}')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; gap:0.75rem;">
                     <div style="display:flex; align-items:center; gap:0.5rem; flex:1; min-width:0;">
-                        <span style="font-size:0.9rem; color:#f0f6fc; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📄 ${title}</span>
-                        <span style="font-size:0.72rem; color:${isToday ? '#39d353' : '#8b949e'}; white-space:nowrap;">• ${isToday ? 'Today' : dateString}</span>
+                        <span style="font-size:0.9rem; color:var(--text-header); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📄 ${title}</span>
+                        <span style="font-size:0.72rem; color:${isToday ? '#39d353' : 'var(--text-muted)'}; white-space:nowrap;">• ${isToday ? 'Today' : postDateStr}</span>
                     </div>
                     <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
                         <span class="localization-tag" style="background:${tagBg}; color:#fff; padding:2px 8px; border-radius:4px; font-size:0.65rem; font-weight:600;">${tagText}</span>
-                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="background:#21262d; border:1px solid ${startOpen ? 'rgba(248, 81, 73, 0.4)' : '#30363d'}; color:${startOpen ? '#f85149' : '#58a6ff'}; padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">${startOpen ? '✖️ Collapse ▴' : '📖 Details ▾'}</button>
+                        <button id="${uniqueId}-trigger-text" class="read-more-btn" style="padding:3px 10px; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer; pointer-events:none;">${startOpen ? '✖️ Collapse ▴' : '📖 Details ▾'}</button>
                     </div>
                 </div>
-                <div id="${uniqueId}" style="display:${startOpen ? 'block' : 'none'}; padding-top:0.75rem; margin-top:0.75rem; border-top:1px solid #21262d;">
+                <div id="${uniqueId}" style="display:${startOpen ? 'block' : 'none'}; padding-top:0.75rem; margin-top:0.75rem; border-top:1px solid var(--border-subtle);">
                     ${mediaHtml}
                     ${techLevelsHtml}
-                    <div class="card-body-text" style="line-height: 1.6; color:#c9d1d9; font-size:0.85rem; margin: 0.75rem 0 0 0; background:#0d1117; padding:1rem; border-radius:6px; border:1px solid #21262d;">
+                    <div class="card-body-text" style="line-height: 1.6; font-size:0.85rem; margin: 0.75rem 0 0 0; padding:1rem; border-radius:6px; border:1px solid var(--border-subtle);">
                         ${formattedHtml}
                     </div>
-                    <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#8b949e;">
-                        <span>Source: <b style="color:#58a6ff;">${sourceBadge}</b></span>
+                    <div style="margin-top:0.5rem; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--text-muted);">
+                        <span>Source: <b style="color:#2962ff;">${sourceBadge}</b></span>
                         <span style="color:#f85149; cursor:pointer; font-weight:600;" onclick="toggleHistoricalDrawer('${uniqueId}')">✖️ Collapse ▴</span>
                     </div>
                 </div>
@@ -2564,8 +2557,8 @@ async function fetchCloudAndFlatData() {
         // Update body text
         if (infTextEl) {
             infTextEl.innerHTML = `
-                <h4 style="color:#ffffff; font-size:0.92rem; margin-top:0; margin-bottom:0.5rem;">${todayDailyFile.title}</h4>
-                <div class="card-body-text" style="color:#c9d1d9; font-size:0.85rem; line-height:1.6;">
+                <h4 style="color:var(--text-header); font-size:0.92rem; margin-top:0; margin-bottom:0.5rem;">${todayDailyFile.title}</h4>
+                <div class="card-body-text" style="font-size:0.85rem; line-height:1.6;">
                     ${formatMarkdownBody(todayDailyFile.rawText)}
                 </div>
             `;
@@ -2573,7 +2566,7 @@ async function fetchCloudAndFlatData() {
     } else {
         // No analysis published for today yet -> Display Upcoming Banner & Live Reference
         if (filenameEl) {
-            filenameEl.innerHTML = `<span style="color:#58a6ff; margin-right:0.35rem;">⏳</span> Today's Analysis is Upcoming...`;
+            filenameEl.innerHTML = `<span style="color:#2962ff; margin-right:0.35rem;">⏳</span> Today's Analysis is Upcoming...`;
         }
         if (primaryImg) {
             primaryImg.style.display = 'none';
@@ -2596,16 +2589,16 @@ async function fetchCloudAndFlatData() {
 
         if (infTextEl) {
             infTextEl.innerHTML = `
-                <div style="text-align:center; padding:1.5rem 1rem; background:#0d1117; border-radius:8px; border:1px solid #21262d;">
-                    <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(88, 166, 255, 0.12); color:#58a6ff; font-size:1.3rem; margin-bottom:0.65rem; border:1px solid rgba(88, 166, 255, 0.25);">⏳</div>
-                    <h4 style="margin:0 0 0.35rem 0; color:#f0f6fc; font-size:1.02rem; font-weight:700;">Today's Analysis is Upcoming...</h4>
-                    <p style="margin:0 auto 0.85rem auto; max-width:540px; color:#8b949e; font-size:0.84rem; line-height:1.55;">
+                <div style="text-align:center; padding:1.5rem 1rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border-subtle);">
+                    <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(41, 98, 255, 0.12); color:#2962ff; font-size:1.3rem; margin-bottom:0.65rem; border:1px solid rgba(41, 98, 255, 0.25);">⏳</div>
+                    <h4 style="margin:0 0 0.35rem 0; color:var(--text-header); font-size:1.02rem; font-weight:700;">Today's Analysis is Upcoming...</h4>
+                    <p style="margin:0 auto 0.85rem auto; max-width:540px; color:var(--text-muted); font-size:0.84rem; line-height:1.55;">
                         Morning Open Interest shifts, CPR pivot ranges, and price action triggers for today's trading session are currently being compiled. Today's full technical report and chart analysis will be published shortly.
                     </p>
-                    <div style="display:inline-flex; gap:0.45rem; flex-wrap:wrap; justify-content:center; font-size:0.75rem; color:#8b949e;">
-                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">📊 Pre-Market Data Sync</span>
-                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">⚡ Pivot Range Calculation</span>
-                        <span style="background:#161b22; border:1px solid #30363d; padding:3px 9px; border-radius:4px; color:#c9d1d9;">🎯 Risk-Reward Setup Screening</span>
+                    <div style="display:inline-flex; gap:0.45rem; flex-wrap:wrap; justify-content:center; font-size:0.75rem; color:var(--text-muted);">
+                        <span style="background:var(--bg-canvas); border:1px solid var(--border-subtle); padding:3px 9px; border-radius:4px; color:var(--text-main);">📊 Pre-Market Data Sync</span>
+                        <span style="background:var(--bg-canvas); border:1px solid var(--border-subtle); padding:3px 9px; border-radius:4px; color:var(--text-main);">⚡ Pivot Range Calculation</span>
+                        <span style="background:var(--bg-canvas); border:1px solid var(--border-subtle); padding:3px 9px; border-radius:4px; color:var(--text-main);">🎯 Risk-Reward Setup Screening</span>
                     </div>
                 </div>
             `;
@@ -2713,38 +2706,45 @@ async function fetchCloudAndFlatData() {
 
 /**
  * ============================================================================
- * ⭐ Watchlist Engine: Custom Stock & Index Tracker with Local Persistence
+ * ⭐ Watchlist Engine: Global Database & GitHub Storage Sync
  * ============================================================================
  */
 let userWatchlist = [];
-const DEFAULT_WATCHLIST_SYMBOLS = [
-    "NSE:NIFTY",
-    "NSE:BANKNIFTY",
-    "NSE:RELIANCE",
-    "NSE:HDFCBANK",
-    "NSE:INFY",
-    "NSE:TCS",
-    "NSE:TATAMOTORS"
-];
+let isWatchlistSyncing = false;
 
-function initWatchlistEngine() {
+async function initWatchlistEngine() {
+    // 1. Initial render with local storage cache if available
     try {
         const saved = localStorage.getItem('tradeSahiHai_watchlist');
         if (saved) {
             const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                userWatchlist = parsed;
-            } else {
-                userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
+            if (Array.isArray(parsed)) {
+                userWatchlist = parsed.map(item => typeof item === 'string' ? item : item.symbol);
             }
-        } else {
-            userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
         }
     } catch (e) {
-        userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
+        userWatchlist = [];
     }
-
     renderWatchlistItems();
+
+    // 2. Fetch fresh global database watchlist from server / GitHub sync
+    await fetchGlobalWatchlist();
+}
+
+async function fetchGlobalWatchlist() {
+    try {
+        const res = await fetch('/api/watchlist');
+        if (res.ok) {
+            const result = await res.json();
+            if (result.success && Array.isArray(result.data)) {
+                userWatchlist = result.data.map(item => typeof item === 'string' ? item : item.symbol);
+                saveWatchlistToStorage();
+                renderWatchlistItems();
+            }
+        }
+    } catch (err) {
+        console.warn("Global database watchlist fetch info:", err.message);
+    }
 }
 
 function saveWatchlistToStorage() {
@@ -2765,13 +2765,13 @@ function renderWatchlistItems() {
 
     if (userWatchlist.length === 0) {
         container.innerHTML = `
-            <div style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; background: #161b22; border: 1px dashed #30363d; border-radius: 8px; color: #8b949e;">
+            <div style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: 8px; color: var(--text-muted);">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
-                <h3 style="color: #f0f6fc; margin: 0 0 0.5rem 0; font-size: 1.1rem;">Your Watchlist is Empty</h3>
-                <p style="margin: 0 auto 1rem auto; max-width: 440px; font-size: 0.85rem;">Use the search bar above or click one of the preset buttons (+ Top Indices, + Bluechips) to add stocks and indices to track.</p>
-                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                <h3 style="color: var(--text-header); margin: 0 0 0.5rem 0; font-size: 1.1rem;">Global Watchlist is Empty</h3>
+                <p style="margin: 0 auto 1rem auto; max-width: 440px; font-size: 0.85rem; color: var(--text-muted);">No stocks in the global database. Use the search bar above to add any NSE/BSE stock or index. Stocks you add are stored in the global database and available to all users worldwide.</p>
+                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
                     <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="background:#2962ff; color:#fff; border-color:#2962ff; padding:6px 14px; font-weight:600;">+ Add Major Indices</button>
-                    <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="background:#21262d; color:#c9d1d9; padding:6px 14px;">+ Add Bluechip Equities</button>
+                    <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="background:var(--bg-input); color:var(--text-body); border:1px solid var(--border-subtle); padding:6px 14px;">+ Add Bluechip Equities</button>
                 </div>
             </div>
         `;
@@ -2806,29 +2806,29 @@ function renderWatchlistItems() {
         const trendText = levels ? levels.trend : (isUp ? "Bullish Momentum" : "Support Test");
 
         return `
-            <div class="display-card-v2" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1rem; transition:transform 0.15s ease, border-color 0.15s ease; position:relative;">
+            <div class="display-card-v2" style="padding:1rem; position:relative;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem;">
                     <div>
                         <div style="display:flex; align-items:center; gap:0.4rem;">
-                            <span style="font-weight:700; color:#f0f6fc; font-size:1.02rem; letter-spacing:0.3px;">${escapeHtml(item.name || item.symbol)}</span>
-                            <span style="font-size:0.65rem; background:#21262d; border:1px solid #30363d; color:#8b949e; padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.symbol)}</span>
+                            <span style="font-weight:700; color:var(--text-header); font-size:1.02rem; letter-spacing:0.3px;">${escapeHtml(item.name || item.symbol)}</span>
+                            <span style="font-size:0.65rem; background:var(--bg-input); border:1px solid var(--border-subtle); color:var(--text-muted); padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.symbol)}</span>
                         </div>
-                        <div style="font-size:0.75rem; color:#8b949e; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:210px;">${escapeHtml(item.fullName || item.name)}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:210px;">${escapeHtml(item.fullName || item.name)}</div>
                     </div>
                     <button onclick="removeStockFromWatchlist('${escapeHtml(item.symbol)}')" 
-                            title="Remove from Watchlist" 
-                            style="background:transparent; border:none; color:#8b949e; font-size:0.9rem; cursor:pointer; padding:2px 6px; border-radius:4px; transition:color 0.15s;"
+                            title="Remove from Global Watchlist" 
+                            style="background:transparent; border:none; color:var(--text-muted); font-size:0.9rem; cursor:pointer; padding:2px 6px; border-radius:4px; transition:color 0.15s;"
                             onmouseover="this.style.color='#f85149'" 
-                            onmouseout="this.style.color='#8b949e'">✖</button>
+                            onmouseout="this.style.color='var(--text-muted)'">✖</button>
                 </div>
 
-                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.75rem; background:#0d1117; padding:0.5rem 0.75rem; border-radius:6px; border:1px solid #21262d;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.75rem; background:var(--bg-canvas); padding:0.5rem 0.75rem; border-radius:6px; border:1px solid var(--border-subtle);">
                     <div>
-                        <span style="font-size:0.65rem; color:#8b949e; display:block;">CURRENT PRICE</span>
-                        <span style="font-size:1.15rem; font-weight:700; color:#f0f6fc;">₹${currentPrice}</span>
+                        <span style="font-size:0.65rem; color:var(--text-muted); display:block;">CURRENT PRICE</span>
+                        <span style="font-size:1.15rem; font-weight:700; color:var(--text-header);">₹${currentPrice}</span>
                     </div>
                     <div style="text-align:right;">
-                        <span style="font-size:0.65rem; color:#8b949e; display:block;">DAY CHG</span>
+                        <span style="font-size:0.65rem; color:var(--text-muted); display:block;">DAY CHG</span>
                         <span style="font-size:0.88rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">
                             ${isUp ? '+' : ''}${changeAmt >= 0 ? '+' : ''}${changeAmt} (${isUp ? '+' : ''}${changePct}%)
                         </span>
@@ -2837,16 +2837,16 @@ function renderWatchlistItems() {
 
                 <!-- Mini Pivots Grid -->
                 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; margin-bottom:0.85rem;">
-                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:#8b949e;">PIVOT</div>
+                    <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:var(--text-muted);">PIVOT</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#ffb300;">${pivotVal}</div>
                     </div>
-                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:#8b949e;">R1</div>
+                    <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:var(--text-muted);">R1</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#f85149;">${r1Val}</div>
                     </div>
-                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:#8b949e;">S1</div>
+                    <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:var(--text-muted);">S1</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#39d353;">${s1Val}</div>
                     </div>
                 </div>
@@ -2860,9 +2860,8 @@ function renderWatchlistItems() {
                         📊 Open Chart
                     </button>
                     <button onclick="calculateForStock('${escapeHtml(item.symbol)}')" 
-                            style="flex:1; background:#21262d; border:1px solid #30363d; color:#c9d1d9; padding:6px 10px; border-radius:5px; font-size:0.75rem; font-weight:600; cursor:pointer; transition:background 0.15s;"
-                            onmouseover="this.style.background='#30363d'" 
-                            onmouseout="this.style.background='#21262d'">
+                            class="read-more-btn"
+                            style="flex:1; padding:6px 10px; border-radius:5px; font-size:0.75rem; font-weight:600; cursor:pointer;">
                         🧮 Calc Risk
                     </button>
                 </div>
@@ -2875,7 +2874,7 @@ function renderWatchlistItems() {
     if (losersEl) losersEl.innerText = lCount.toString();
 }
 
-function addCustomStockToWatchlist(symbolToAdd = null) {
+async function addCustomStockToWatchlist(symbolToAdd = null) {
     const input = document.getElementById('watchlist-add-input');
     const feedback = document.getElementById('watchlist-feedback-msg');
     const symbol = (symbolToAdd || (input ? input.value : '')).trim();
@@ -2889,11 +2888,12 @@ function addCustomStockToWatchlist(symbolToAdd = null) {
     const canonical = resolved.symbol;
 
     if (userWatchlist.includes(canonical)) {
-        showWatchlistFeedback(`"${resolved.name}" is already in your watchlist`, "gold");
+        showWatchlistFeedback(`"${resolved.name}" is already in the global watchlist`, "gold");
         if (input) input.value = '';
         return;
     }
 
+    // Optimistic UI update
     userWatchlist.unshift(canonical);
     saveWatchlistToStorage();
     renderWatchlistItems();
@@ -2902,34 +2902,93 @@ function addCustomStockToWatchlist(symbolToAdd = null) {
     const dropdown = document.getElementById('watchlist-search-dropdown');
     if (dropdown) dropdown.style.display = 'none';
 
-    showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to Watchlist`, "green");
+    showWatchlistFeedback(`Saving "${resolved.name}" to global database...`, "gold");
+
+    // Persist to global backend & GitHub database
+    try {
+        const res = await fetch('/api/watchlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                symbol: canonical,
+                name: resolved.name,
+                fullName: resolved.fullName || resolved.name,
+                addedAt: new Date().toISOString()
+            })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.data)) {
+                userWatchlist = data.data.map(item => typeof item === 'string' ? item : item.symbol);
+                saveWatchlistToStorage();
+                renderWatchlistItems();
+            }
+            showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to global database`, "green");
+        } else {
+            showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to Watchlist`, "green");
+        }
+    } catch (e) {
+        showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to Watchlist`, "green");
+    }
 }
 
-function removeStockFromWatchlist(canonicalSymbol) {
+async function removeStockFromWatchlist(canonicalSymbol) {
     userWatchlist = userWatchlist.filter(s => s !== canonicalSymbol);
     saveWatchlistToStorage();
     renderWatchlistItems();
-    showWatchlistFeedback(`Removed ${canonicalSymbol} from Watchlist`, "gold");
+    showWatchlistFeedback(`Removing ${canonicalSymbol} from global database...`, "gold");
+
+    try {
+        const res = await fetch('/api/watchlist', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ symbol: canonicalSymbol })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.data)) {
+                userWatchlist = data.data.map(item => typeof item === 'string' ? item : item.symbol);
+                saveWatchlistToStorage();
+                renderWatchlistItems();
+            }
+            showWatchlistFeedback(`Removed ${canonicalSymbol} from global database`, "green");
+        } else {
+            showWatchlistFeedback(`Removed ${canonicalSymbol} from Watchlist`, "gold");
+        }
+    } catch (e) {
+        showWatchlistFeedback(`Removed ${canonicalSymbol} from Watchlist`, "gold");
+    }
 }
 
-function addPresetGroup(groupType) {
+async function addPresetGroup(groupType) {
     const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NSE:FINNIFTY", "NSE:NIFTYIT", "NSE:NIFTYAUTO"];
     const bluechipsList = ["NSE:RELIANCE", "NSE:HDFCBANK", "NSE:INFY", "NSE:ICICIBANK", "NSE:TCS", "NSE:SBIN", "NSE:BHARTIARTL", "NSE:LT"];
 
     const targetList = groupType === 'indices' ? indicesList : bluechipsList;
     let addedCount = 0;
 
-    targetList.forEach(sym => {
+    for (const sym of targetList) {
         const resolved = getOrRegisterSymbol(sym);
         if (!userWatchlist.includes(resolved.symbol)) {
             userWatchlist.push(resolved.symbol);
             addedCount++;
+            try {
+                await fetch('/api/watchlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        symbol: resolved.symbol,
+                        name: resolved.name,
+                        fullName: resolved.fullName || resolved.name
+                    })
+                });
+            } catch (e) {}
         }
-    });
+    }
 
     saveWatchlistToStorage();
     renderWatchlistItems();
-    showWatchlistFeedback(`Added ${addedCount} symbols to Watchlist`, "green");
+    showWatchlistFeedback(`Added ${addedCount} symbols to global database`, "green");
 }
 
 function showWatchlistFeedback(msg, color) {
