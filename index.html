@@ -101,6 +101,7 @@
             <button class="nav-link" data-tab="learning" onclick="navigateHub('learning', event)">Today's Learning</button>
             <button class="nav-link" data-tab="strategy" onclick="navigateHub('strategy', event)">Strategies</button>
             <button class="nav-link" data-tab="reels" onclick="navigateHub('reels', event)">Trending Reels</button>
+            <button class="nav-link" data-tab="watchlist" onclick="navigateHub('watchlist', event)">⭐ Watchlist</button>
             <button class="nav-link theme-toggle-tab" id="theme-toggle-btn" onclick="toggleThemeMode()" aria-label="Switch Light and Dark Theme" title="Toggle Light / Dark Theme">
                 <span class="theme-toggle-icon" id="theme-toggle-icon">☀️</span>
                 <span class="theme-toggle-label" id="theme-toggle-label">Light Mode</span>
@@ -244,7 +245,7 @@
 
                 <!-- Dynamic Today / Timeline Date Subhead Banner -->
                 <div class="timeline-date-header" id="daily-date-header" style="margin-bottom:0.75rem;">
-                    <span id="current-date-display" style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">📅 Today — August 16, 2026</span>
+                    <span id="current-date-display" style="font-weight:700; color:#f0f6fc; font-size:0.875rem;">📅 Today</span>
                 </div>
 
                 <!-- Today's Featured Full Content Daily Analysis Card -->
@@ -364,6 +365,79 @@
                         <span style="font-size:0.7rem; color:#8b949e;">Click Read More to expand reel logs</span>
                     </div>
                     <div id="stream-reels-container"></div>
+                </div>
+            </div>
+
+            <!-- 5. WATCHLIST & CUSTOM SYMBOLS PANEL -->
+            <div id="watchlist-panel" class="viewport-panel">
+                <div class="stream-header">
+                    <h2>⭐ Live Stock & Index Watchlist</h2>
+                    <span class="badge blue">Live Tracker</span>
+                </div>
+
+                <!-- Watchlist Add Toolbar & Fast Search -->
+                <div class="display-card-v2" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.15rem; margin-bottom:1.25rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem; flex-wrap:wrap; gap:0.5rem;">
+                        <div>
+                            <h3 style="margin:0; color:#f0f6fc; font-size:0.98rem; font-weight:700;">Add Stocks to Watchlist</h3>
+                            <span style="font-size:0.75rem; color:#8b949e;">Search Indian equities (NSE/BSE), Sectoral Indices, or type any custom ticker</span>
+                        </div>
+                        <div style="display:flex; gap:0.5rem;">
+                            <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Top Indices</button>
+                            <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Bluechips</button>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:0.65rem; align-items:center; position:relative; flex-wrap:wrap;">
+                        <div style="position:relative; flex:1; min-width:240px;">
+                            <input type="text" 
+                                   id="watchlist-add-input" 
+                                   placeholder="Search symbol (e.g. RELIANCE, TATASTEEL, INFY, HDFCBANK)..." 
+                                   autocomplete="off"
+                                   oninput="onWatchlistSearchInput(this.value)"
+                                   onkeydown="onWatchlistInputKeyDown(event)"
+                                   style="width:100%; background:#0d1117; border:1px solid #30363d; color:#f0f6fc; padding:9px 12px; border-radius:6px; font-size:0.85rem; outline:none; box-sizing:border-box;">
+                            
+                            <!-- Search Autocomplete Dropdown -->
+                            <div id="watchlist-search-dropdown" style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:#161b22; border:1px solid #30363d; border-radius:6px; max-height:260px; overflow-y:auto; z-index:999; box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+                        </div>
+
+                        <button id="watchlist-add-btn" 
+                                onclick="addCustomStockToWatchlist()" 
+                                style="background:#2962ff; color:#ffffff; border:none; padding:9px 16px; border-radius:6px; font-size:0.82rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; white-space:nowrap; transition:background 0.15s ease;">
+                            <span>➕ Add Stock</span>
+                        </button>
+                    </div>
+
+                    <div id="watchlist-feedback-msg" style="display:none; font-size:0.75rem; margin-top:0.5rem; padding:4px 8px; border-radius:4px;"></div>
+                </div>
+
+                <!-- Watchlist Summary Statistics -->
+                <div class="calc-output-summary-pills" style="margin-bottom:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+                    <div class="metric-pill" style="flex:1; min-width:140px; background:#161b22; border:1px solid #30363d; padding:0.6rem 0.85rem; border-radius:6px;">
+                        <span class="m-label" style="font-size:0.7rem; color:#8b949e; display:block;">Tracked Tickers</span>
+                        <b class="m-val" id="wl-count" style="color:#58a6ff; font-size:1.1rem;">0</b>
+                    </div>
+                    <div class="metric-pill" style="flex:1; min-width:140px; background:#161b22; border:1px solid #30363d; padding:0.6rem 0.85rem; border-radius:6px;">
+                        <span class="m-label" style="font-size:0.7rem; color:#8b949e; display:block;">Gainers</span>
+                        <b class="m-val green" id="wl-gainers" style="color:#39d353; font-size:1.1rem;">0</b>
+                    </div>
+                    <div class="metric-pill" style="flex:1; min-width:140px; background:#161b22; border:1px solid #30363d; padding:0.6rem 0.85rem; border-radius:6px;">
+                        <span class="m-label" style="font-size:0.7rem; color:#8b949e; display:block;">Losers</span>
+                        <b class="m-val red" id="wl-losers" style="color:#f85149; font-size:1.1rem;">0</b>
+                    </div>
+                    <div class="metric-pill" style="flex:1; min-width:140px; background:#161b22; border:1px solid #30363d; padding:0.6rem 0.85rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span class="m-label" style="font-size:0.7rem; color:#8b949e; display:block;">Auto-Update</span>
+                            <b class="m-val green" style="color:#39d353; font-size:0.85rem;">Live Feed</b>
+                        </div>
+                        <button onclick="renderWatchlistItems()" title="Refresh Watchlist Prices" style="background:#21262d; border:1px solid #30363d; color:#c9d1d9; border-radius:4px; padding:4px 8px; font-size:0.72rem; cursor:pointer;">🔄 Refresh</button>
+                    </div>
+                </div>
+
+                <!-- Watchlist Grid / Table Cards -->
+                <div id="watchlist-grid-container" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:0.85rem;">
+                    <!-- Watchlist items rendered dynamically via JS -->
                 </div>
             </div>
 

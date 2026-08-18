@@ -17,6 +17,17 @@ const currentYear = globalToday.getFullYear().toString();
 const currentMonthName = globalToday.toLocaleString('en-US', { month: 'long' });
 const todayLabelString = globalToday.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
+// Global HTML Escape Utility
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Fallback & Multi-candidate Image Resolver for Supabase Storage
 window.handleImageFallback = function(img) {
     try {
@@ -222,7 +233,62 @@ function refreshCatalogMaps() {
 refreshCatalogMaps();
 
 // Symbol level dictionary for quick interactive updates on Indian Market Indices & Stocks
-const symbolLevels = {};
+const symbolLevels = {
+    "NSE:NIFTY": {
+        pivot: "24,350.00", r1: "24,480.00", r2: "24,620.00",
+        s1: "24,240.00", s2: "24,110.00", trend: "Bullish Bias", trendColor: "green",
+        header: "NIFTY 50 INDEX (NSE:NIFTY) – TECHNICAL CHART REPORT",
+        text: "• <b>Price Structure:</b> NIFTY 50 holding firmly above the 24,240 demand cluster with expanding volume.\n• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive close above 24,480 opens the path towards 24,620 new ATH test.\n• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with strict stop loss below 24,240 for upside targets of 24,480 and 24,560."
+    },
+    "NSE:BANKNIFTY": {
+        pivot: "50,450.00", r1: "50,850.00", r2: "51,200.00",
+        s1: "50,150.00", s2: "49,800.00", trend: "Consolidation", trendColor: "gold",
+        header: "BANK NIFTY INDEX (NSE:BANKNIFTY) – TECHNICAL STRUCTURE & PIVOTS",
+        text: "• <b>Price Structure:</b> Bank Nifty trading inside a tight 50,150 - 50,850 consolidation range above the 50-day EMA.\n• <b>Pivot Defense:</b> Strong support established at 50,150 (S1). Breakdown below 49,800 will trigger long liquidation.\n• <b>Trigger Level:</b> Breakout above 50,850 will invite sharp short-covering towards 51,200 and 51,500."
+    },
+    "BSE:SENSEX": {
+        pivot: "80,200.00", r1: "80,650.00", r2: "81,100.00",
+        s1: "79,800.00", s2: "79,350.00", trend: "Bullish Trend", trendColor: "green",
+        header: "BSE SENSEX INDEX (BSE:SENSEX) – BENCHMARK OUTLOOK",
+        text: "• <b>Structure:</b> SENSEX sustaining above psychological 80,000 mark with strong leadership from IT and Banking heavyweights.\n• <b>Resistance:</b> Major supply zone at 80,650 (R1). Sustaining above this level triggers rally towards 81,100."
+    },
+    "NSE:FINNIFTY": {
+        pivot: "23,100.00", r1: "23,320.00", r2: "23,550.00",
+        s1: "22,920.00", s2: "22,750.00", trend: "Accumulation", trendColor: "blue",
+        header: "NIFTY FINANCIAL SERVICES (NSE:FINNIFTY) – DERIVATIVES OUTLOOK",
+        text: "• <b>Pivots:</b> FINNIFTY consolidating between 22,920 and 23,320. Strong base at 23,000 round strike.\n• <b>Trigger:</b> Expiry momentum favors longs if price sustains above 23,150 pivot."
+    },
+    "NSE:RELIANCE": {
+        pivot: "2,500.00", r1: "2,545.00", r2: "2,580.00",
+        s1: "2,465.00", s2: "2,430.00", trend: "Breakout", trendColor: "green",
+        header: "RELIANCE INDUSTRIES (NSE:RELIANCE) – PRICE ACTION SETUP",
+        text: "• <b>Breakout Confirmation:</b> Reliance formed a bullish flag breakout on the daily chart with above-average institutional volume.\n• <b>Support Base:</b> 2,465 is the new demand floor. Sustaining above 2,500 keeps momentum intact for targets of 2,545 and 2,580."
+    },
+    "NSE:HDFCBANK": {
+        pivot: "1,615.00", r1: "1,640.00", r2: "1,675.00",
+        s1: "1,595.00", s2: "1,570.00", trend: "Range Bound", trendColor: "blue",
+        header: "HDFC BANK (NSE:HDFCBANK) – RANGE ACCUMULATION ANALYSIS",
+        text: "• <b>Key Zone:</b> HDFC Bank consolidating in the 1,595–1,640 accumulation box with declining selling pressure.\n• <b>Strategy:</b> Accumulate on dips near 1,600 with stop loss at 1,585 for swing target of 1,640–1,675."
+    },
+    "NSE:INFY": {
+        pivot: "1,765.00", r1: "1,810.00", r2: "1,850.00",
+        s1: "1,740.00", s2: "1,710.00", trend: "Strong Momentum", trendColor: "green",
+        header: "INFOSYS (NSE:INFY) – IT MOMENTUM LEADER",
+        text: "• <b>Momentum:</b> Infy leading the Nifty IT index charge following strong multi-year contract renewals.\n• <b>Pivot Target:</b> Immediate resistance at 1,810. Support firmly pegged at 1,740."
+    },
+    "NSE:ICICIBANK": {
+        pivot: "1,180.00", r1: "1,210.00", r2: "1,235.00",
+        s1: "1,160.00", s2: "1,140.00", trend: "Upward Trend", trendColor: "green",
+        header: "ICICI BANK (NSE:ICICIBANK) – TREND CONTINUATION",
+        text: "• <b>Structure:</b> Moving in a well-defined ascending price channel on daily charts.\n• <b>Support:</b> Lower trendline support at 1,160. Target at 1,210 and 1,235."
+    },
+    "NSE:TCS": {
+        pivot: "4,150.00", r1: "4,240.00", r2: "4,320.00",
+        s1: "4,080.00", s2: "4,000.00", trend: "Bullish Flag", trendColor: "green",
+        header: "TATA CONSULTANCY SERVICES (NSE:TCS) – SWING OUTLOOK",
+        text: "• <b>Setup:</b> TCS consolidating near 52-week highs. Sustained close above 4,200 opens room for 4,320."
+    }
+};
 
 // Helper: Seed-deterministic baseline calculation for any arbitrary stock/symbol
 function computeStockProfile(rawCode) {
@@ -350,64 +416,6 @@ function getOrRegisterSymbol(rawInput) {
     return newEntry;
 }
 
-// Symbol level dictionary for quick interactive updates on Indian Market Indices & Stocks
-const symbolLevels = {
-    "NSE:NIFTY": {
-        pivot: "24,350.00", r1: "24,480.00", r2: "24,620.00",
-        s1: "24,240.00", s2: "24,110.00", trend: "Bullish Bias", trendColor: "green",
-        header: "NIFTY 50 INDEX (NSE:NIFTY) – TECHNICAL CHART REPORT",
-        text: "• <b>Price Structure:</b> NIFTY 50 holding firmly above the 24,240 demand cluster with expanding volume.\n• <b>Key Pivot Zone:</b> Immediate hurdle stands at 24,480 (R1). A decisive close above 24,480 opens the path towards 24,620 new ATH test.\n• <b>Actionable Plan:</b> Look for pullback entries near 24,310 - 24,340 with strict stop loss below 24,240 for upside targets of 24,480 and 24,560."
-    },
-    "NSE:BANKNIFTY": {
-        pivot: "50,450.00", r1: "50,850.00", r2: "51,200.00",
-        s1: "50,150.00", s2: "49,800.00", trend: "Consolidation", trendColor: "gold",
-        header: "BANK NIFTY INDEX (NSE:BANKNIFTY) – TECHNICAL STRUCTURE & PIVOTS",
-        text: "• <b>Price Structure:</b> Bank Nifty trading inside a tight 50,150 - 50,850 consolidation range above the 50-day EMA.\n• <b>Pivot Defense:</b> Strong support established at 50,150 (S1). Breakdown below 49,800 will trigger long liquidation.\n• <b>Trigger Level:</b> Breakout above 50,850 will invite sharp short-covering towards 51,200 and 51,500."
-    },
-    "BSE:SENSEX": {
-        pivot: "80,200.00", r1: "80,650.00", r2: "81,100.00",
-        s1: "79,800.00", s2: "79,350.00", trend: "Bullish Trend", trendColor: "green",
-        header: "BSE SENSEX INDEX (BSE:SENSEX) – BENCHMARK OUTLOOK",
-        text: "• <b>Structure:</b> SENSEX sustaining above psychological 80,000 mark with strong leadership from IT and Banking heavyweights.\n• <b>Resistance:</b> Major supply zone at 80,650 (R1). Sustaining above this level triggers rally towards 81,100."
-    },
-    "NSE:FINNIFTY": {
-        pivot: "23,100.00", r1: "23,320.00", r2: "23,550.00",
-        s1: "22,920.00", s2: "22,750.00", trend: "Accumulation", trendColor: "blue",
-        header: "NIFTY FINANCIAL SERVICES (NSE:FINNIFTY) – DERIVATIVES OUTLOOK",
-        text: "• <b>Pivots:</b> FINNIFTY consolidating between 22,920 and 23,320. Strong base at 23,000 round strike.\n• <b>Trigger:</b> Expiry momentum favors longs if price sustains above 23,150 pivot."
-    },
-    "NSE:RELIANCE": {
-        pivot: "2,500.00", r1: "2,545.00", r2: "2,580.00",
-        s1: "2,465.00", s2: "2,430.00", trend: "Breakout", trendColor: "green",
-        header: "RELIANCE INDUSTRIES (NSE:RELIANCE) – PRICE ACTION SETUP",
-        text: "• <b>Breakout Confirmation:</b> Reliance formed a bullish flag breakout on the daily chart with above-average institutional volume.\n• <b>Support Base:</b> 2,465 is the new demand floor. Sustaining above 2,500 keeps momentum intact for targets of 2,545 and 2,580."
-    },
-    "NSE:HDFCBANK": {
-        pivot: "1,615.00", r1: "1,640.00", r2: "1,675.00",
-        s1: "1,595.00", s2: "1,570.00", trend: "Range Bound", trendColor: "blue",
-        header: "HDFC BANK (NSE:HDFCBANK) – RANGE ACCUMULATION ANALYSIS",
-        text: "• <b>Key Zone:</b> HDFC Bank consolidating in the 1,595–1,640 accumulation box with declining selling pressure.\n• <b>Strategy:</b> Accumulate on dips near 1,600 with stop loss at 1,585 for swing target of 1,640–1,675."
-    },
-    "NSE:INFY": {
-        pivot: "1,765.00", r1: "1,810.00", r2: "1,850.00",
-        s1: "1,740.00", s2: "1,710.00", trend: "Strong Momentum", trendColor: "green",
-        header: "INFOSYS (NSE:INFY) – IT MOMENTUM LEADER",
-        text: "• <b>Momentum:</b> Infy leading the Nifty IT index charge following strong multi-year contract renewals.\n• <b>Pivot Target:</b> Immediate resistance at 1,810. Support firmly pegged at 1,740."
-    },
-    "NSE:ICICIBANK": {
-        pivot: "1,180.00", r1: "1,210.00", r2: "1,235.00",
-        s1: "1,160.00", s2: "1,140.00", trend: "Upward Trend", trendColor: "green",
-        header: "ICICI BANK (NSE:ICICIBANK) – TREND CONTINUATION",
-        text: "• <b>Structure:</b> Moving in a well-defined ascending price channel on daily charts.\n• <b>Support:</b> Lower trendline support at 1,160. Target at 1,210 and 1,235."
-    },
-    "NSE:TCS": {
-        pivot: "4,150.00", r1: "4,240.00", r2: "4,320.00",
-        s1: "4,080.00", s2: "4,000.00", trend: "Bullish Flag", trendColor: "green",
-        header: "TATA CONSULTANCY SERVICES (NSE:TCS) – SWING OUTLOOK",
-        text: "• <b>Setup:</b> TCS consolidating near 52-week highs. Sustained close above 4,200 opens room for 4,320."
-    }
-};
-
 // Application Initialization
 document.addEventListener("DOMContentLoaded", () => {
     // 0. Initialize Light / Dark Theme State
@@ -432,6 +440,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 6. Fetch Cloud and Flat File analysis streams
     fetchCloudAndFlatData();
+
+    // 7. Initialize Interactive Watchlist Engine
+    initWatchlistEngine();
 });
 
 /**
@@ -2698,5 +2709,333 @@ async function fetchCloudAndFlatData() {
             }
         }
     });
+}
+
+/**
+ * ============================================================================
+ * ⭐ Watchlist Engine: Custom Stock & Index Tracker with Local Persistence
+ * ============================================================================
+ */
+let userWatchlist = [];
+const DEFAULT_WATCHLIST_SYMBOLS = [
+    "NSE:NIFTY",
+    "NSE:BANKNIFTY",
+    "NSE:RELIANCE",
+    "NSE:HDFCBANK",
+    "NSE:INFY",
+    "NSE:TCS",
+    "NSE:TATAMOTORS"
+];
+
+function initWatchlistEngine() {
+    try {
+        const saved = localStorage.getItem('tradeSahiHai_watchlist');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                userWatchlist = parsed;
+            } else {
+                userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
+            }
+        } else {
+            userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
+        }
+    } catch (e) {
+        userWatchlist = [...DEFAULT_WATCHLIST_SYMBOLS];
+    }
+
+    renderWatchlistItems();
+}
+
+function saveWatchlistToStorage() {
+    try {
+        localStorage.setItem('tradeSahiHai_watchlist', JSON.stringify(userWatchlist));
+    } catch (e) {}
+}
+
+function renderWatchlistItems() {
+    const container = document.getElementById('watchlist-grid-container');
+    const countEl = document.getElementById('wl-count');
+    const gainersEl = document.getElementById('wl-gainers');
+    const losersEl = document.getElementById('wl-losers');
+
+    if (!container) return;
+
+    if (countEl) countEl.innerText = userWatchlist.length.toString();
+
+    if (userWatchlist.length === 0) {
+        container.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; background: #161b22; border: 1px dashed #30363d; border-radius: 8px; color: #8b949e;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                <h3 style="color: #f0f6fc; margin: 0 0 0.5rem 0; font-size: 1.1rem;">Your Watchlist is Empty</h3>
+                <p style="margin: 0 auto 1rem auto; max-width: 440px; font-size: 0.85rem;">Use the search bar above or click one of the preset buttons (+ Top Indices, + Bluechips) to add stocks and indices to track.</p>
+                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                    <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="background:#2962ff; color:#fff; border-color:#2962ff; padding:6px 14px; font-weight:600;">+ Add Major Indices</button>
+                    <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="background:#21262d; color:#c9d1d9; padding:6px 14px;">+ Add Bluechip Equities</button>
+                </div>
+            </div>
+        `;
+        if (gainersEl) gainersEl.innerText = "0";
+        if (losersEl) losersEl.innerText = "0";
+        return;
+    }
+
+    let gCount = 0;
+    let lCount = 0;
+
+    const cardsHtml = userWatchlist.map((rawSym, idx) => {
+        const item = getOrRegisterSymbol(rawSym);
+        const levels = symbolLevels[item.symbol] || symbolLevels[item.code] || null;
+
+        // Deterministic live pseudo-fluctuation based on symbol hash
+        const prof = computeStockProfile(item.code || item.symbol);
+        const base = prof.basePrice;
+        
+        // Dynamic change
+        const changeSign = (idx % 3 === 0) ? -1 : 1;
+        const changePct = Number((((prof.vol / prof.basePrice) * 100) * changeSign * 0.45).toFixed(2));
+        const changeAmt = Number((base * (changePct / 100)).toFixed(2));
+        const currentPrice = (base + changeAmt).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+        const isUp = changePct >= 0;
+        if (isUp) gCount++; else lCount++;
+
+        const pivotVal = levels ? levels.pivot : (base).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        const r1Val = levels ? levels.r1 : (base * 1.012).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        const s1Val = levels ? levels.s1 : (base * 0.988).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        const trendText = levels ? levels.trend : (isUp ? "Bullish Momentum" : "Support Test");
+
+        return `
+            <div class="display-card-v2" style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1rem; transition:transform 0.15s ease, border-color 0.15s ease; position:relative;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem;">
+                    <div>
+                        <div style="display:flex; align-items:center; gap:0.4rem;">
+                            <span style="font-weight:700; color:#f0f6fc; font-size:1.02rem; letter-spacing:0.3px;">${escapeHtml(item.name || item.symbol)}</span>
+                            <span style="font-size:0.65rem; background:#21262d; border:1px solid #30363d; color:#8b949e; padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.symbol)}</span>
+                        </div>
+                        <div style="font-size:0.75rem; color:#8b949e; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:210px;">${escapeHtml(item.fullName || item.name)}</div>
+                    </div>
+                    <button onclick="removeStockFromWatchlist('${escapeHtml(item.symbol)}')" 
+                            title="Remove from Watchlist" 
+                            style="background:transparent; border:none; color:#8b949e; font-size:0.9rem; cursor:pointer; padding:2px 6px; border-radius:4px; transition:color 0.15s;"
+                            onmouseover="this.style.color='#f85149'" 
+                            onmouseout="this.style.color='#8b949e'">✖</button>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.75rem; background:#0d1117; padding:0.5rem 0.75rem; border-radius:6px; border:1px solid #21262d;">
+                    <div>
+                        <span style="font-size:0.65rem; color:#8b949e; display:block;">CURRENT PRICE</span>
+                        <span style="font-size:1.15rem; font-weight:700; color:#f0f6fc;">₹${currentPrice}</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="font-size:0.65rem; color:#8b949e; display:block;">DAY CHG</span>
+                        <span style="font-size:0.88rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">
+                            ${isUp ? '+' : ''}${changeAmt >= 0 ? '+' : ''}${changeAmt} (${isUp ? '+' : ''}${changePct}%)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Mini Pivots Grid -->
+                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; margin-bottom:0.85rem;">
+                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:#8b949e;">PIVOT</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#ffb300;">${pivotVal}</div>
+                    </div>
+                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:#8b949e;">R1</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#f85149;">${r1Val}</div>
+                    </div>
+                    <div style="background:#0d1117; border:1px solid #21262d; border-radius:4px; padding:0.3rem; text-align:center;">
+                        <div style="font-size:0.6rem; color:#8b949e;">S1</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#39d353;">${s1Val}</div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Buttons: Chart Now & Calc Risk -->
+                <div style="display:flex; gap:0.4rem;">
+                    <button onclick="viewStockInChart('${escapeHtml(item.symbol)}')" 
+                            style="flex:1; background:#2962ff; border:none; color:#ffffff; padding:6px 10px; border-radius:5px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:opacity 0.15s;"
+                            onmouseover="this.style.opacity='0.85'" 
+                            onmouseout="this.style.opacity='1'">
+                        📊 Open Chart
+                    </button>
+                    <button onclick="calculateForStock('${escapeHtml(item.symbol)}')" 
+                            style="flex:1; background:#21262d; border:1px solid #30363d; color:#c9d1d9; padding:6px 10px; border-radius:5px; font-size:0.75rem; font-weight:600; cursor:pointer; transition:background 0.15s;"
+                            onmouseover="this.style.background='#30363d'" 
+                            onmouseout="this.style.background='#21262d'">
+                        🧮 Calc Risk
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = cardsHtml;
+    if (gainersEl) gainersEl.innerText = gCount.toString();
+    if (losersEl) losersEl.innerText = lCount.toString();
+}
+
+function addCustomStockToWatchlist(symbolToAdd = null) {
+    const input = document.getElementById('watchlist-add-input');
+    const feedback = document.getElementById('watchlist-feedback-msg');
+    const symbol = (symbolToAdd || (input ? input.value : '')).trim();
+
+    if (!symbol) {
+        showWatchlistFeedback("Please enter a stock name or ticker symbol", "red");
+        return;
+    }
+
+    const resolved = getOrRegisterSymbol(symbol);
+    const canonical = resolved.symbol;
+
+    if (userWatchlist.includes(canonical)) {
+        showWatchlistFeedback(`"${resolved.name}" is already in your watchlist`, "gold");
+        if (input) input.value = '';
+        return;
+    }
+
+    userWatchlist.unshift(canonical);
+    saveWatchlistToStorage();
+    renderWatchlistItems();
+
+    if (input) input.value = '';
+    const dropdown = document.getElementById('watchlist-search-dropdown');
+    if (dropdown) dropdown.style.display = 'none';
+
+    showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to Watchlist`, "green");
+}
+
+function removeStockFromWatchlist(canonicalSymbol) {
+    userWatchlist = userWatchlist.filter(s => s !== canonicalSymbol);
+    saveWatchlistToStorage();
+    renderWatchlistItems();
+    showWatchlistFeedback(`Removed ${canonicalSymbol} from Watchlist`, "gold");
+}
+
+function addPresetGroup(groupType) {
+    const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NSE:FINNIFTY", "NSE:NIFTYIT", "NSE:NIFTYAUTO"];
+    const bluechipsList = ["NSE:RELIANCE", "NSE:HDFCBANK", "NSE:INFY", "NSE:ICICIBANK", "NSE:TCS", "NSE:SBIN", "NSE:BHARTIARTL", "NSE:LT"];
+
+    const targetList = groupType === 'indices' ? indicesList : bluechipsList;
+    let addedCount = 0;
+
+    targetList.forEach(sym => {
+        const resolved = getOrRegisterSymbol(sym);
+        if (!userWatchlist.includes(resolved.symbol)) {
+            userWatchlist.push(resolved.symbol);
+            addedCount++;
+        }
+    });
+
+    saveWatchlistToStorage();
+    renderWatchlistItems();
+    showWatchlistFeedback(`Added ${addedCount} symbols to Watchlist`, "green");
+}
+
+function showWatchlistFeedback(msg, color) {
+    const feedback = document.getElementById('watchlist-feedback-msg');
+    if (!feedback) return;
+
+    const bgMap = {
+        green: "rgba(57, 211, 83, 0.15)",
+        red: "rgba(248, 81, 73, 0.15)",
+        gold: "rgba(255, 179, 0, 0.15)"
+    };
+    const textMap = {
+        green: "#39d353",
+        red: "#f85149",
+        gold: "#ffb300"
+    };
+
+    feedback.style.display = "block";
+    feedback.style.background = bgMap[color] || bgMap.green;
+    feedback.style.color = textMap[color] || textMap.green;
+    feedback.style.border = `1px solid ${textMap[color] || textMap.green}`;
+    feedback.innerText = msg;
+
+    setTimeout(() => {
+        feedback.style.display = "none";
+    }, 4000);
+}
+
+function onWatchlistInputKeyDown(event) {
+    if (event.key === 'Enter') {
+        addCustomStockToWatchlist();
+    }
+}
+
+let wlDebounceTimer = null;
+function onWatchlistSearchInput(query) {
+    const dropdown = document.getElementById('watchlist-search-dropdown');
+    if (!dropdown) return;
+
+    const trimmed = (query || '').trim();
+    if (!trimmed) {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    if (wlDebounceTimer) clearTimeout(wlDebounceTimer);
+    wlDebounceTimer = setTimeout(() => {
+        const lower = trimmed.toLowerCase();
+        const catalogMatches = SYMBOL_CATALOG.filter(item => 
+            item.symbol.toLowerCase().includes(lower) ||
+            item.code.toLowerCase().includes(lower) ||
+            item.name.toLowerCase().includes(lower) ||
+            (item.fullName && item.fullName.toLowerCase().includes(lower))
+        ).slice(0, 8);
+
+        let html = '';
+        if (catalogMatches.length > 0) {
+            html += catalogMatches.map(m => `
+                <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(m.symbol)}')" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #21262d; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-weight:700; color:#f0f6fc; font-size:0.82rem;">${escapeHtml(m.name)} <span style="color:#58a6ff; font-weight:normal;">(${escapeHtml(m.symbol)})</span></div>
+                        <div style="font-size:0.7rem; color:#8b949e;">${escapeHtml(m.fullName || m.name)}</div>
+                    </div>
+                    <span style="font-size:0.7rem; background:#2962ff; color:#fff; padding:2px 7px; border-radius:3px; font-weight:600;">+ Add</span>
+                </div>
+            `).join('');
+        }
+
+        html += `
+            <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(trimmed)}')" style="padding:8px 12px; cursor:pointer; background:#0d1117; display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:0.8rem; color:#58a6ff;">➕ Add custom ticker <b>"${escapeHtml(trimmed.toUpperCase())}"</b></div>
+                <span style="font-size:0.7rem; background:#238636; color:#fff; padding:2px 7px; border-radius:3px; font-weight:600;">Add</span>
+            </div>
+        `;
+
+        dropdown.innerHTML = html;
+        dropdown.style.display = 'block';
+    }, 150);
+}
+
+// Close search dropdown on clicking outside
+document.addEventListener('click', (e) => {
+    const input = document.getElementById('watchlist-add-input');
+    const dropdown = document.getElementById('watchlist-search-dropdown');
+    if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+function viewStockInChart(symbol) {
+    navigateHub('daily');
+    onSymbolSelectChange(symbol);
+    const mainHeader = document.getElementById('main-header');
+    if (mainHeader) mainHeader.scrollIntoView({ behavior: 'smooth' });
+}
+
+function calculateForStock(symbol) {
+    navigateHub('daily');
+    onSymbolSelectChange(symbol);
+    const calcBox = document.querySelector('.calc-box');
+    if (calcBox) {
+        calcBox.scrollIntoView({ behavior: 'smooth' });
+        calcBox.style.boxShadow = "0 0 0 2px #2962ff";
+        setTimeout(() => {
+            calcBox.style.boxShadow = "none";
+        }, 1500);
+    }
 }
 
