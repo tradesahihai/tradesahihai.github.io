@@ -211,7 +211,46 @@ const SYMBOL_CATALOG = [
     { symbol: "NSE:BSE", name: "BSE LIMITED", fullName: "BSE Limited", code: "BSE", group: "Stocks", tvTicker: "BSE:BSE", yahooTicker: "BSE.NS", googleTicker: "BSE:NSE", basePrice: 2880.00, drift: 6.8, vol: 21.0, volumeBase: 3400000 },
     { symbol: "NSE:CDSL", name: "CDSL", fullName: "Central Depository Services Ltd", code: "CDSL", group: "Stocks", tvTicker: "BSE:CDSL", yahooTicker: "CDSL.NS", googleTicker: "CDSL:NSE", basePrice: 1520.00, drift: 3.8, vol: 11.5, volumeBase: 4200000 },
     { symbol: "NSE:MCX", name: "MCX", fullName: "Multi Commodity Exchange", code: "MCX", group: "Stocks", tvTicker: "BSE:MCX", yahooTicker: "MCX.NS", googleTicker: "MCX:NSE", basePrice: 5450.00, drift: 12.0, vol: 36.0, volumeBase: 950000 },
-    { symbol: "NSE:ANGELONE", name: "ANGEL ONE", fullName: "Angel One Limited", code: "ANGELONE", group: "Stocks", tvTicker: "BSE:ANGELONE", yahooTicker: "ANGELONE.NS", googleTicker: "ANGELONE:NSE", basePrice: 2650.00, drift: 6.2, vol: 19.0, volumeBase: 1100000 }
+    { symbol: "NSE:ANGELONE", name: "ANGEL ONE", fullName: "Angel One Limited", code: "ANGELONE", group: "Stocks", tvTicker: "BSE:ANGELONE", yahooTicker: "ANGELONE.NS", googleTicker: "ANGELONE:NSE", basePrice: 2650.00, drift: 6.2, vol: 19.0, volumeBase: 1100000 },
+
+    // Global & US Benchmark Indices
+    { symbol: "NASDAQ:IXIC", name: "NASDAQ COMPOSITE", fullName: "NASDAQ Composite Index", code: "IXIC", exchange: "NASDAQ", group: "US Indices", tvTicker: "NASDAQ:IXIC", yahooTicker: "^IXIC", googleTicker: "INDEXNASDAQ:.IXIC", currency: "USD", currencySymbol: "$", basePrice: 17850.50, drift: 24.0, vol: 85.0, volumeBase: 4500000000 },
+    { symbol: "NASDAQ:NDX", name: "NASDAQ 100", fullName: "NASDAQ-100 Tech Heavy Index", code: "NDX", exchange: "NASDAQ", group: "US Indices", tvTicker: "NASDAQ:NDX", yahooTicker: "^NDX", googleTicker: "INDEXNASDAQ:NDX", currency: "USD", currencySymbol: "$", basePrice: 19820.00, drift: 28.0, vol: 95.0, volumeBase: 3800000000 },
+    { symbol: "INDEX:SPX", name: "S&P 500", fullName: "S&P 500 Index (Standard & Poor's)", code: "SPX", exchange: "S&P", group: "US Indices", tvTicker: "SP:SPX", yahooTicker: "^GSPC", googleTicker: "INDEXSP:.INX", currency: "USD", currencySymbol: "$", basePrice: 5540.20, drift: 6.5, vol: 22.0, volumeBase: 3200000000 },
+    { symbol: "NASDAQ:QQQ", name: "INVESCO QQQ", fullName: "Invesco QQQ Trust (NASDAQ 100 ETF)", code: "QQQ", exchange: "NASDAQ", group: "NASDAQ ETFs", tvTicker: "NASDAQ:QQQ", yahooTicker: "QQQ", googleTicker: "QQQ:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 482.40, drift: 0.9, vol: 2.8, volumeBase: 42000000 },
+
+    // NASDAQ & US Mega-Cap Tech Equities
+    { symbol: "NASDAQ:NVDA", name: "NVIDIA", fullName: "NVIDIA Corporation (AI & GPUs)", code: "NVDA", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:NVDA", yahooTicker: "NVDA", googleTicker: "NVDA:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 128.50, drift: 0.45, vol: 1.85, volumeBase: 65000000 },
+    { symbol: "NASDAQ:AAPL", name: "APPLE", fullName: "Apple Inc. (Consumer Tech & Services)", code: "AAPL", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:AAPL", yahooTicker: "AAPL", googleTicker: "AAPL:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 224.25, drift: 0.35, vol: 1.25, volumeBase: 48000000 },
+    { symbol: "NASDAQ:MSFT", name: "MICROSOFT", fullName: "Microsoft Corporation (Cloud & AI)", code: "MSFT", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:MSFT", yahooTicker: "MSFT", googleTicker: "MSFT:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 416.80, drift: 0.70, vol: 2.40, volumeBase: 22000000 },
+    { symbol: "NASDAQ:GOOGL", name: "ALPHABET / GOOGLE", fullName: "Alphabet Inc. Class A (Google)", code: "GOOGL", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:GOOGL", yahooTicker: "GOOGL", googleTicker: "GOOGL:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 165.40, drift: 0.35, vol: 1.15, volumeBase: 28000000 },
+    { symbol: "NASDAQ:AMZN", name: "AMAZON", fullName: "Amazon.com Inc. (E-Commerce & AWS)", code: "AMZN", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:AMZN", yahooTicker: "AMZN", googleTicker: "AMZN:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 178.60, drift: 0.40, vol: 1.35, volumeBase: 35000000 },
+    { symbol: "NASDAQ:META", name: "META", fullName: "Meta Platforms Inc. (Facebook / Instagram)", code: "META", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:META", yahooTicker: "META", googleTicker: "META:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 512.40, drift: 1.10, vol: 3.80, volumeBase: 16000000 },
+    { symbol: "NASDAQ:TSLA", name: "TESLA", fullName: "Tesla Inc. (EV & Autonomy)", code: "TSLA", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:TSLA", yahooTicker: "TSLA", googleTicker: "TSLA:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 218.80, drift: 0.85, vol: 3.20, volumeBase: 78000000 },
+    { symbol: "NASDAQ:AVGO", name: "BROADCOM", fullName: "Broadcom Inc. (Semiconductors & AI)", code: "AVGO", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:AVGO", yahooTicker: "AVGO", googleTicker: "AVGO:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 164.20, drift: 0.45, vol: 1.65, volumeBase: 19000000 },
+    { symbol: "NASDAQ:AMD", name: "AMD", fullName: "Advanced Micro Devices Inc.", code: "AMD", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:AMD", yahooTicker: "AMD", googleTicker: "AMD:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 146.50, drift: 0.50, vol: 1.95, volumeBase: 44000000 },
+    { symbol: "NASDAQ:NFLX", name: "NETFLIX", fullName: "Netflix Inc. (Streaming Entertainment)", code: "NFLX", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:NFLX", yahooTicker: "NFLX", googleTicker: "NFLX:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 692.00, drift: 1.40, vol: 4.80, volumeBase: 4200000 },
+    { symbol: "NASDAQ:INTC", name: "INTEL", fullName: "Intel Corporation (Semiconductors)", code: "INTC", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:INTC", yahooTicker: "INTC", googleTicker: "INTC:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 21.40, drift: 0.12, vol: 0.45, volumeBase: 58000000 },
+    { symbol: "NASDAQ:QCOM", name: "QUALCOMM", fullName: "QUALCOMM Incorporated (Mobile Snapdragon)", code: "QCOM", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:QCOM", yahooTicker: "QCOM", googleTicker: "QCOM:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 168.00, drift: 0.40, vol: 1.45, volumeBase: 11000000 },
+    { symbol: "NASDAQ:COST", name: "COSTCO", fullName: "Costco Wholesale Corporation", code: "COST", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:COST", yahooTicker: "COST", googleTicker: "COST:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 885.00, drift: 1.60, vol: 5.20, volumeBase: 2400000 },
+    { symbol: "NASDAQ:ADBE", name: "ADOBE", fullName: "Adobe Inc. (Creative Cloud & Firefly)", code: "ADBE", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:ADBE", yahooTicker: "ADBE", googleTicker: "ADBE:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 535.00, drift: 1.20, vol: 3.90, volumeBase: 3100000 },
+    { symbol: "NASDAQ:CSCO", name: "CISCO", fullName: "Cisco Systems Inc. (Networking & Security)", code: "CSCO", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:CSCO", yahooTicker: "CSCO", googleTicker: "CSCO:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 49.80, drift: 0.18, vol: 0.62, volumeBase: 18000000 },
+    { symbol: "NASDAQ:PYPL", name: "PAYPAL", fullName: "PayPal Holdings Inc. (FinTech)", code: "PYPL", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:PYPL", yahooTicker: "PYPL", googleTicker: "PYPL:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 71.50, drift: 0.25, vol: 0.88, volumeBase: 14000000 },
+    { symbol: "NASDAQ:ARM", name: "ARM HOLDINGS", fullName: "Arm Holdings plc (CPU Architectures)", code: "ARM", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:ARM", yahooTicker: "ARM", googleTicker: "ARM:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 132.80, drift: 0.60, vol: 2.40, volumeBase: 24000000 },
+    { symbol: "NASDAQ:PLTR", name: "PALANTIR", fullName: "Palantir Technologies Inc. (AI Platforms)", code: "PLTR", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:PLTR", yahooTicker: "PLTR", googleTicker: "PLTR:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 36.40, drift: 0.22, vol: 0.85, volumeBase: 62000000 },
+    { symbol: "NASDAQ:CRWD", name: "CROWDSTRIKE", fullName: "CrowdStrike Holdings Inc. (Cybersecurity)", code: "CRWD", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:CRWD", yahooTicker: "CRWD", googleTicker: "CRWD:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 284.00, drift: 0.85, vol: 3.10, volumeBase: 5500000 },
+    { symbol: "NASDAQ:SMCI", name: "SUPER MICRO", fullName: "Super Micro Computer Inc. (AI Servers)", code: "SMCI", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:SMCI", yahooTicker: "SMCI", googleTicker: "SMCI:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 44.50, drift: 0.35, vol: 1.45, volumeBase: 38000000 },
+    { symbol: "NASDAQ:COIN", name: "COINBASE", fullName: "Coinbase Global Inc. (Crypto Exchange)", code: "COIN", exchange: "NASDAQ", group: "NASDAQ Stocks", tvTicker: "NASDAQ:COIN", yahooTicker: "COIN", googleTicker: "COIN:NASDAQ", currency: "USD", currencySymbol: "$", basePrice: 174.00, drift: 0.75, vol: 3.10, volumeBase: 12000000 },
+
+    // NYSE Bluechip Equities
+    { symbol: "NYSE:BRK.B", name: "BERKSHIRE", fullName: "Berkshire Hathaway Inc. Class B", code: "BRK.B", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:BRK.B", yahooTicker: "BRK-B", googleTicker: "BRK.B:NYSE", currency: "USD", currencySymbol: "$", basePrice: 448.00, drift: 0.65, vol: 2.10, volumeBase: 3900000 },
+    { symbol: "NYSE:JPM", name: "JPMORGAN", fullName: "JPMorgan Chase & Co. (Global Banking)", code: "JPM", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:JPM", yahooTicker: "JPM", googleTicker: "JPM:NYSE", currency: "USD", currencySymbol: "$", basePrice: 214.50, drift: 0.45, vol: 1.55, volumeBase: 8800000 },
+    { symbol: "NYSE:V", name: "VISA", fullName: "Visa Inc. (Global Payment Processing)", code: "V", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:V", yahooTicker: "V", googleTicker: "V:NYSE", currency: "USD", currencySymbol: "$", basePrice: 278.40, drift: 0.50, vol: 1.70, volumeBase: 5900000 },
+    { symbol: "NYSE:WMT", name: "WALMART", fullName: "Walmart Inc. (Retail & E-Commerce)", code: "WMT", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:WMT", yahooTicker: "WMT", googleTicker: "WMT:NYSE", currency: "USD", currencySymbol: "$", basePrice: 78.90, drift: 0.22, vol: 0.75, volumeBase: 19000000 },
+    { symbol: "NYSE:LLY", name: "ELI LILLY", fullName: "Eli Lilly and Company (Pharmaceuticals)", code: "LLY", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:LLY", yahooTicker: "LLY", googleTicker: "LLY:NYSE", currency: "USD", currencySymbol: "$", basePrice: 945.00, drift: 1.80, vol: 6.20, volumeBase: 2800000 },
+    { symbol: "NYSE:ORCL", name: "ORACLE", fullName: "Oracle Corporation (Enterprise Database)", code: "ORCL", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:ORCL", yahooTicker: "ORCL", googleTicker: "ORCL:NYSE", currency: "USD", currencySymbol: "$", basePrice: 172.50, drift: 0.48, vol: 1.65, volumeBase: 12500000 },
+    { symbol: "NYSE:DIS", name: "DISNEY", fullName: "The Walt Disney Company (Entertainment)", code: "DIS", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:DIS", yahooTicker: "DIS", googleTicker: "DIS:NYSE", currency: "USD", currencySymbol: "$", basePrice: 92.40, drift: 0.28, vol: 0.95, volumeBase: 9200000 },
+    { symbol: "NYSE:UBER", name: "UBER", fullName: "Uber Technologies Inc. (Rides & Delivery)", code: "UBER", exchange: "NYSE", group: "NYSE Stocks", tvTicker: "NYSE:UBER", yahooTicker: "UBER", googleTicker: "UBER:NYSE", currency: "USD", currencySymbol: "$", basePrice: 74.80, drift: 0.30, vol: 1.10, volumeBase: 16000000 }
 ];
 
 // Lookup Maps
@@ -225,7 +264,7 @@ function refreshCatalogMaps() {
         TV_ADVANCED_SYMBOL_MAP[item.symbol] = item.tvTicker || item.symbol;
         TV_ADVANCED_SYMBOL_MAP[item.code] = item.tvTicker || item.symbol;
         TV_GAUGE_SYMBOL_MAP[item.symbol] = item.tvTicker || item.symbol;
-        YAHOO_INDIAN_SYMBOL_MAP[item.symbol] = item.yahooTicker || `${item.code}.NS`;
+        YAHOO_INDIAN_SYMBOL_MAP[item.symbol] = item.yahooTicker || (item.currency === 'USD' ? item.code : `${item.code}.NS`);
         SYMBOL_DISPLAY_NAMES[item.symbol] = item.name;
         SYMBOL_DISPLAY_NAMES[item.code] = item.name;
     });
@@ -287,29 +326,71 @@ const symbolLevels = {
         s1: "4,080.00", s2: "4,000.00", trend: "Bullish Flag", trendColor: "green",
         header: "TATA CONSULTANCY SERVICES (NSE:TCS) – SWING OUTLOOK",
         text: "• <b>Setup:</b> TCS consolidating near 52-week highs. Sustained close above 4,200 opens room for 4,320."
+    },
+    "NASDAQ:NVDA": {
+        pivot: "$128.00", r1: "$134.50", r2: "$140.00",
+        s1: "$123.50", s2: "$118.00", trend: "Strong Momentum", trendColor: "green",
+        header: "NVIDIA CORP (NASDAQ:NVDA) – AI CHIP LEADER TECHNICAL REPORT",
+        text: "• <b>Price Action:</b> NVIDIA consolidating constructively above the $123.50 demand floor with rising volume.\n• <b>Pivot Levels:</b> Breakout above $134.50 (R1) targets fresh push toward $140.00+."
+    },
+    "NASDAQ:AAPL": {
+        pivot: "$224.00", r1: "$230.50", r2: "$236.00",
+        s1: "$219.00", s2: "$214.00", trend: "Bullish Continuation", trendColor: "green",
+        header: "APPLE INC (NASDAQ:AAPL) – TECHNICAL PRICE ACTION",
+        text: "• <b>Key Structure:</b> Apple holding steady above 20-day EMA with major support anchored at $219.00."
+    },
+    "NASDAQ:MSFT": {
+        pivot: "$416.00", r1: "$425.00", r2: "$435.00",
+        s1: "$408.00", s2: "$398.00", trend: "Accumulation", trendColor: "blue",
+        header: "MICROSOFT (NASDAQ:MSFT) – ENTERPRISE CLOUD OUTLOOK",
+        text: "• <b>Structure:</b> Consolidating in the $408 - $425 channel awaiting breakout."
+    },
+    "NASDAQ:TSLA": {
+        pivot: "$218.00", r1: "$230.00", r2: "$244.00",
+        s1: "$206.00", s2: "$195.00", trend: "High Volatility", trendColor: "gold",
+        header: "TESLA INC (NASDAQ:TSLA) – TECHNICAL MOMENTUM",
+        text: "• <b>Volatility:</b> Active accumulation above $206 support with targets toward $230."
     }
 };
 
 // Helper: Seed-deterministic baseline calculation for any arbitrary stock/symbol
-function computeStockProfile(rawCode) {
+function computeStockProfile(rawCode, currency = 'INR') {
     let hash = 0;
-    for (let i = 0; i < rawCode.length; i++) {
-        hash = (hash << 5) - hash + rawCode.charCodeAt(i);
+    const str = String(rawCode || '').toUpperCase();
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
         hash |= 0;
     }
     const absHash = Math.abs(hash);
-    // Sensible base price between 85 and 4,800
+
+    const isUS = currency === 'USD' || 
+                 str.startsWith('NASDAQ:') || 
+                 str.startsWith('NYSE:') || 
+                 str.startsWith('INDEX:') ||
+                 ['NVDA','AAPL','MSFT','GOOGL','GOOG','AMZN','META','TSLA','AMD','NFLX','AVGO','QQQ','SPY','PLTR','ARM','SMCI','COIN','CRWD','COST','ADBE','INTC','QCOM','PYPL','IXIC','NDX','SPX','BRK.B','JPM','V','WMT','LLY','ORCL','DIS','UBER'].includes(str.replace(/^NASDAQ:|^NYSE:|^INDEX:/, ''));
+
+    if (isUS) {
+        // Sensible USD base price between $35 and $580
+        const priceMod = (absHash % 450) + 35;
+        const basePrice = Number((priceMod + (absHash % 99) * 0.15).toFixed(2));
+        const drift = Number((basePrice * 0.002).toFixed(2));
+        const vol = Number((basePrice * 0.012).toFixed(2));
+        const volumeBase = ((absHash % 25) + 5) * 1000000;
+        return { basePrice, drift, vol, volumeBase, currency: 'USD', currencySymbol: '$' };
+    }
+
+    // Sensible INR base price between 85 and 4,800
     const priceMod = (absHash % 4200) + 120;
     const basePrice = Number((priceMod + (absHash % 99) * 0.25).toFixed(2));
     const drift = Number((basePrice * 0.0018).toFixed(2));
     const vol = Number((basePrice * 0.0055).toFixed(2));
     const volumeBase = ((absHash % 18) + 2) * 250000;
-    return { basePrice, drift, vol, volumeBase };
+    return { basePrice, drift, vol, volumeBase, currency: 'INR', currencySymbol: '₹' };
 }
 
 /**
  * Universal Symbol Resolver:
- * Resolves or dynamically registers ANY Indian or Global stock/index so ALL platforms display it identically.
+ * Resolves or dynamically registers ANY Indian, NASDAQ, NYSE, or Global stock/index so ALL platforms display it identically.
  */
 function getOrRegisterSymbol(rawInput) {
     if (!rawInput) return SYMBOL_CATALOG[0];
@@ -317,17 +398,18 @@ function getOrRegisterSymbol(rawInput) {
     const cleanInput = String(rawInput).trim();
     const upper = cleanInput.toUpperCase();
     
-    // 1. Direct match by symbol or code
+    // 1. Direct match by symbol or code or name or ticker
     let found = SYMBOL_CATALOG.find(c => 
         c.symbol.toUpperCase() === upper || 
         c.code.toUpperCase() === upper ||
         c.name.toUpperCase() === upper ||
-        (c.yahooTicker && c.yahooTicker.toUpperCase() === upper)
+        (c.yahooTicker && c.yahooTicker.toUpperCase() === upper) ||
+        (c.tvTicker && c.tvTicker.toUpperCase() === upper)
     );
 
     if (found) return found;
 
-    // 2. Extract clean ticker code (e.g. from "NSE:TATAPOWER", "TATAPOWER.NS", "BSE:500400")
+    // 2. Extract clean exchange and ticker code
     let exchange = 'NSE';
     let code = upper;
 
@@ -341,37 +423,64 @@ function getOrRegisterSymbol(rawInput) {
     } else if (upper.endsWith('.BO')) {
         exchange = 'BSE';
         code = upper.replace('.BO', '');
+    } else {
+        // Detect known NASDAQ or US tickers
+        const usTechs = ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'GOOG', 'AMZN', 'META', 'TSLA', 'AMD', 'NFLX', 'AVGO', 'QQQ', 'SPY', 'INTC', 'QCOM', 'ADBE', 'COST', 'PYPL', 'ARM', 'PLTR', 'CRWD', 'SMCI', 'COIN', 'UBER', 'IXIC', 'NDX', 'SPX', 'BRK.B', 'JPM', 'V', 'WMT', 'LLY', 'ORCL', 'DIS'];
+        if (usTechs.includes(code)) {
+            exchange = ['BRK.B', 'JPM', 'V', 'WMT', 'LLY', 'ORCL', 'DIS', 'UBER'].includes(code) ? 'NYSE' : 'NASDAQ';
+        }
     }
 
-    code = code.replace(/[^A-Z0-9&_-]/g, '');
+    code = code.replace(/[^A-Z0-9&_.-]/g, '');
     if (!code) code = 'CUSTOM';
 
-    const symbolKey = `${exchange}:${code}`;
-    const prof = computeStockProfile(code);
+    const isUS = exchange === 'NASDAQ' || exchange === 'NYSE' || exchange === 'INDEX';
+    const isIndex = code.startsWith('NIFTY') || code === 'SENSEX' || code.includes('INDEX') || code.includes('BANK') || code === 'IXIC' || code === 'NDX' || code === 'SPX' || code === 'DJI';
+    
+    let symbolKey = `${exchange}:${code}`;
+    if (exchange === 'INDEX') symbolKey = `INDEX:${code}`;
 
-    const isIndex = code.startsWith('NIFTY') || code === 'SENSEX' || code.includes('INDEX') || code.includes('BANK');
-    const groupName = isIndex ? 'Indices' : 'Stocks';
+    const prof = computeStockProfile(code, isUS ? 'USD' : 'INR');
+    
+    let groupName = 'Stocks';
+    if (isUS) {
+        groupName = isIndex ? 'US Indices' : (exchange === 'NASDAQ' ? 'NASDAQ Stocks' : 'NYSE Stocks');
+    } else {
+        groupName = isIndex ? 'Indices' : 'Stocks';
+    }
     
     // TradingView symbol resolution
-    const tvTicker = isIndex 
-        ? (code === 'NIFTY' ? 'CAPITALCOM:INDIA50' : (code === 'BANKNIFTY' ? 'CAPITALCOM:BANKNIFTY' : (code === 'SENSEX' ? 'BSE:SENSEX' : `BSE:${code}`)))
-        : `BSE:${code}`;
+    let tvTicker = `${exchange}:${code}`;
+    if (exchange === 'NASDAQ' || exchange === 'NYSE') {
+        tvTicker = `${exchange}:${code}`;
+    } else if (isIndex) {
+        tvTicker = (code === 'NIFTY' ? 'CAPITALCOM:INDIA50' : (code === 'BANKNIFTY' ? 'CAPITALCOM:BANKNIFTY' : (code === 'SENSEX' ? 'BSE:SENSEX' : `BSE:${code}`)));
+    } else {
+        tvTicker = `BSE:${code}`;
+    }
 
-    const yahooTicker = isIndex 
-        ? (code === 'NIFTY' ? '^NSEI' : (code === 'BANKNIFTY' ? '^NSEBANK' : (code === 'SENSEX' ? '^BSESN' : `${code}.NS`)))
-        : `${code}.NS`;
+    let yahooTicker = isUS ? code : `${code}.NS`;
+    if (isIndex && !isUS) {
+        yahooTicker = (code === 'NIFTY' ? '^NSEI' : (code === 'BANKNIFTY' ? '^NSEBANK' : (code === 'SENSEX' ? '^BSESN' : `${code}.NS`)));
+    } else if (code === 'IXIC') yahooTicker = '^IXIC';
+    else if (code === 'NDX') yahooTicker = '^NDX';
+    else if (code === 'SPX') yahooTicker = '^GSPC';
 
-    const googleTicker = isIndex ? `${code}:INDEXNSE` : `${code}:NSE`;
+    const googleTicker = isUS ? `${code}:${exchange}` : (isIndex ? `${code}:INDEXNSE` : `${code}:NSE`);
+    const currSym = isUS ? '$' : '₹';
 
     const newEntry = {
         symbol: symbolKey,
         name: code,
         fullName: `${code} (${exchange})`,
         code: code,
+        exchange: exchange,
         group: groupName,
         tvTicker: tvTicker,
         yahooTicker: yahooTicker,
         googleTicker: googleTicker,
+        currency: isUS ? 'USD' : 'INR',
+        currencySymbol: currSym,
         basePrice: prof.basePrice,
         drift: prof.drift,
         vol: prof.vol,
@@ -384,21 +493,21 @@ function getOrRegisterSymbol(rawInput) {
 
     // Dynamically generate pivot & technical report for this symbol
     const p = prof.basePrice;
-    const r1 = (p * 1.012).toFixed(2);
-    const r2 = (p * 1.025).toFixed(2);
-    const s1 = (p * 0.988).toFixed(2);
-    const s2 = (p * 0.975).toFixed(2);
+    const r1 = (p * 1.015).toFixed(2);
+    const r2 = (p * 1.030).toFixed(2);
+    const s1 = (p * 0.985).toFixed(2);
+    const s2 = (p * 0.970).toFixed(2);
 
     symbolLevels[symbolKey] = {
-        pivot: p.toLocaleString('en-IN', { minimumFractionDigits: 2 }),
-        r1: Number(r1).toLocaleString('en-IN', { minimumFractionDigits: 2 }),
-        r2: Number(r2).toLocaleString('en-IN', { minimumFractionDigits: 2 }),
-        s1: Number(s1).toLocaleString('en-IN', { minimumFractionDigits: 2 }),
-        s2: Number(s2).toLocaleString('en-IN', { minimumFractionDigits: 2 }),
+        pivot: `${currSym}${Number(p).toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2 })}`,
+        r1: `${currSym}${Number(r1).toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2 })}`,
+        r2: `${currSym}${Number(r2).toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2 })}`,
+        s1: `${currSym}${Number(s1).toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2 })}`,
+        s2: `${currSym}${Number(s2).toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2 })}`,
         trend: "Active Momentum",
         trendColor: "green",
         header: `${code} (${symbolKey}) – TECHNICAL STRUCTURE & PIVOTS`,
-        text: `• <b>Price Structure:</b> ${code} maintaining strong base near ₹${s1} with active volume.\n• <b>Key Pivot Zone:</b> Immediate resistance placed at ₹${r1} (R1). Breakout triggers extension towards ₹${r2}.\n• <b>Actionable Plan:</b> Buy on dips near ₹${p.toFixed(2)} with stop-loss below ₹${s1}.`
+        text: `• <b>Price Structure:</b> ${code} maintaining strong base near ${currSym}${s1} with active volume.\n• <b>Key Pivot Zone:</b> Immediate resistance placed at ${currSym}${r1} (R1). Breakout triggers extension towards ${currSym}${r2}.\n• <b>Actionable Plan:</b> Buy on dips near ${currSym}${p.toFixed(2)} with stop-loss below ${currSym}${s1}.`
     };
 
     // Sync into the HTML select element if not present
@@ -2768,10 +2877,11 @@ function renderWatchlistItems() {
             <div style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: 8px; color: var(--text-muted);">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
                 <h3 style="color: var(--text-header); margin: 0 0 0.5rem 0; font-size: 1.1rem;">Global Watchlist is Empty</h3>
-                <p style="margin: 0 auto 1rem auto; max-width: 440px; font-size: 0.85rem; color: var(--text-muted);">No stocks in the global database. Use the search bar above to add any NSE/BSE stock or index. Stocks you add are stored in the global database and available to all users worldwide.</p>
-                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="background:#2962ff; color:#fff; border-color:#2962ff; padding:6px 14px; font-weight:600;">+ Add Major Indices</button>
-                    <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="background:var(--bg-input); color:var(--text-body); border:1px solid var(--border-subtle); padding:6px 14px;">+ Add Bluechip Equities</button>
+                <p style="margin: 0 auto 1.25rem auto; max-width: 460px; font-size: 0.85rem; color: var(--text-muted);">No stocks in the global database. Search and add any Indian (NSE/BSE) stock, NASDAQ tech giant (NVDA, AAPL, MSFT, TSLA), or custom ticker worldwide.</p>
+                <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="addPresetGroup('nasdaq')" class="chart-platform-btn" style="background:#9333ea; color:#fff; border-color:#9333ea; padding:7px 14px; font-weight:600;">+ Add NASDAQ Tech</button>
+                    <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="background:#2962ff; color:#fff; border-color:#2962ff; padding:7px 14px; font-weight:600;">+ Add Major Indices</button>
+                    <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="background:var(--bg-input); color:var(--text-body); border:1px solid var(--border-subtle); padding:7px 14px;">+ Add Bluechips</button>
                 </div>
             </div>
         `;
@@ -2787,33 +2897,59 @@ function renderWatchlistItems() {
         const item = getOrRegisterSymbol(rawSym);
         const levels = symbolLevels[item.symbol] || symbolLevels[item.code] || null;
 
+        const isUSD = item.currency === 'USD' || (item.currencySymbol === '$') || item.symbol.startsWith('NASDAQ:') || item.symbol.startsWith('NYSE:') || item.exchange === 'NASDAQ' || item.exchange === 'NYSE';
+        const currSym = isUSD ? '$' : '₹';
+        const localeCode = isUSD ? 'en-US' : 'en-IN';
+
         // Deterministic live pseudo-fluctuation based on symbol hash
-        const prof = computeStockProfile(item.code || item.symbol);
+        const prof = computeStockProfile(item.code || item.symbol, isUSD ? 'USD' : 'INR');
         const base = prof.basePrice;
         
-        // Dynamic change
+        // Dynamic change calculation
         const changeSign = (idx % 3 === 0) ? -1 : 1;
         const changePct = Number((((prof.vol / prof.basePrice) * 100) * changeSign * 0.45).toFixed(2));
         const changeAmt = Number((base * (changePct / 100)).toFixed(2));
-        const currentPrice = (base + changeAmt).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const currentPrice = (base + changeAmt).toLocaleString(localeCode, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         
         const isUp = changePct >= 0;
         if (isUp) gCount++; else lCount++;
 
-        const pivotVal = levels ? levels.pivot : (base).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-        const r1Val = levels ? levels.r1 : (base * 1.012).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-        const s1Val = levels ? levels.s1 : (base * 0.988).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-        const trendText = levels ? levels.trend : (isUp ? "Bullish Momentum" : "Support Test");
+        const pivotVal = levels ? levels.pivot : `${currSym}${base.toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
+        const r1Val = levels ? levels.r1 : `${currSym}${(base * 1.015).toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
+        const s1Val = levels ? levels.s1 : `${currSym}${(base * 0.985).toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
+
+        // Exchange Badge Colors
+        let exchBadgeBg = 'rgba(41, 98, 255, 0.15)';
+        let exchBadgeColor = '#58a6ff';
+        let exchLabel = item.exchange || (item.symbol.includes(':') ? item.symbol.split(':')[0] : 'STOCK');
+
+        if (exchLabel === 'NASDAQ') {
+            exchBadgeBg = 'rgba(168, 85, 247, 0.2)';
+            exchBadgeColor = '#c084fc';
+        } else if (exchLabel === 'NYSE') {
+            exchBadgeBg = 'rgba(59, 130, 246, 0.2)';
+            exchBadgeColor = '#60a5fa';
+        } else if (exchLabel === 'NSE') {
+            exchBadgeBg = 'rgba(16, 185, 129, 0.2)';
+            exchBadgeColor = '#34d399';
+        } else if (exchLabel === 'BSE') {
+            exchBadgeBg = 'rgba(20, 184, 166, 0.2)';
+            exchBadgeColor = '#2dd4bf';
+        } else if (exchLabel === 'INDEX') {
+            exchBadgeBg = 'rgba(245, 158, 11, 0.2)';
+            exchBadgeColor = '#fbbf24';
+        }
 
         return `
             <div class="display-card-v2" style="padding:1rem; position:relative;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem;">
                     <div>
-                        <div style="display:flex; align-items:center; gap:0.4rem;">
+                        <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
                             <span style="font-weight:700; color:var(--text-header); font-size:1.02rem; letter-spacing:0.3px;">${escapeHtml(item.name || item.symbol)}</span>
-                            <span style="font-size:0.65rem; background:var(--bg-input); border:1px solid var(--border-subtle); color:var(--text-muted); padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.symbol)}</span>
+                            <span style="font-size:0.65rem; background:${exchBadgeBg}; border:1px solid ${exchBadgeColor}44; color:${exchBadgeColor}; padding:1px 6px; border-radius:3px; font-weight:700; text-transform:uppercase;">${escapeHtml(exchLabel)}</span>
+                            <span style="font-size:0.65rem; background:var(--bg-input); border:1px solid var(--border-subtle); color:var(--text-muted); padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.code || item.symbol)}</span>
                         </div>
-                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:210px;">${escapeHtml(item.fullName || item.name)}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px;" title="${escapeHtml(item.fullName || item.name)}">${escapeHtml(item.fullName || item.name)}</div>
                     </div>
                     <button onclick="removeStockFromWatchlist('${escapeHtml(item.symbol)}')" 
                             title="Remove from Global Watchlist" 
@@ -2824,13 +2960,13 @@ function renderWatchlistItems() {
 
                 <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.75rem; background:var(--bg-canvas); padding:0.5rem 0.75rem; border-radius:6px; border:1px solid var(--border-subtle);">
                     <div>
-                        <span style="font-size:0.65rem; color:var(--text-muted); display:block;">CURRENT PRICE</span>
-                        <span style="font-size:1.15rem; font-weight:700; color:var(--text-header);">₹${currentPrice}</span>
+                        <span style="font-size:0.65rem; color:var(--text-muted); display:block; font-weight:600;">CURRENT PRICE</span>
+                        <span style="font-size:1.15rem; font-weight:700; color:var(--text-header);">${currSym}${currentPrice}</span>
                     </div>
                     <div style="text-align:right;">
-                        <span style="font-size:0.65rem; color:var(--text-muted); display:block;">DAY CHG</span>
+                        <span style="font-size:0.65rem; color:var(--text-muted); display:block; font-weight:600;">DAY CHANGE</span>
                         <span style="font-size:0.88rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">
-                            ${isUp ? '+' : ''}${changeAmt >= 0 ? '+' : ''}${changeAmt} (${isUp ? '+' : ''}${changePct}%)
+                            ${isUp ? '+' : ''}${currSym}${Math.abs(changeAmt).toFixed(2)} (${isUp ? '+' : ''}${changePct}%)
                         </span>
                     </div>
                 </div>
@@ -2838,15 +2974,15 @@ function renderWatchlistItems() {
                 <!-- Mini Pivots Grid -->
                 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; margin-bottom:0.85rem;">
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted);">PIVOT</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">PIVOT</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#ffb300;">${pivotVal}</div>
                     </div>
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted);">R1</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">R1</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#f85149;">${r1Val}</div>
                     </div>
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted);">S1</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">S1</div>
                         <div style="font-size:0.75rem; font-weight:700; color:#39d353;">${s1Val}</div>
                     </div>
                 </div>
@@ -2890,6 +3026,8 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
     if (userWatchlist.includes(canonical)) {
         showWatchlistFeedback(`"${resolved.name}" is already in the global watchlist`, "gold");
         if (input) input.value = '';
+        const dropdown = document.getElementById('watchlist-search-dropdown');
+        if (dropdown) dropdown.style.display = 'none';
         return;
     }
 
@@ -2902,7 +3040,7 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
     const dropdown = document.getElementById('watchlist-search-dropdown');
     if (dropdown) dropdown.style.display = 'none';
 
-    showWatchlistFeedback(`Saving "${resolved.name}" to global database...`, "gold");
+    showWatchlistFeedback(`Saving "${resolved.name}" (${resolved.exchange || 'GLOBAL'}) to global database...`, "gold");
 
     // Persist to global backend & GitHub database
     try {
@@ -2913,6 +3051,8 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
                 symbol: canonical,
                 name: resolved.name,
                 fullName: resolved.fullName || resolved.name,
+                exchange: resolved.exchange,
+                currency: resolved.currency,
                 addedAt: new Date().toISOString()
             })
         });
@@ -2961,10 +3101,14 @@ async function removeStockFromWatchlist(canonicalSymbol) {
 }
 
 async function addPresetGroup(groupType) {
-    const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NSE:FINNIFTY", "NSE:NIFTYIT", "NSE:NIFTYAUTO"];
+    const nasdaqList = ["NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:GOOGL", "NASDAQ:AMZN", "NASDAQ:META", "NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:NFLX"];
+    const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NASDAQ:IXIC", "NASDAQ:NDX", "INDEX:SPX"];
     const bluechipsList = ["NSE:RELIANCE", "NSE:HDFCBANK", "NSE:INFY", "NSE:ICICIBANK", "NSE:TCS", "NSE:SBIN", "NSE:BHARTIARTL", "NSE:LT"];
 
-    const targetList = groupType === 'indices' ? indicesList : bluechipsList;
+    let targetList = bluechipsList;
+    if (groupType === 'nasdaq') targetList = nasdaqList;
+    else if (groupType === 'indices') targetList = indicesList;
+
     let addedCount = 0;
 
     for (const sym of targetList) {
@@ -2979,7 +3123,9 @@ async function addPresetGroup(groupType) {
                     body: JSON.stringify({
                         symbol: resolved.symbol,
                         name: resolved.name,
-                        fullName: resolved.fullName || resolved.name
+                        fullName: resolved.fullName || resolved.name,
+                        exchange: resolved.exchange,
+                        currency: resolved.currency
                     })
                 });
             } catch (e) {}
@@ -3019,7 +3165,13 @@ function showWatchlistFeedback(msg, color) {
 
 function onWatchlistInputKeyDown(event) {
     if (event.key === 'Enter') {
-        addCustomStockToWatchlist();
+        const dropdown = document.getElementById('watchlist-search-dropdown');
+        const firstMatchBtn = dropdown ? dropdown.querySelector('.chart-search-item') : null;
+        if (firstMatchBtn && dropdown && dropdown.style.display !== 'none') {
+            firstMatchBtn.click();
+        } else {
+            addCustomStockToWatchlist();
+        }
     }
 }
 
@@ -3034,39 +3186,119 @@ function onWatchlistSearchInput(query) {
         return;
     }
 
+    const lower = trimmed.toLowerCase();
+    
+    // 1. Instant local search across SYMBOL_CATALOG
+    const localMatches = SYMBOL_CATALOG.filter(item => 
+        item.symbol.toLowerCase().includes(lower) ||
+        item.code.toLowerCase().includes(lower) ||
+        item.name.toLowerCase().includes(lower) ||
+        (item.fullName && item.fullName.toLowerCase().includes(lower)) ||
+        (item.exchange && item.exchange.toLowerCase().includes(lower)) ||
+        (item.group && item.group.toLowerCase().includes(lower))
+    ).slice(0, 10);
+
+    renderWatchlistSearchResults(trimmed, localMatches, false);
+
+    // 2. Debounced API Search for Live Global & NASDAQ Tickers
     if (wlDebounceTimer) clearTimeout(wlDebounceTimer);
-    wlDebounceTimer = setTimeout(() => {
-        const lower = trimmed.toLowerCase();
-        const catalogMatches = SYMBOL_CATALOG.filter(item => 
-            item.symbol.toLowerCase().includes(lower) ||
-            item.code.toLowerCase().includes(lower) ||
-            item.name.toLowerCase().includes(lower) ||
-            (item.fullName && item.fullName.toLowerCase().includes(lower))
-        ).slice(0, 8);
+    wlDebounceTimer = setTimeout(async () => {
+        try {
+            const res = await fetch(`/api/symbol/search?q=${encodeURIComponent(trimmed)}`);
+            if (res.ok) {
+                const data = await res.json();
+                const apiResults = (data.results || []).map(r => ({
+                    symbol: r.symbol,
+                    name: r.name || r.code,
+                    fullName: r.fullName || r.name,
+                    code: r.code,
+                    exchange: r.exchange || 'GLOBAL',
+                    group: r.group || 'Global Stocks',
+                    currency: r.currency || (r.exchange === 'NASDAQ' || r.exchange === 'NYSE' ? 'USD' : 'INR'),
+                    yahooTicker: r.yahooTicker
+                }));
 
-        let html = '';
-        if (catalogMatches.length > 0) {
-            html += catalogMatches.map(m => `
-                <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(m.symbol)}')" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #21262d; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="font-weight:700; color:#f0f6fc; font-size:0.82rem;">${escapeHtml(m.name)} <span style="color:#58a6ff; font-weight:normal;">(${escapeHtml(m.symbol)})</span></div>
-                        <div style="font-size:0.7rem; color:#8b949e;">${escapeHtml(m.fullName || m.name)}</div>
-                    </div>
-                    <span style="font-size:0.7rem; background:#2962ff; color:#fff; padding:2px 7px; border-radius:3px; font-weight:600;">+ Add</span>
-                </div>
-            `).join('');
+                // Merge and deduplicate
+                const combined = [...localMatches];
+                apiResults.forEach(ar => {
+                    const exists = combined.some(c => c.code.toUpperCase() === ar.code.toUpperCase() || c.symbol.toUpperCase() === ar.symbol.toUpperCase());
+                    if (!exists) {
+                        combined.push(ar);
+                    }
+                });
+
+                renderWatchlistSearchResults(trimmed, combined, true);
+            }
+        } catch (e) {
+            console.warn("Watchlist global search API error:", e.message);
         }
+    }, 220);
+}
 
-        html += `
-            <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(trimmed)}')" style="padding:8px 12px; cursor:pointer; background:#0d1117; display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-size:0.8rem; color:#58a6ff;">➕ Add custom ticker <b>"${escapeHtml(trimmed.toUpperCase())}"</b></div>
-                <span style="font-size:0.7rem; background:#238636; color:#fff; padding:2px 7px; border-radius:3px; font-weight:600;">Add</span>
+function renderWatchlistSearchResults(query, matches, isFinal) {
+    const dropdown = document.getElementById('watchlist-search-dropdown');
+    if (!dropdown) return;
+
+    const trimmed = query.trim();
+    if (!trimmed) {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    let html = '';
+
+    if (matches && matches.length > 0) {
+        html += matches.slice(0, 12).map(m => {
+            const exch = m.exchange || (m.symbol.includes(':') ? m.symbol.split(':')[0] : 'STOCK');
+            let badgeBg = 'rgba(41, 98, 255, 0.15)';
+            let badgeColor = '#58a6ff';
+
+            if (exch === 'NASDAQ') {
+                badgeBg = 'rgba(168, 85, 247, 0.2)';
+                badgeColor = '#c084fc';
+            } else if (exch === 'NYSE') {
+                badgeBg = 'rgba(59, 130, 246, 0.2)';
+                badgeColor = '#60a5fa';
+            } else if (exch === 'NSE') {
+                badgeBg = 'rgba(16, 185, 129, 0.2)';
+                badgeColor = '#34d399';
+            } else if (exch === 'BSE') {
+                badgeBg = 'rgba(20, 184, 166, 0.2)';
+                badgeColor = '#2dd4bf';
+            } else if (exch === 'INDEX') {
+                badgeBg = 'rgba(245, 158, 11, 0.2)';
+                badgeColor = '#fbbf24';
+            }
+
+            return `
+                <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(m.symbol)}')" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #21262d; display:flex; justify-content:space-between; align-items:center; transition:background 0.15s ease;">
+                    <div style="flex:1; min-width:0; padding-right:8px;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-weight:700; color:#f0f6fc; font-size:0.84rem;">${escapeHtml(m.name)}</span>
+                            <span style="font-size:0.62rem; background:${badgeBg}; color:${badgeColor}; border:1px solid ${badgeColor}44; padding:1px 5px; border-radius:3px; font-weight:700; text-transform:uppercase;">${escapeHtml(exch)}</span>
+                            <span style="color:#8b949e; font-size:0.72rem;">${escapeHtml(m.code || m.symbol)}</span>
+                        </div>
+                        <div style="font-size:0.7rem; color:#8b949e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px;">${escapeHtml(m.fullName || m.name)}</div>
+                    </div>
+                    <span style="font-size:0.7rem; background:#2962ff; color:#fff; padding:3px 9px; border-radius:4px; font-weight:700; white-space:nowrap; flex-shrink:0;">+ Add</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Direct add custom ticker row
+    html += `
+        <div class="chart-search-item" onclick="addCustomStockToWatchlist('${escapeHtml(trimmed)}')" style="padding:9px 12px; cursor:pointer; background:var(--bg-canvas, #0d1117); display:flex; justify-content:space-between; align-items:center; border-top:1px solid #30363d;">
+            <div>
+                <div style="font-size:0.8rem; color:#58a6ff; font-weight:600;">➕ Add custom ticker <b>"${escapeHtml(trimmed.toUpperCase())}"</b></div>
+                <div style="font-size:0.68rem; color:#8b949e;">Add directly to global watchlist & sync database</div>
             </div>
-        `;
+            <span style="font-size:0.7rem; background:#238636; color:#fff; padding:3px 9px; border-radius:4px; font-weight:700; white-space:nowrap;">Add</span>
+        </div>
+    `;
 
-        dropdown.innerHTML = html;
-        dropdown.style.display = 'block';
-    }, 150);
+    dropdown.innerHTML = html;
+    dropdown.style.display = 'block';
 }
 
 // Close search dropdown on clicking outside

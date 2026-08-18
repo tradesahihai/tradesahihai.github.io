@@ -20,7 +20,7 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
 
             var activeTab = sessionStorage.getItem('activeTradingTab') || 'daily';
-            var styleNode = document.createElement('style');
+            var styleNode = document.creacd .teElement('style');
             styleNode.id = "instant-persistence-css";
             styleNode.innerHTML = `
                 .viewport-panel { display: none !important; }
@@ -380,9 +380,10 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem; flex-wrap:wrap; gap:0.5rem;">
                         <div>
                             <h3 style="margin:0; color:var(--text-header); font-size:0.98rem; font-weight:700;">Add Stocks to Watchlist</h3>
-                            <span style="font-size:0.75rem; color:var(--text-muted);">Search Indian equities (NSE/BSE), Sectoral Indices, or type any custom ticker</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">Search Indian Equities (NSE/BSE), NASDAQ & US Tech Giants, Indices, or type any custom ticker</span>
                         </div>
-                        <div style="display:flex; gap:0.5rem;">
+                        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                            <button onclick="addPresetGroup('nasdaq')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem; background:rgba(147,51,234,0.15); border-color:#9333ea; color:#c084fc; font-weight:600;">+ NASDAQ Tech</button>
                             <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Top Indices</button>
                             <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Bluechips</button>
                         </div>
@@ -392,7 +393,7 @@
                         <div style="position:relative; flex:1; min-width:240px;">
                             <input type="text" 
                                    id="watchlist-add-input" 
-                                   placeholder="Search symbol (e.g. RELIANCE, TATASTEEL, INFY, HDFCBANK)..." 
+                                   placeholder="Search symbol (e.g. NVDA, AAPL, MSFT, TSLA, RELIANCE, NIFTY)..." 
                                    autocomplete="off"
                                    oninput="onWatchlistSearchInput(this.value)"
                                    onkeydown="onWatchlistInputKeyDown(event)"
@@ -400,7 +401,7 @@
                                    style="width:100%; padding:9px 12px; border-radius:6px; font-size:0.85rem; outline:none; box-sizing:border-box;">
                             
                             <!-- Search Autocomplete Dropdown -->
-                            <div id="watchlist-search-dropdown" class="chart-search-dropdown-menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:260px; overflow-y:auto; z-index:999;"></div>
+                            <div id="watchlist-search-dropdown" class="chart-search-dropdown-menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:280px; overflow-y:auto; z-index:999;"></div>
                         </div>
 
                         <button id="watchlist-add-btn" 
