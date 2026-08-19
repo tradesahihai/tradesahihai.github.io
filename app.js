@@ -1375,19 +1375,48 @@ function generateRealisticCandles(symbol, interval) {
     return candles;
 }
 
-function renderProCandlestickChart(container, symbol, interval) {
+async function renderProCandlestickChart(container, symbol, interval) {
     const resolved = getOrRegisterSymbol(symbol);
     const displayName = resolved.name || SYMBOL_DISPLAY_NAMES[symbol] || symbol;
     const currSym = resolved.currencySymbol || (resolved.currency === 'USD' ? '$' : '₹');
     const isUS = resolved.currency === 'USD' || resolved.exchange === 'NASDAQ' || resolved.exchange === 'NYSE';
-    const candles = generateRealisticCandles(symbol, interval);
+    
+    // Default fallback candles
+    let candles = generateRealisticCandles(symbol, interval);
+    let isLiveFeed = false;
+
+    // Fetch real live candle bars from server exchange proxy
+    try {
+        const res = await fetch(`/api/chart/candles?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.candles) && data.candles.length > 0) {
+                candles = data.candles.map(c => ({
+                    time: new Date(c.time),
+                    open: c.open,
+                    high: c.high,
+                    low: c.low,
+                    close: c.close,
+                    volume: c.volume,
+                    ema9: c.ema9,
+                    ema21: c.ema21,
+                    pattern: c.pattern
+                }));
+                isLiveFeed = true;
+            }
+        }
+    } catch (e) {
+        console.warn('Live candle fetch notice:', e.message);
+    }
+
     proChartState.candles = candles;
     proChartState.hoverIndex = -1;
+    proChartState.isLiveFeed = isLiveFeed;
 
-    const latest = candles[candles.length - 1];
+    const latest = candles[candles.length - 1] || { open: 100, high: 100, low: 100, close: 100, volume: 0 };
     const prev = candles[candles.length - 2] || latest;
     const diff = latest.close - prev.close;
-    const pct = ((diff / prev.close) * 100).toFixed(2);
+    const pct = prev.close > 0 ? ((diff / prev.close) * 100).toFixed(2) : '0.00';
     const isUp = diff >= 0;
 
     container.innerHTML = `
@@ -1395,7 +1424,12 @@ function renderProCandlestickChart(container, symbol, interval) {
             <!-- Top Pro HUD Bar -->
             <div id="pro-chart-hud" class="pro-chart-hud">
                 <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
-                    <span class="pro-symbol-pill">${displayName}</span>
+                    <span class="pro-symbol-pill" style="display:inline-flex; align-items:center; gap:5px;">
+                        <span>${escapeHtml(displayName)}</span>
+                        <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:${isLiveFeed ? 'rgba(57,211,83,0.15)' : 'rgba(255,179,0,0.15)'}; color:${isLiveFeed ? '#39d353' : '#ffb300'}; border:1px solid ${isLiveFeed ? '#39d35344' : '#ffb30044'}; font-weight:700;">
+                            ${isLiveFeed ? '🟢 LIVE FEED' : 'SNAPSHOT'}
+                        </span>
+                    </span>
                     <span style="font-size:0.95rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">${currSym}${latest.close.toLocaleString(isUS ? 'en-US' : 'en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     <span style="color:${isUp ? '#39d353' : '#f85149'}; font-weight:600;">${isUp ? '+' : ''}${currSym}${Math.abs(diff).toFixed(2)} (${isUp ? '+' : ''}${pct}%)</span>
                     <div id="pro-candle-ohlc-info" class="pro-ohlc-info">
@@ -2849,11 +2883,13 @@ async function fetchCloudAndFlatData() {
 
 /**
  * ============================================================================
- * ⭐ Watchlist Engine: Global Database & GitHub Storage Sync
+ * ⭐ Watchlist Engine & Real-Time Exchange Data Sync
  * ============================================================================
  */
 let userWatchlist = [];
 let isWatchlistSyncing = false;
+let liveMarketQuotes = {};
+let liveQuotesPollingTimer = null;
 
 async function initWatchlistEngine() {
     // 1. Initial render with local storage cache if available
@@ -2872,6 +2908,14 @@ async function initWatchlistEngine() {
 
     // 2. Fetch fresh global database watchlist from server / GitHub sync
     await fetchGlobalWatchlist();
+
+    // 3. Immediately trigger real-time quotes poll and establish auto-refresh
+    pollLiveMarketQuotes(true);
+    if (!liveQuotesPollingTimer) {
+        liveQuotesPollingTimer = setInterval(() => {
+            pollLiveMarketQuotes(false);
+        }, 12000);
+    }
 }
 
 async function fetchGlobalWatchlist() {
@@ -2886,7 +2930,7 @@ async function fetchGlobalWatchlist() {
             }
         }
     } catch (err) {
-        console.warn("Global database watchlist fetch info:", err.message);
+        console.warn("Global database watchlist fetch notice:", err.message);
     }
 }
 
@@ -2894,6 +2938,50 @@ function saveWatchlistToStorage() {
     try {
         localStorage.setItem('tradeSahiHai_watchlist', JSON.stringify(userWatchlist));
     } catch (e) {}
+}
+
+async function pollLiveMarketQuotes(force = false) {
+    const badge = document.getElementById('wl-live-badge');
+    
+    // Collect all active symbols to poll: watchlist + benchmark indices + active chart symbol
+    const activeChartSymbol = (typeof currentSymbol !== 'undefined' ? currentSymbol : '') || 
+                              document.getElementById('chart-symbol-select')?.value || '';
+    
+    const benchmarkSymbols = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NASDAQ:IXIC", "INDEX:SPX"];
+    const allSymbolsSet = new Set([...userWatchlist, activeChartSymbol, ...benchmarkSymbols].filter(Boolean));
+    const symbolsList = Array.from(allSymbolsSet);
+
+    if (symbolsList.length === 0) return;
+
+    if (badge && force) {
+        badge.innerHTML = `<span class="live-dot-pulse" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#2962ff;"></span><span>Syncing...</span>`;
+    }
+
+    try {
+        const res = await fetch(`/api/quotes?symbols=${encodeURIComponent(symbolsList.join(','))}`);
+        if (res.ok) {
+            const json = await res.json();
+            if (json.success && json.data) {
+                // Merge quotes
+                Object.assign(liveMarketQuotes, json.data);
+                
+                // Update badge with active time
+                if (badge) {
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    badge.innerHTML = `<span class="live-dot-pulse" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#39d353;"></span><span>Live: ${timeStr}</span>`;
+                }
+
+                // Re-render watchlist with fresh real-time exchange numbers
+                renderWatchlistItems();
+            }
+        }
+    } catch (err) {
+        console.warn("Live quotes poll notice:", err.message);
+        if (badge) {
+            badge.innerHTML = `<span style="color:#ffb300; font-size:0.75rem;">🟡 Reconnecting...</span>`;
+        }
+    }
 }
 
 function renderWatchlistItems() {
@@ -2910,8 +2998,8 @@ function renderWatchlistItems() {
         container.innerHTML = `
             <div style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: 8px; color: var(--text-muted);">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
-                <h3 style="color: var(--text-header); margin: 0 0 0.5rem 0; font-size: 1.1rem;">Global Watchlist is Empty</h3>
-                <p style="margin: 0 auto 1.25rem auto; max-width: 460px; font-size: 0.85rem; color: var(--text-muted);">No stocks in the global database. Search and add any Indian (NSE/BSE) stock, NASDAQ tech giant (NVDA, AAPL, MSFT, TSLA), or custom ticker worldwide.</p>
+                <h3 style="color: var(--text-header); margin: 0 0 0.5rem 0; font-size: 1.1rem;">Watchlist is Empty</h3>
+                <p style="margin: 0 auto 1.25rem auto; max-width: 460px; font-size: 0.85rem; color: var(--text-muted);">No stocks currently tracked. Search and add any Indian (NSE/BSE) stock, NASDAQ tech giant (IBM, NVDA, AAPL, MSFT, TSLA), or top index.</p>
                 <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
                     <button onclick="addPresetGroup('nasdaq')" class="chart-platform-btn" style="background:#9333ea; color:#fff; border-color:#9333ea; padding:7px 14px; font-weight:600;">+ Add NASDAQ Tech</button>
                     <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="background:#2962ff; color:#fff; border-color:#2962ff; padding:7px 14px; font-weight:600;">+ Add Major Indices</button>
@@ -2927,7 +3015,7 @@ function renderWatchlistItems() {
     let gCount = 0;
     let lCount = 0;
 
-    const cardsHtml = userWatchlist.map((rawSym, idx) => {
+    const cardsHtml = userWatchlist.map((rawSym) => {
         const item = getOrRegisterSymbol(rawSym);
         const levels = symbolLevels[item.symbol] || symbolLevels[item.code] || null;
 
@@ -2935,22 +3023,53 @@ function renderWatchlistItems() {
         const currSym = isUSD ? '$' : '₹';
         const localeCode = isUSD ? 'en-US' : 'en-IN';
 
-        // Deterministic live pseudo-fluctuation based on symbol hash
-        const prof = computeStockProfile(item.code || item.symbol, isUSD ? 'USD' : 'INR');
-        const base = prof.basePrice;
-        
-        // Dynamic change calculation
-        const changeSign = (idx % 3 === 0) ? -1 : 1;
-        const changePct = Number((((prof.vol / prof.basePrice) * 100) * changeSign * 0.45).toFixed(2));
-        const changeAmt = Number((base * (changePct / 100)).toFixed(2));
-        const currentPrice = (base + changeAmt).toLocaleString(localeCode, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        
-        const isUp = changePct >= 0;
+        // Check if real live quote exists in liveMarketQuotes store
+        const liveQuote = liveMarketQuotes[item.symbol] || 
+                          liveMarketQuotes[item.code] || 
+                          liveMarketQuotes[rawSym] ||
+                          liveMarketQuotes[`NASDAQ:${item.code}`] ||
+                          liveMarketQuotes[`NYSE:${item.code}`] ||
+                          liveMarketQuotes[`NSE:${item.code}`];
+
+        let currentPriceStr = '';
+        let changeAmt = 0;
+        let changePct = 0;
+        let isUp = true;
+        let dayHighStr = '--';
+        let dayLowStr = '--';
+        let volumeStr = '--';
+        let isRealTimeFeed = false;
+
+        if (liveQuote && typeof liveQuote.price === 'number' && liveQuote.price > 0) {
+            isRealTimeFeed = true;
+            const price = liveQuote.price;
+            changeAmt = typeof liveQuote.change === 'number' ? liveQuote.change : 0;
+            changePct = typeof liveQuote.changePercent === 'number' ? liveQuote.changePercent : 0;
+            isUp = changeAmt >= 0;
+            
+            currentPriceStr = price.toLocaleString(localeCode, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            dayHighStr = liveQuote.high ? `${currSym}${liveQuote.high.toLocaleString(localeCode, { minimumFractionDigits: 2 })}` : '--';
+            dayLowStr = liveQuote.low ? `${currSym}${liveQuote.low.toLocaleString(localeCode, { minimumFractionDigits: 2 })}` : '--';
+            
+            if (liveQuote.volume) {
+                volumeStr = liveQuote.volume >= 1e6 
+                    ? (liveQuote.volume / 1e6).toFixed(2) + 'M' 
+                    : (liveQuote.volume >= 1e3 ? (liveQuote.volume / 1e3).toFixed(1) + 'K' : liveQuote.volume.toString());
+            }
+        } else {
+            // Fallback estimation until first live polling response completes
+            const prof = computeStockProfile(item.code || item.symbol, isUSD ? 'USD' : 'INR');
+            const base = prof.basePrice;
+            changePct = 0.00;
+            changeAmt = 0.00;
+            currentPriceStr = base.toLocaleString(localeCode, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         if (isUp) gCount++; else lCount++;
 
-        const pivotVal = levels ? levels.pivot : `${currSym}${base.toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
-        const r1Val = levels ? levels.r1 : `${currSym}${(base * 1.015).toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
-        const s1Val = levels ? levels.s1 : `${currSym}${(base * 0.985).toLocaleString(localeCode, { minimumFractionDigits: 2 })}`;
+        const pivotVal = levels ? levels.pivot : (dayHighStr !== '--' ? dayHighStr : `${currSym}${currentPriceStr}`);
+        const r1Val = levels ? levels.r1 : dayHighStr;
+        const s1Val = levels ? levels.s1 : dayLowStr;
 
         // Exchange Badge Colors
         let exchBadgeBg = 'rgba(41, 98, 255, 0.15)';
@@ -2982,6 +3101,7 @@ function renderWatchlistItems() {
                             <span style="font-weight:700; color:var(--text-header); font-size:1.02rem; letter-spacing:0.3px;">${escapeHtml(item.name || item.symbol)}</span>
                             <span style="font-size:0.65rem; background:${exchBadgeBg}; border:1px solid ${exchBadgeColor}44; color:${exchBadgeColor}; padding:1px 6px; border-radius:3px; font-weight:700; text-transform:uppercase;">${escapeHtml(exchLabel)}</span>
                             <span style="font-size:0.65rem; background:var(--bg-input); border:1px solid var(--border-subtle); color:var(--text-muted); padding:1px 5px; border-radius:3px; font-weight:600;">${escapeHtml(item.code || item.symbol)}</span>
+                            ${isRealTimeFeed ? `<span style="font-size:0.6rem; color:#39d353; font-weight:700; background:rgba(57,211,83,0.12); padding:1px 4px; border-radius:2px;">LIVE</span>` : ''}
                         </div>
                         <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px;" title="${escapeHtml(item.fullName || item.name)}">${escapeHtml(item.fullName || item.name)}</div>
                     </div>
@@ -2995,29 +3115,29 @@ function renderWatchlistItems() {
                 <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.75rem; background:var(--bg-canvas); padding:0.5rem 0.75rem; border-radius:6px; border:1px solid var(--border-subtle);">
                     <div>
                         <span style="font-size:0.65rem; color:var(--text-muted); display:block; font-weight:600;">CURRENT PRICE</span>
-                        <span style="font-size:1.15rem; font-weight:700; color:var(--text-header);">${currSym}${currentPrice}</span>
+                        <span style="font-size:1.15rem; font-weight:700; color:var(--text-header);">${currSym}${currentPriceStr}</span>
                     </div>
                     <div style="text-align:right;">
                         <span style="font-size:0.65rem; color:var(--text-muted); display:block; font-weight:600;">DAY CHANGE</span>
                         <span style="font-size:0.88rem; font-weight:700; color:${isUp ? '#39d353' : '#f85149'};">
-                            ${isUp ? '+' : ''}${currSym}${Math.abs(changeAmt).toFixed(2)} (${isUp ? '+' : ''}${changePct}%)
+                            ${isUp ? '+' : ''}${currSym}${Math.abs(changeAmt).toFixed(2)} (${isUp ? '+' : ''}${changePct.toFixed(2)}%)
                         </span>
                     </div>
                 </div>
 
-                <!-- Mini Pivots Grid -->
+                <!-- Mini Real-Time Range / Pivots Grid -->
                 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; margin-bottom:0.85rem;">
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">PIVOT</div>
-                        <div style="font-size:0.75rem; font-weight:700; color:#ffb300;">${pivotVal}</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">DAY HIGH</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#39d353;">${dayHighStr}</div>
                     </div>
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">R1</div>
-                        <div style="font-size:0.75rem; font-weight:700; color:#f85149;">${r1Val}</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">DAY LOW</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#f85149;">${dayLowStr}</div>
                     </div>
                     <div style="background:var(--bg-canvas); border:1px solid var(--border-subtle); border-radius:4px; padding:0.3rem; text-align:center;">
-                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">S1</div>
-                        <div style="font-size:0.75rem; font-weight:700; color:#39d353;">${s1Val}</div>
+                        <div style="font-size:0.6rem; color:var(--text-muted); font-weight:600;">VOLUME</div>
+                        <div style="font-size:0.75rem; font-weight:700; color:#58a6ff;">${volumeStr}</div>
                     </div>
                 </div>
 
@@ -3046,7 +3166,6 @@ function renderWatchlistItems() {
 
 async function addCustomStockToWatchlist(symbolToAdd = null) {
     const input = document.getElementById('watchlist-add-input');
-    const feedback = document.getElementById('watchlist-feedback-msg');
     const symbol = (symbolToAdd || (input ? input.value : '')).trim();
 
     if (!symbol) {
@@ -3058,7 +3177,7 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
     const canonical = resolved.symbol;
 
     if (userWatchlist.includes(canonical)) {
-        showWatchlistFeedback(`"${resolved.name}" is already in the global watchlist`, "gold");
+        showWatchlistFeedback(`"${resolved.name}" is already in the watchlist`, "gold");
         if (input) input.value = '';
         const dropdown = document.getElementById('watchlist-search-dropdown');
         if (dropdown) dropdown.style.display = 'none';
@@ -3069,14 +3188,15 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
     userWatchlist.unshift(canonical);
     saveWatchlistToStorage();
     renderWatchlistItems();
+    pollLiveMarketQuotes(true);
 
     if (input) input.value = '';
     const dropdown = document.getElementById('watchlist-search-dropdown');
     if (dropdown) dropdown.style.display = 'none';
 
-    showWatchlistFeedback(`Saving "${resolved.name}" (${resolved.exchange || 'GLOBAL'}) to global database...`, "gold");
+    showWatchlistFeedback(`Saving "${resolved.name}" (${resolved.exchange || 'GLOBAL'}) to watchlist...`, "gold");
 
-    // Persist to global backend & GitHub database
+    // Persist to global backend & storage
     try {
         const res = await fetch('/api/watchlist', {
             method: 'POST',
@@ -3096,8 +3216,9 @@ async function addCustomStockToWatchlist(symbolToAdd = null) {
                 userWatchlist = data.data.map(item => typeof item === 'string' ? item : item.symbol);
                 saveWatchlistToStorage();
                 renderWatchlistItems();
+                pollLiveMarketQuotes(false);
             }
-            showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to global database`, "green");
+            showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to watchlist`, "green");
         } else {
             showWatchlistFeedback(`✅ Added "${resolved.name}" (${canonical}) to Watchlist`, "green");
         }
@@ -3110,7 +3231,7 @@ async function removeStockFromWatchlist(canonicalSymbol) {
     userWatchlist = userWatchlist.filter(s => s !== canonicalSymbol);
     saveWatchlistToStorage();
     renderWatchlistItems();
-    showWatchlistFeedback(`Removing ${canonicalSymbol} from global database...`, "gold");
+    showWatchlistFeedback(`Removing ${canonicalSymbol}...`, "gold");
 
     try {
         const res = await fetch('/api/watchlist', {
@@ -3125,7 +3246,7 @@ async function removeStockFromWatchlist(canonicalSymbol) {
                 saveWatchlistToStorage();
                 renderWatchlistItems();
             }
-            showWatchlistFeedback(`Removed ${canonicalSymbol} from global database`, "green");
+            showWatchlistFeedback(`Removed ${canonicalSymbol}`, "green");
         } else {
             showWatchlistFeedback(`Removed ${canonicalSymbol} from Watchlist`, "gold");
         }
@@ -3134,9 +3255,32 @@ async function removeStockFromWatchlist(canonicalSymbol) {
     }
 }
 
+async function clearAllWatchlist() {
+    if (userWatchlist.length === 0) {
+        showWatchlistFeedback("Watchlist is already empty", "gold");
+        return;
+    }
+
+    userWatchlist = [];
+    liveMarketQuotes = {};
+    saveWatchlistToStorage();
+    renderWatchlistItems();
+    showWatchlistFeedback("Clearing all stocks from watchlist...", "gold");
+
+    try {
+        await Promise.all([
+            fetch('/api/watchlist/all', { method: 'DELETE' }),
+            fetch('/api/watchlist?clearAll=true', { method: 'DELETE' })
+        ]);
+        showWatchlistFeedback("🗑️ Watchlist cleared completely", "green");
+    } catch (e) {
+        showWatchlistFeedback("🗑️ Watchlist cleared locally", "green");
+    }
+}
+
 async function addPresetGroup(groupType) {
-    const nasdaqList = ["NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:GOOGL", "NASDAQ:AMZN", "NASDAQ:META", "NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:NFLX", "NYSE:IBM"];
-    const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NASDAQ:IXIC", "NASDAQ:NDX", "INDEX:SPX"];
+    const nasdaqList = ["NYSE:IBM", "NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:GOOGL", "NASDAQ:AMZN", "NASDAQ:META", "NASDAQ:TSLA", "NASDAQ:AMD", "NASDAQ:NFLX"];
+    const indicesList = ["NSE:NIFTY", "NSE:BANKNIFTY", "BSE:SENSEX", "NASDAQ:IXIC", "INDEX:SPX"];
     const bluechipsList = ["NSE:RELIANCE", "NSE:HDFCBANK", "NSE:INFY", "NSE:ICICIBANK", "NSE:TCS", "NSE:SBIN", "NSE:BHARTIARTL", "NSE:LT"];
 
     let targetList = bluechipsList;
@@ -3168,7 +3312,8 @@ async function addPresetGroup(groupType) {
 
     saveWatchlistToStorage();
     renderWatchlistItems();
-    showWatchlistFeedback(`Added ${addedCount} symbols to global database`, "green");
+    pollLiveMarketQuotes(true);
+    showWatchlistFeedback(`Added ${addedCount} symbols to watchlist`, "green");
 }
 
 function showWatchlistFeedback(msg, color) {

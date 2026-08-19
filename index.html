@@ -382,10 +382,11 @@
                             <h3 style="margin:0; color:var(--text-header); font-size:0.98rem; font-weight:700;">Add Stocks to Watchlist</h3>
                             <span style="font-size:0.75rem; color:var(--text-muted);">Search Indian Equities (NSE/BSE), NASDAQ & US Tech Giants, Indices, or type any custom ticker</span>
                         </div>
-                        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center;">
                             <button onclick="addPresetGroup('nasdaq')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem; background:rgba(147,51,234,0.15); border-color:#9333ea; color:#c084fc; font-weight:600;">+ NASDAQ Tech</button>
                             <button onclick="addPresetGroup('indices')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Top Indices</button>
                             <button onclick="addPresetGroup('nifty50')" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem;">+ Bluechips</button>
+                            <button onclick="clearAllWatchlist()" class="chart-platform-btn" style="padding:4px 10px; font-size:0.75rem; background:rgba(248,81,73,0.12); border-color:rgba(248,81,73,0.4); color:#f85149;" title="Remove all stocks from watchlist">🗑️ Clear All</button>
                         </div>
                     </div>
 
@@ -393,7 +394,7 @@
                         <div style="position:relative; flex:1; min-width:240px;">
                             <input type="text" 
                                    id="watchlist-add-input" 
-                                   placeholder="Search symbol (e.g. NVDA, AAPL, MSFT, TSLA, RELIANCE, NIFTY)..." 
+                                   placeholder="Search symbol (e.g. IBM, NVDA, AAPL, MSFT, TSLA, RELIANCE, NIFTY)..." 
                                    autocomplete="off"
                                    oninput="onWatchlistSearchInput(this.value)"
                                    onkeydown="onWatchlistInputKeyDown(event)"
@@ -432,10 +433,13 @@
                     </div>
                     <div class="metric-pill" style="flex:1; min-width:140px; padding:0.6rem 0.85rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <span class="m-label" style="font-size:0.7rem; color:var(--text-muted); display:block;">Auto-Update</span>
-                            <b class="m-val green" style="color:#39d353; font-size:0.85rem;">Live Feed</b>
+                            <span class="m-label" style="font-size:0.7rem; color:var(--text-muted); display:block;">Market Data Feed</span>
+                            <b class="m-val green" id="wl-live-badge" style="color:#39d353; font-size:0.82rem; display:flex; align-items:center; gap:4px;">
+                                <span class="live-dot-pulse" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#39d353;"></span>
+                                <span>Live Feed</span>
+                            </b>
                         </div>
-                        <button onclick="renderWatchlistItems()" class="footer-btn" title="Refresh Watchlist Prices" style="border-radius:4px; padding:4px 8px; font-size:0.72rem; cursor:pointer;">🔄 Refresh</button>
+                        <button onclick="pollLiveMarketQuotes(true)" class="footer-btn" title="Refresh Live Market Quotes Now" style="border-radius:4px; padding:4px 8px; font-size:0.72rem; cursor:pointer;">🔄 Refresh</button>
                     </div>
                 </div>
 
