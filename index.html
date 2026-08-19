@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Sahi Hai | Live Trading Analytics & Research</title>
-    <link rel="stylesheet" href="style.css?v=9.8.0">
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="alternate icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css?v=9.9.0">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
     <!-- ⚡️ CRITICAL MODAL, THEME & TAB PERSISTENCE ENGINE -->
@@ -92,8 +94,8 @@
 
     <!-- Main Navigation Top Bar -->
     <header id="main-header">
-        <div class="logo-group" onclick="navigateHub('daily', event)">
-            <span class="trend-icon" aria-hidden="true">📈</span>
+        <div class="logo-group" onclick="navigateHub('daily', event)" id="app-brand-logo" title="Trade Sahi Hai - Home">
+            <img src="logo.png" alt="Trade Sahi Hai Emblem" class="brand-logo-img" onerror="this.src='logo.svg'" width="36" height="36">
             <h1>Trade Sahi Hai</h1>
         </div>
         <nav class="navigation-hub" role="tablist" aria-label="Main Navigation">

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Outer Ring Gradient: Blue (bottom-left) to Gold (top-right) -->
+    <linearGradient id="ringGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="30%" stop-color="#0284c7"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+
+    <!-- Inner Metallic Disc Gradient -->
+    <radialGradient id="discGrad" cx="45%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </radialGradient>
+
+    <!-- Blue Script T Gradient -->
+    <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="35%" stop-color="#0284c7"/>
+      <stop offset="85%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Gold Script S Gradient -->
+    <linearGradient id="sGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="40%" stop-color="#d97706"/>
+      <stop offset="80%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+
+    <!-- Arrow Gold Gradient -->
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+
+    <!-- Soft 3D Drop Shadow -->
+    <filter id="emblemShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.28"/>
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+
+    <filter id="bevelFilter" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#emblemShadow)">
+    <!-- Base Circular Emblem Container -->
+    <circle cx="250" cy="250" r="235" fill="url(#discGrad)"/>
+    <circle cx="250" cy="250" r="235" fill="none" stroke="url(#ringGrad)" stroke-width="14"/>
+    <circle cx="250" cy="250" r="226" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.8"/>
+    <circle cx="250" cy="250" r="224" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-opacity="0.4"/>
+
+    <!-- Left Blue Candlestick Bars Ascending -->
+    <!-- Candle 1 -->
+    <line x1="120" y1="135" x2="120" y2="185" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+    <rect x="114" y="148" width="12" height="24" rx="2.5" fill="url(#tGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Candle 2 -->
+    <line x1="158" y1="110" x2="158" y2="175" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="151" y="125" width="14" height="36" rx="3" fill="url(#tGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Candle 3 -->
+    <line x1="198" y1="75" x2="198" y2="165" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/>
+    <rect x="189" y="92" width="18" height="58" rx="3.5" fill="url(#tGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Right Orange/Gold Candlestick Bars Ascending -->
+    <!-- Candle 4 (Tallest Center Gold) -->
+    <line x1="240" y1="45" x2="240" y2="155" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round"/>
+    <rect x="230" y="65" width="20" height="74" rx="4" fill="url(#sGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Candle 5 (Gold) -->
+    <line x1="280" y1="80" x2="280" y2="150" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="272" y="98" width="16" height="42" rx="3" fill="url(#sGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Prominent Upward Diagonal Breakout Arrow (Gold) -->
+    <path d="M 265 195 L 348 95" fill="none" stroke="url(#arrowGrad)" stroke-width="18" stroke-linecap="round" filter="url(#bevelFilter)"/>
+    <polygon points="380,55 315,88 348,122" fill="url(#arrowGrad)" filter="url(#bevelFilter)"/>
+
+    <!-- Stylized "t" (Blue Dynamic Script Monogram) -->
+    <!-- Horizontal Cross-Sweep Wave -->
+    <path d="M 68 248 C 115 208 178 185 228 175 C 205 192 188 215 178 248 C 145 258 100 270 68 248 Z" fill="url(#tGrad)" filter="url(#bevelFilter)"/>
+    <!-- Main Stem & Bottom Loop Curve -->
+    <path d="M 188 190 C 182 245 160 305 135 348 C 118 378 95 385 88 362 C 82 342 98 312 118 292 C 122 315 110 338 112 348 C 120 348 138 322 152 285 C 168 245 178 215 188 190 Z" fill="url(#tGrad)" filter="url(#bevelFilter)"/>
+    <!-- Central Swoosh -->
+    <path d="M 188 190 Q 230 295 270 380 Q 225 365 195 305 Q 185 260 188 190 Z" fill="url(#tGrad)" opacity="0.95" filter="url(#bevelFilter)"/>
+
+    <!-- Stylized "S" (Golden Metallic Dynamic Monogram) -->
+    <!-- Top Loop -->
+    <path d="M 305 178 C 342 168 365 195 352 228 C 338 258 298 285 278 315 C 255 350 262 388 295 392 C 325 395 350 368 362 345 C 352 360 328 382 300 380 C 275 378 268 350 282 320 C 300 285 345 258 355 228 C 362 205 345 185 315 188 C 298 190 288 202 288 212 C 285 190 295 180 305 178 Z" fill="url(#sGrad)" filter="url(#bevelFilter)"/>
+    
+    <!-- Outer Wing Accent on S -->
+    <path d="M 315 315 Q 365 270 385 205 Q 368 252 325 298 Z" fill="url(#sGrad)" opacity="0.85" filter="url(#bevelFilter)"/>
+  </g>
+</svg>
+
